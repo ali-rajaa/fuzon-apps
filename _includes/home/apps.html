@@ -1,7 +1,8 @@
 {%- comment -%}
   "Find the app for the job." The template's "Everything you need" row
   of white cards on a grey band, one card per app in apps.yml, in its
-  tone: tile, name, tagline, its points as chips, a link to its page, and
+  tone: tile, name, tagline, its points as a tick list (no pills, owner,
+  16 Oct), a link to its page, and
   the
   template's large faded icon in the corner (tinted with the app's tone).
 
@@ -13,6 +14,7 @@
 <section class="section section--alt" id="apps" aria-labelledby="apps-title">
   <div class="wrap">
     <div class="section-head section-head--center reveal">
+      <p class="eyebrow">Our apps</p>
       <h2 id="apps-title">Find the app for the job.</h2>
       <p class="section-sub">Every Fuzon app is free to download on Google Play.</p>
     </div>
@@ -23,9 +25,9 @@
         {% include app-tile.html app=app class="app-card-tile" %}
         <h3 class="app-card-name"><a href="{{ _url }}">{{ app.name | escape }}</a></h3>
         <p class="app-card-text">{{ app.tagline | escape }}</p>
-        <ul class="chips" role="list">
+        <ul class="check-list" role="list">
           {%- for point in app.points %}
-          <li class="chip-sm">{{ point | escape }}</li>
+          <li><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg><span>{{ point | escape }}</span></li>
           {%- endfor %}
         </ul>
         {%- if app.store_name != app.name %}

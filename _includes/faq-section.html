@@ -1,6 +1,6 @@
 {%- comment -%}
   A visible FAQ section (playbook Appendix G3). Params: faqs (list of
-  {q, a}), optional heading, sub, id and alt (true for the grey section
+  {q, a}), optional eyebrow, heading, sub, id and alt (true for the grey section
   background). The heading sits beside the questions on wide screens and
   above them on phones. Pair it with faq-schema.html, which writes the
   same questions as FAQPage data, so the two always match.
@@ -10,6 +10,9 @@
 <section class="section{% if include.alt %} section--alt{% endif %}"{% if include.id %} id="{{ include.id }}"{% endif %} aria-labelledby="{{ _faq_title }}">
   <div class="wrap split">
     <div class="section-head split-head reveal">
+      {%- if include.eyebrow %}
+      <p class="eyebrow">{{ include.eyebrow | escape }}</p>
+      {%- endif %}
       <h2 id="{{ _faq_title }}">{{ include.heading | default: "Questions people ask" | escape }}</h2>
       {%- if include.sub %}
       <p class="section-sub">{{ include.sub | escape }}</p>

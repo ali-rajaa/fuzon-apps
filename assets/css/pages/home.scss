@@ -1,6 +1,6 @@
 ---
 ---
-/* Homepage: hero (chip, title, lead, actions), the showcase window, the
+/* Homepage: hero (eyebrow, title, lead, actions), the showcase window, the
    facts strip, the app cards and the data points. Shared pieces (buttons,
    tiles, tones, FAQ, CTA band) live in shell.scss. */
 
@@ -12,37 +12,8 @@
 }
 .hero-copy { max-width: 54rem; margin-inline: auto; text-align: center; }
 
-.chip {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  min-height: 2.75rem;
-  padding: 0.5rem 0.875rem 0.5rem 1rem;
-  border: 1px solid var(--border);
-  border-radius: var(--radius-pill);
-  background: rgba(255, 255, 255, 0.8);
-  box-shadow: var(--shadow-sm);
-  color: var(--text);
-  font-size: 0.8125rem;
-  font-weight: 500;
-  text-decoration: none;
-  transition: box-shadow 0.2s ease, border-color 0.2s ease;
-}
-.chip-dot {
-  width: 0.5rem;
-  height: 0.5rem;
-  border-radius: 50%;
-  background: var(--logo-magenta);
-  box-shadow: 0 0 0 3px color-mix(in srgb, var(--logo-magenta) 22%, transparent);
-}
-.chip-arrow { width: 1rem; height: 1rem; color: var(--text-2); transition: transform 0.2s var(--ease-out); }
-@media (hover: hover) {
-  .chip:hover { border-color: var(--border-strong); box-shadow: var(--shadow-md); }
-  .chip:hover .chip-arrow { transform: translateX(2px); }
-}
-
 .hero-title {
-  margin-top: 1.75rem;
+  margin-top: 1rem;
   font-size: clamp(2.5rem, 1.45rem + 4.6vw, 4.75rem);
   font-weight: 800;
   line-height: 1.03;
@@ -220,7 +191,6 @@
    small grey label, then the Google Play button (developer page) and the
    confirmed facts from the listings. */
 .store-strip { max-width: 62rem; margin: clamp(2.75rem, 6vw, 4rem) auto 0; text-align: center; }
-.facts-label { color: var(--text-3); font-size: 0.8125rem; font-weight: 500; }
 .store-strip-row {
   display: flex;
   flex-wrap: wrap;
@@ -257,7 +227,9 @@
 .app-card-name a:focus-visible { outline: none; }
 .app-card-name a:focus-visible::after { outline: 2px solid var(--brand-text); outline-offset: -2px; }
 .app-card-text { margin-top: 0.5rem; color: var(--text-2); font-size: 0.9375rem; }
-.app-card .chips { margin-top: 1.25rem; }
+.app-card .check-list { margin-top: 1.25rem; font-size: 0.9375rem; }
+.app-card .check-list li + li { margin-top: 0.5rem; }
+.app-card .check-list .icon { width: 1.125rem; height: 1.125rem; }
 .app-card-foot {
   display: flex;
   flex-wrap: wrap;
@@ -297,6 +269,6 @@
 
 @media (prefers-reduced-motion: reduce) {
   .showcase-panel.is-entering { animation: none; }
-  .app-card, .chip-arrow { transition: none; }
+  .app-card { transition: none; }
   .app-card:hover { transform: none; }
 }

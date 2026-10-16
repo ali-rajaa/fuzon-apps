@@ -45,6 +45,9 @@ colours. There is no login (owner, 16 Oct).
 - No app counts ("three apps", "all three"). Copy must stay true when an
   app is added; lists, menus, tabs and cards come from `_data/apps.yml`.
 - "Free to download", never a bare "free".
+- No pills or chips (owner, 16 Oct). Labels use the one `.eyebrow` style
+  (small caps grey line above a heading); feature points use the tick
+  list (`.check-list`) everywhere.
 
 ## 3. Directory tree
 
@@ -135,6 +138,13 @@ workable links ready to make after."
 - Checked: axe zero violations, no overflow, html-validate clean, 26
   links, 23 interaction checks, no app counts and no legal or ratings
   wording on non-legal pages.
+
+### 5d. No pills (16 Oct)
+Owner: "remove the ugly pills and make it consistent". Hero pill, app-card
+feature chips and the placeholder "being written" badge replaced: one
+`.eyebrow` style (hero, "Where to get them", "Our apps", "Help", the CTA
+band, placeholder card) and tick lists on the cards, matching the
+showcase. Checks rerun: all pass.
 
 ## 6. SEO and routing
 
