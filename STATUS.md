@@ -269,6 +269,36 @@ Owner: "continue what you were fixing, finish fully".
 - Checked: axe, overflow, tap targets, 89 links, 23 interaction checks,
   html-validate clean.
 
+### 5l. Apple design pass over all CSS (16 Oct)
+Owner: apply the apple-design skill across all CSS. What changed:
+- **Motion tokens** (shell.scss `:root`): one spring curve
+  (`--ease-spring`, damping 1.0, no bounce, as CSS `linear()` with a
+  cubic-bezier fallback), `--dur-spring` 0.54s (response 0.4) and
+  `--dur-spring-fast` 0.4s (response 0.3), `--ease-exit` (the entrance
+  curve mirrored) and `--dur-exit` for quicker exits on the same path.
+- **Press feedback on press, not release**: buttons, store badges, menu
+  button, tabs, app cards, other-app rows, per-app email rows and 404 rows
+  shrink on press in 80ms and spring back on release; nav, menu, contents
+  and footer links change colour on press. No grey tap flash on phones;
+  `touch-action: manipulation` on controls.
+- **Showcase tabs** work like a segmented control: one white thumb slides
+  to the picked tab, and the new panel comes in from that side (site.js).
+- **Materials**: the header is a translucent layer with a scroll-edge fade
+  instead of a ruled border (0.84 opacity keeps grey nav text at 4.9:1
+  over the black band); desktop menus are a thicker translucent layer that
+  grows out of the trigger and shrinks back along the same path; the phone
+  sheet dims the page behind it, and bar plus sheet turn solid.
+- **Type**: tracking set by size through tokens (`--track-display` to
+  `--track-small`, `--track-caps`), body and small text from Inter's own
+  size table. The logo wordmark and the 404 numeral keep their own values.
+- **Preferences**: reduced motion swaps slides and scales for cross-fades
+  (nothing moves, feedback stays); reduced transparency or more contrast
+  makes every translucent surface solid; more contrast also darkens
+  secondary text and borders through the tokens.
+- Checked: axe, overflow, tap targets, 89 links, 23 interaction checks,
+  html-validate clean; tab thumb, menus, sheet and header checked in
+  screenshots, including mid-animation.
+
 ## 6. SEO and routing
 
 - Clean URLs (`/cloud-storage`), canonicals generated from `page.url`.

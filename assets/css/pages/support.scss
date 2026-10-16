@@ -17,7 +17,7 @@
   font-size: clamp(2.5rem, 1.6rem + 3.6vw, 4rem);
   font-weight: 800;
   line-height: 1.04;
-  letter-spacing: -0.04em;
+  letter-spacing: var(--track-display);
 }
 .support-lead {
   max-width: 40rem;
@@ -35,7 +35,7 @@
   font-size: clamp(1.625rem, 1.3rem + 1.4vw, 2.25rem);
   font-weight: 800;
   line-height: 1.12;
-  letter-spacing: -0.03em;
+  letter-spacing: var(--track-title-2);
 }
 .support-section .section-intro { max-width: 42rem; margin-top: 0.75rem; color: var(--text-2); font-size: 1.0625rem; }
 .support-grid { display: grid; gap: 2rem; align-items: start; }
@@ -60,11 +60,11 @@
   margin-top: 0.75rem;
   font-size: clamp(1.375rem, 1rem + 2vw, 2rem);
   font-weight: 800;
-  letter-spacing: -0.03em;
+  letter-spacing: var(--track-title-2);
   overflow-wrap: anywhere;
 }
 .mail-actions { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: 1.5rem; }
-.mail-status { min-height: 1.5rem; margin-top: 0.75rem; color: var(--text-2); font-size: 0.875rem; }
+.mail-status { min-height: 1.5rem; margin-top: 0.75rem; color: var(--text-2); font-size: 0.875rem; letter-spacing: var(--track-small); }
 .mail-note {
   display: flex;
   gap: 0.75rem;
@@ -93,12 +93,14 @@
   background: var(--surface);
   color: var(--text);
   text-decoration: none;
-  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  -webkit-tap-highlight-color: transparent;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, transform var(--dur-spring-fast) var(--ease-spring);
 }
+.app-mail:active { transform: scale(0.985); transition-duration: var(--dur-press); transition-timing-function: ease-out; }
 .app-mail-tile { --tile: 2.75rem; }
 .app-mail-text { display: grid; gap: 0.125rem; min-width: 0; }
 .app-mail-name { font-weight: 700; }
-.app-mail-sub { color: var(--text-2); font-size: 0.875rem; }
+.app-mail-sub { color: var(--text-2); font-size: 0.875rem; letter-spacing: var(--track-small); }
 .app-mail > .icon:last-child { margin-left: auto; color: var(--text-2); }
 @media (hover: hover) {
   .app-mail:hover { border-color: var(--border-strong); box-shadow: var(--shadow-sm); }
@@ -127,6 +129,7 @@
   background: var(--btn);
   color: var(--on-btn);
   font-size: 0.875rem;
+  letter-spacing: var(--track-small);
   font-weight: 700;
 }
 .num-steps strong { display: block; color: var(--text); }
@@ -177,7 +180,9 @@
   color: var(--text);
   font-weight: 500;
   text-decoration: none;
+  -webkit-tap-highlight-color: transparent;
 }
+.link-list a:active { color: var(--text-2); }
 .link-list li:first-child a { border-top: 0; }
 .link-list a > .icon { color: var(--text-2); }
 .link-list a > .icon:last-child { margin-left: auto; }
@@ -192,6 +197,7 @@
 .support-prose h2 { color: var(--text); }
 
 @media (prefers-reduced-motion: reduce) {
-  .app-mail { transition: none; }
+  .app-mail { transition: border-color 0.2s ease, box-shadow 0.2s ease; }
+  .app-mail:active { transform: none; }
 }
 .support-section .per-app-title { margin-top: 3rem; }

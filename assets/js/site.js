@@ -14,8 +14,9 @@
   var header = document.getElementById('site-header');
 
   /* ---- Header scroll state ----
-     The hairline and shadow appear once content is under the header,
-     tracked by a 1px sentinel at the top of the page (no scroll listener). */
+     The hairline and the soft scroll-edge fade appear once content is
+     under the header, tracked by a 1px sentinel at the top of the page
+     (no scroll listener). */
   var sentinel = document.getElementById('scroll-sentinel');
   if (header && sentinel && 'IntersectionObserver' in window) {
     new IntersectionObserver(function (entries) {
@@ -133,11 +134,32 @@
      keys / Home / End move between tabs and select them. Panels other
      than the selected one carry data-hidden (hidden by CSS only when
      .js is set, so without this script all three panels show). The
-     panel that appears gets .is-entering for a short fade. */
+     panel that appears gets .is-entering and comes in from the side of
+     the tab that was picked (--enter-x). The white selection is one thumb
+     that slides between tabs, like a segmented control. */
   document.querySelectorAll('[data-tabs]').forEach(function (box) {
     var tabs = Array.prototype.slice.call(box.querySelectorAll('[role="tab"]'));
     if (!tabs.length) return;
+    var list = tabs[0].parentElement;
+    var thumb = document.createElement('span');
+    thumb.className = 'showcase-thumb is-placing';
+    thumb.setAttribute('aria-hidden', 'true');
+    list.insertBefore(thumb, list.firstChild);
+    list.classList.add('has-thumb');
+    var current = tabs.filter(function (t) { return t.getAttribute('aria-selected') === 'true'; })[0] || tabs[0];
+    var place = function (instant) {
+      if (instant) thumb.classList.add('is-placing');
+      thumb.style.width = current.offsetWidth + 'px';
+      thumb.style.transform = 'translateX(' + current.offsetLeft + 'px)';
+      if (instant) { void thumb.offsetWidth; thumb.classList.remove('is-placing'); }
+    };
+    place(true);
+    window.addEventListener('resize', function () { place(true); });
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(function () { place(true); });
     var select = function (tab, focus) {
+      var dir = tabs.indexOf(tab) - tabs.indexOf(current);
+      current = tab;
+      place(false);
       tabs.forEach(function (t) {
         var on = t === tab;
         var panel = document.getElementById(t.getAttribute('aria-controls'));
@@ -146,6 +168,7 @@
         if (!panel) return;
         if (on) {
           if (panel.hasAttribute('data-hidden')) {
+            panel.style.setProperty('--enter-x', (dir > 0 ? 1.5 : dir < 0 ? -1.5 : 0) + 'rem');
             panel.removeAttribute('data-hidden');
             panel.classList.remove('is-entering');
             void panel.offsetWidth;

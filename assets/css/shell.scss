@@ -73,9 +73,54 @@
   --space-hero-top: clamp(3rem, 7vw, 5.5rem);
   --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
 
+  /* Motion (apple-design skill, from WWDC "Designing Fluid Interfaces").
+     A spring with damping 1.0 (no overshoot) drawn as a CSS linear()
+     curve; the shape is the same for any response, only the settle time
+     changes. Response 0.4 settles in about 0.54s (things that move or
+     reposition), response 0.3 in about 0.4s (menus, sheets, a pressed
+     control springing back). Nothing on the site is flicked or thrown, so
+     nothing bounces. Browsers without linear() get --ease-out instead.
+     Presses get no curve at all: feedback lands on the press, in 80ms. */
+  --ease-spring: var(--ease-out);
+  --ease-exit: cubic-bezier(0.64, 0, 0.78, 0);     /* --ease-out mirrored: leave the way you came */
+  --dur-press: 80ms;
+  --dur-quick: 150ms;
+  --dur-exit: 160ms;
+  --dur-spring-fast: 0.4s;
+  --dur-spring: 0.54s;
+  --press-scale: 0.97;
+
+  /* Tracking by size, never one value for every size (WWDC "The Details
+     of UI Typography"). Body and small values follow Inter's own size
+     table (rsms.me/inter/dynmetrics); headings stay tighter than that, as
+     in the template. Capitals get positive tracking. */
+  --track-display: -0.04em;         /* page titles, 2.5rem and up */
+  --track-title: -0.03em;           /* section headings, 2 to 3.25rem */
+  --track-title-2: -0.025em;        /* sub-section headings, 1.375 to 2.25rem */
+  --track-headline: -0.015em;       /* card names, h3, 1.0625 to 1.375rem */
+  --track-body: -0.011em;           /* 15 to 18px text */
+  --track-small: -0.004em;          /* 12 to 14px text */
+  --track-caps: 0.12em;             /* small capitals: eyebrows, table labels */
+
   /* Light only (owner, 16 Oct). Keeps form controls and scrollbars light
      on dark-mode devices too. */
   color-scheme: light;
+}
+@supports (transition-timing-function: linear(0, 1)) {
+  :root {
+    --ease-spring: linear(0, 0.068, 0.208, 0.363, 0.505, 0.625, 0.721, 0.795, 0.852, 0.893, 0.924, 0.946, 0.962, 0.974, 0.982, 0.987, 0.991, 0.994, 0.996, 0.997, 1);
+  }
+}
+
+/* Higher contrast asked for: darker secondary text and borders that can
+   be seen, everywhere at once through the tokens. */
+@media (prefers-contrast: more) {
+  :root {
+    --text-2: #3f3d48;
+    --text-3: #47444f;
+    --border: #bdbcc4;
+    --border-strong: #8f8d98;
+  }
 }
 
 /* ---------- App tones ----------
@@ -138,16 +183,19 @@ body {
   font-family: var(--font);
   font-size: 1rem;
   line-height: 1.6;
+  letter-spacing: var(--track-body);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
 }
-h1, h2, h3, h4 { margin: 0; line-height: 1.15; letter-spacing: -0.02em; text-wrap: balance; }
+h1, h2, h3, h4 { margin: 0; line-height: 1.15; letter-spacing: var(--track-headline); text-wrap: balance; }
 p, ul, ol { margin: 0; }
 ul[role="list"], ol[role="list"] { list-style: none; padding: 0; }
 img, svg { display: block; max-width: 100%; }
 a { color: inherit; text-underline-offset: 0.18em; text-decoration-thickness: 1px; }
-button { font: inherit; color: inherit; }
+button { font: inherit; color: inherit; letter-spacing: inherit; }
+/* No double-tap-to-zoom wait on controls (pinch zoom still works). */
+a, button, summary, label, [role="tab"] { touch-action: manipulation; }
 main:focus { outline: none; }
 :focus-visible { outline: 2px solid var(--brand-text); outline-offset: 2px; border-radius: 4px; }
 
@@ -203,17 +251,30 @@ main:focus { outline: none; }
   font-size: 0.9375rem;
   font-weight: 600;
   line-height: 1.2;
-  letter-spacing: -0.005em;
+  letter-spacing: var(--track-body);
   text-decoration: none;
   white-space: nowrap;
   cursor: pointer;
-  transition: background-color 0.15s ease, box-shadow 0.2s ease, transform 0.1s ease;
+  -webkit-tap-highlight-color: transparent;
+  transition: background-color var(--dur-quick) ease, box-shadow 0.2s ease, transform var(--dur-spring-fast) var(--ease-spring);
 }
-.btn:active { transform: scale(0.97); }
+
+/* Press feedback (apple-design 1 and 10): every control that isn't plain
+   text answers the moment it is pressed, not on release. The press shrinks
+   it in 80ms; letting go springs it back. site.js adds an empty
+   touchstart listener so iOS Safari applies :active on touch. */
+.btn:active,
+.store-badge:active,
+.nav-toggle:active,
+.showcase-tab:active {
+  transform: scale(var(--press-scale));
+  transition-duration: var(--dur-press);
+  transition-timing-function: ease-out;
+}
 .btn--primary { background: var(--btn); color: var(--on-btn); box-shadow: 0 1px 2px rgba(11, 11, 18, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.12); }
 .btn--secondary { background: var(--btn-2); color: var(--text); }
 .btn--light { background: #ffffff; color: var(--text); box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.12), 0 10px 32px rgba(255, 255, 255, 0.16); }
-.btn--sm { min-height: 2.5rem; padding: 0.5rem 0.875rem; font-size: 0.875rem; }
+.btn--sm { min-height: 2.5rem; padding: 0.5rem 0.875rem; font-size: 0.875rem; letter-spacing: var(--track-small); }
 .btn--sm::after { content: ""; position: absolute; inset: -2px; }
 .btn--lg { min-height: 3rem; padding: 0.75rem 1.375rem; font-size: 1rem; }
 @media (hover: hover) {
@@ -231,8 +292,11 @@ main:focus { outline: none; }
   font-weight: 600;
   color: var(--text);
   text-decoration: none;
+  -webkit-tap-highlight-color: transparent;
+  transition: opacity var(--dur-quick) ease;
 }
-.link-arrow .icon { width: 1.125rem; height: 1.125rem; transition: transform 0.2s var(--ease-out); }
+.link-arrow:active { opacity: 0.6; transition-duration: var(--dur-press); }
+.link-arrow .icon { width: 1.125rem; height: 1.125rem; transition: transform var(--dur-spring-fast) var(--ease-spring); }
 @media (hover: hover) {
   .link-arrow:hover { text-decoration: underline; }
   .link-arrow:hover .icon { transform: translateX(3px); }
@@ -256,7 +320,7 @@ main:focus { outline: none; }
   font-size: 0.8125rem;
   font-weight: 600;
   line-height: 1.4;
-  letter-spacing: 0.12em;
+  letter-spacing: var(--track-caps);
   text-transform: uppercase;
 }
 .section-head .eyebrow + h2 { margin-top: 0.75rem; }
@@ -281,23 +345,44 @@ main:focus { outline: none; }
 .app-tile .icon { width: 50%; height: 50%; stroke-width: 2; }
 
 /* ---------- Header ---------- */
+/* A translucent material (apple-design 12): the page scrolls under it,
+   blurred. Once the page has scrolled, a hairline and a short soft fade
+   below the bar mark where content meets it (a scroll edge, not a ruled
+   border). Scrolled opacity 0.84 keeps grey nav text at 4.9:1 even over
+   the black CTA band. */
 .site-header {
   position: sticky;
   top: 0;
   z-index: 50;
-  background: rgba(255, 255, 255, 0.86);
+  background: rgba(255, 255, 255, 0.72);
   -webkit-backdrop-filter: saturate(180%) blur(20px);
   backdrop-filter: saturate(180%) blur(20px);
-  border-bottom: 1px solid transparent;
-  transition: border-color 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+  box-shadow: inset 0 -1px 0 transparent;
+  transition: box-shadow 0.2s ease, background-color 0.2s ease;
+}
+.site-header::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 100%;
+  height: 0.75rem;
+  background: linear-gradient(180deg, rgba(11, 11, 18, 0.045), rgba(11, 11, 18, 0));
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease;
 }
 .site-header.is-scrolled,
 .site-header.menu-open,
 .site-header.nav-open {
-  background: rgba(255, 255, 255, 0.96);
-  border-bottom-color: var(--border);
-  box-shadow: 0 1px 16px rgba(11, 11, 18, 0.04);
+  background: rgba(255, 255, 255, 0.84);
+  box-shadow: inset 0 -1px 0 rgba(11, 11, 18, 0.07);
 }
+.site-header.is-scrolled::after { opacity: 1; }
+/* With the phone sheet open the bar and the sheet are one solid surface
+   over the dimmed page. */
+.site-header.nav-open { background: var(--surface); }
+.site-header.nav-open::after { opacity: 0; }
 .header-bar {
   display: flex;
   align-items: center;
@@ -334,11 +419,13 @@ main:focus { outline: none; }
   font-weight: 500;
   text-decoration: none;
   cursor: pointer;
-  transition: color 0.15s ease, background-color 0.15s ease;
+  -webkit-tap-highlight-color: transparent;
+  transition: color var(--dur-quick) ease, background-color var(--dur-quick) ease;
 }
+.nav-trigger:active, .nav-link:active { background: var(--btn-2-hover); transition-duration: var(--dur-press); }
 .nav-trigger[aria-expanded="true"],
 .nav-link[aria-current="page"] { color: var(--text); }
-.nav-chevron { width: 1rem; height: 1rem; transition: transform 0.2s var(--ease-out); }
+.nav-chevron { width: 1rem; height: 1rem; transition: transform var(--dur-spring-fast) var(--ease-spring); }
 .nav-trigger[aria-expanded="true"] .nav-chevron { transform: rotate(180deg); }
 @media (hover: hover) {
   .nav-trigger:hover, .nav-link:hover { color: var(--text); background: var(--surface-sunk); }
@@ -352,11 +439,13 @@ main:focus { outline: none; }
   border-radius: 12px;
   color: var(--text);
   text-decoration: none;
-  transition: background-color 0.15s ease;
+  -webkit-tap-highlight-color: transparent;
+  transition: background-color var(--dur-quick) ease, transform var(--dur-spring-fast) var(--ease-spring);
 }
 @media (hover: hover) {
   .nav-menu-link:hover { background: var(--bg-alt); }
 }
+.nav-menu-link:active { background: var(--surface-sunk); transform: scale(0.985); transition-duration: var(--dur-press); transition-timing-function: ease-out; }
 .nav-menu-link[aria-current="page"] { background: var(--bg-alt); }
 .nav-menu-tile { --tile: 2.5rem; }
 .nav-menu-icon {
@@ -371,7 +460,7 @@ main:focus { outline: none; }
 }
 .nav-menu-text { display: grid; gap: 0.125rem; min-width: 0; }
 .nav-menu-title { font-size: 0.9375rem; font-weight: 600; line-height: 1.3; }
-.nav-menu-blurb { font-size: 0.8125rem; line-height: 1.4; color: var(--text-2); }
+.nav-menu-blurb { font-size: 0.8125rem; line-height: 1.4; letter-spacing: var(--track-small); color: var(--text-2); }
 
 .header-actions { display: flex; align-items: center; gap: 0.5rem; margin-left: auto; }
 .nav-toggle {
@@ -385,6 +474,8 @@ main:focus { outline: none; }
   background: none;
   color: var(--text);
   cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  transition: transform var(--dur-spring-fast) var(--ease-spring);
 }
 .nav-toggle .icon { width: 1.5rem; height: 1.5rem; }
 .nav-toggle-close { display: none; }
@@ -398,9 +489,9 @@ main:focus { outline: none; }
   background: rgba(11, 11, 18, 0.08);
   opacity: 0;
   pointer-events: none;
-  transition: opacity 0.2s ease;
+  transition: opacity var(--dur-exit) ease;
 }
-.nav-flyout-open .nav-scrim { opacity: 1; pointer-events: auto; }
+.nav-flyout-open .nav-scrim { opacity: 1; pointer-events: auto; transition-duration: 0.24s; }
 
 /* Desktop: plain links beside the logo, flyout menus. */
 @media (min-width: 760px) {
@@ -413,16 +504,21 @@ main:focus { outline: none; }
     left: -0.5rem;
     width: 23rem;
     padding: 0.5rem;
-    background: var(--surface);
+    /* A thicker material than the header (bigger surface, deeper shadow),
+       and not stacked on it: it opens below the bar, over the page. */
+    background: rgba(255, 255, 255, 0.9);
+    -webkit-backdrop-filter: saturate(180%) blur(28px);
+    backdrop-filter: saturate(180%) blur(28px);
     border: 1px solid var(--border);
     border-radius: var(--radius);
     box-shadow: var(--shadow-lg);
     opacity: 0;
     visibility: hidden;
-    transform: translateY(-6px) scale(0.98);
-    transform-origin: 2rem top;
-    /* Exits are quicker than entrances (playbook 10). */
-    transition: opacity 0.14s ease, transform 0.14s ease, visibility 0s linear 0.14s;
+    /* Grows out of its trigger and shrinks back into it on the same path
+       (apple-design 7). Exits are quicker, on the mirrored curve. */
+    transform: translateY(-6px) scale(0.96);
+    transform-origin: 2.75rem top;
+    transition: opacity var(--dur-exit) var(--ease-exit), transform var(--dur-exit) var(--ease-exit), visibility 0s linear var(--dur-exit);
   }
   .nav-panel--support { width: 20rem; }
   .nav-trigger[aria-expanded="true"] + .nav-panel,
@@ -431,7 +527,7 @@ main:focus { outline: none; }
     opacity: 1;
     visibility: visible;
     transform: none;
-    transition: opacity 0.2s ease, transform 0.24s var(--ease-out), visibility 0s;
+    transition: opacity 0.2s ease, transform var(--dur-spring-fast) var(--ease-spring), visibility 0s;
   }
 }
 
@@ -457,14 +553,15 @@ main:focus { outline: none; }
     box-shadow: 0 24px 40px -16px rgba(11, 11, 18, 0.16);
     opacity: 0;
     visibility: hidden;
-    transform: translateY(-8px);
-    transition: opacity 0.16s ease, transform 0.16s ease, visibility 0s linear 0.16s;
+    transform: translateY(-0.75rem);
+    transform-origin: top;
+    transition: opacity var(--dur-exit) var(--ease-exit), transform var(--dur-exit) var(--ease-exit), visibility 0s linear var(--dur-exit);
   }
   .js .nav-open .site-nav {
     opacity: 1;
     visibility: visible;
     transform: none;
-    transition: opacity 0.22s ease, transform 0.26s var(--ease-out), visibility 0s;
+    transition: opacity 0.22s ease, transform var(--dur-spring-fast) var(--ease-spring), visibility 0s;
   }
   .nav-list { flex-direction: column; align-items: stretch; gap: 0; }
   .nav-item { border-bottom: 1px solid var(--border); }
@@ -482,7 +579,10 @@ main:focus { outline: none; }
   .js .nav-trigger[aria-expanded="true"] + .nav-panel { display: block; }
   .nav-menu-link { padding-inline: 0.25rem; }
   .nav-sheet-cta { width: 100%; margin-top: 1.25rem; }
-  .nav-scrim { display: none; }
+  /* The sheet is a focused task: dim the page behind it (apple-design 12).
+     A tap on the dimmed page closes it (site.js, click outside the header). */
+  .nav-scrim { background: rgba(11, 11, 18, 0.24); }
+  .js .nav-open ~ .nav-scrim { opacity: 1; pointer-events: auto; transition-duration: 0.24s; }
 }
 @media (max-width: 479.98px) {
   .header-cta { display: none; }
@@ -559,6 +659,7 @@ main:focus { outline: none; }
   align-items: center;
   gap: 0.25rem;
   font-size: 0.875rem;
+  letter-spacing: var(--track-small);
   color: var(--text-2);
 }
 .breadcrumbs a {
@@ -578,7 +679,7 @@ main:focus { outline: none; }
   font-size: clamp(2rem, 1.35rem + 2.6vw, 3.25rem);
   font-weight: 800;
   line-height: 1.08;
-  letter-spacing: -0.035em;
+  letter-spacing: var(--track-title);
 }
 .section-sub {
   max-width: 36rem;
@@ -607,6 +708,7 @@ main:focus { outline: none; }
   border-radius: var(--radius);
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
+.faq-item:has(.faq-q:active) { border-color: var(--border-strong); background: var(--bg-alt); }
 .faq-item[open] { border-color: var(--border-strong); box-shadow: var(--shadow-sm); }
 .faq-q {
   display: flex;
@@ -619,9 +721,10 @@ main:focus { outline: none; }
   line-height: 1.4;
   list-style: none;
   cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
 }
 .faq-q::-webkit-details-marker { display: none; }
-.faq-chevron { color: var(--text-2); transition: transform 0.25s var(--ease-out); }
+.faq-chevron { color: var(--text-2); transition: transform var(--dur-spring-fast) var(--ease-spring); }
 .faq-item[open] .faq-chevron { transform: rotate(180deg); }
 .faq-a { padding: 0 1.25rem 1.25rem; color: var(--text-2); }
 .faq-a p { max-width: 40rem; }
@@ -657,7 +760,7 @@ main:focus { outline: none; }
   font-size: clamp(2.25rem, 1.5rem + 3.5vw, 4rem);
   font-weight: 800;
   line-height: 1.05;
-  letter-spacing: -0.04em;
+  letter-spacing: var(--track-display);
 }
 .cta-sub {
   max-width: 34rem;
@@ -674,7 +777,7 @@ main:focus { outline: none; }
   margin-top: 2.25rem;
 }
 .cta-tile { --tile: 1.625rem; }
-.cta-small { margin-top: 1.75rem; color: #a09eab; font-size: 0.875rem; }
+.cta-small { margin-top: 1.75rem; color: #a09eab; font-size: 0.875rem; letter-spacing: var(--track-small); }
 .cta-small a { color: #ffffff; }
 @media (max-width: 479.98px) {
   .cta-apps { flex-direction: column; align-items: stretch; }
@@ -697,7 +800,7 @@ main:focus { outline: none; }
 }
 .footer-email .icon { width: 1.125rem; height: 1.125rem; }
 .footer-cols { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 2rem 1.5rem; }
-.footer-head { font-size: 0.875rem; font-weight: 600; letter-spacing: 0; color: var(--text); }
+.footer-head { font-size: 0.875rem; font-weight: 600; letter-spacing: var(--track-small); color: var(--text); }
 .footer-col ul { margin-top: 0.5rem; }
 .footer-col a {
   display: inline-flex;
@@ -710,6 +813,7 @@ main:focus { outline: none; }
 @media (hover: hover) {
   .footer-col a:hover, .footer-email:hover { color: var(--text); text-decoration: underline; }
 }
+.footer-col a:active, .footer-email:active { color: var(--text); }
 .footer-bottom {
   display: flex;
   flex-wrap: wrap;
@@ -720,6 +824,7 @@ main:focus { outline: none; }
   border-top: 1px solid var(--border);
   color: var(--text-3);
   font-size: 0.875rem;
+  letter-spacing: var(--track-small);
 }
 @media (min-width: 600px) {
   .footer-cols { grid-template-columns: repeat(4, minmax(0, 1fr)); }
@@ -734,26 +839,35 @@ main:focus { outline: none; }
 .reveal-ready .reveal {
   opacity: 0;
   transform: translateY(1rem);
-  transition: opacity 0.6s var(--ease-out), transform 0.6s var(--ease-out);
+  transition: opacity 0.4s ease, transform var(--dur-spring) var(--ease-spring);
 }
 .reveal-ready .reveal.is-visible { opacity: 1; transform: none; }
 
 /* ---------- User preferences ---------- */
+/* Reduced motion is not no feedback (apple-design 14): nothing moves or
+   scales, but menus, sheets and panels still cross-fade and pressed
+   controls still change colour. */
 @media (prefers-reduced-motion: reduce) {
-  .btn:active { transform: none; }
+  .btn:active, .store-badge:active, .nav-toggle:active, .showcase-tab:active,
+  .nav-menu-link:active { transform: none; }
   .reveal-ready .reveal { transform: none; transition: opacity 0.3s ease; }
   .hero-glow-blob { animation: none; }
   .js .site-nav, .js .nav-open .site-nav, .nav-panel,
   .nav-trigger[aria-expanded="true"] + .nav-panel { transform: none; }
   .nav-chevron, .faq-chevron, .link-arrow .icon { transition: none; }
 }
+/* Less transparency or more contrast: solid surfaces, defined edges. */
 @media (prefers-reduced-transparency: reduce), (prefers-contrast: more) {
-  .site-header { background: #ffffff; border-bottom-color: var(--border-strong); -webkit-backdrop-filter: none; backdrop-filter: none; }
+  .site-header,
+  .site-header.is-scrolled { background: #ffffff; box-shadow: inset 0 -1px 0 var(--border-strong); -webkit-backdrop-filter: none; backdrop-filter: none; }
+  .site-header::after { display: none; }
+  .nav-panel { background: var(--surface); -webkit-backdrop-filter: none; backdrop-filter: none; }
   .hero-glow { display: none; }
   .faq-item, .nav-panel { border-color: var(--border-strong); }
 }
 @supports not ((-webkit-backdrop-filter: blur(1px)) or (backdrop-filter: blur(1px))) {
-  .site-header { background: #ffffff; }
+  .site-header, .site-header.is-scrolled { background: #ffffff; }
+  .nav-panel { background: var(--surface); }
 }
 
 /* ---------- Google Play button ----------
@@ -771,21 +885,18 @@ main:focus { outline: none; }
   color: var(--on-btn);
   text-decoration: none;
   line-height: 1.1;
-  transition: background-color 0.15s ease, transform 0.1s ease, box-shadow 0.2s ease;
+  -webkit-tap-highlight-color: transparent;
+  transition: background-color var(--dur-quick) ease, transform var(--dur-spring-fast) var(--ease-spring), box-shadow 0.2s ease;
 }
-.store-badge:active { transform: scale(0.97); }
 .store-badge-mark { width: 1.375rem; height: 1.375rem; fill: currentColor; }
 .store-badge-text { display: grid; text-align: left; }
-.store-badge-top { font-size: 0.75rem; font-weight: 500; color: #d4d3db; }   /* 13:1 on the black badge */
-.store-badge-name { font-size: 1.0625rem; font-weight: 700; letter-spacing: -0.01em; }
+.store-badge-top { font-size: 0.75rem; font-weight: 500; letter-spacing: var(--track-small); color: #d4d3db; }   /* 13:1 on the black badge */
+.store-badge-name { font-size: 1.0625rem; font-weight: 700; letter-spacing: var(--track-headline); }
 .store-badge--light { background: #ffffff; color: var(--text); box-shadow: 0 10px 32px rgba(255, 255, 255, 0.16); }
 .store-badge--light .store-badge-top { color: var(--text-2); }
 @media (hover: hover) {
   .store-badge:hover { background: var(--btn-hover); }
   .store-badge--light:hover { background: #ffffff; box-shadow: 0 12px 40px rgba(255, 255, 255, 0.28); }
-}
-@media (prefers-reduced-motion: reduce) {
-  .store-badge:active { transform: none; }
 }
 
 /* ---------- Utilities ---------- */
@@ -840,6 +951,7 @@ main:focus { outline: none; }
 .showcase-dots i:nth-child(3) { background: #28c840; }
 
 .showcase-tabs {
+  position: relative;
   display: none;
   gap: 0.25rem;
   padding: 0.25rem;
@@ -866,10 +978,31 @@ main:focus { outline: none; }
   font-size: 0.875rem;
   font-weight: 600;
   line-height: 1.15;
+  letter-spacing: var(--track-small);
   cursor: pointer;
-  transition: background-color 0.2s ease, color 0.2s ease, box-shadow 0.2s ease;
+  -webkit-tap-highlight-color: transparent;
+  transition: background-color 0.2s ease, color 0.2s ease, box-shadow 0.2s ease, transform var(--dur-spring-fast) var(--ease-spring);
 }
 .showcase-tab[aria-selected="true"] { background: var(--surface); color: var(--text); box-shadow: var(--shadow-sm); }
+
+/* Segmented control: once site.js has measured the tabs, the white
+   selection is one thumb that slides from the old tab to the new one on
+   a spring (apple-design 7), instead of jumping. The tabs sit above it. */
+.showcase-thumb {
+  position: absolute;
+  top: 0.25rem;
+  left: 0;
+  z-index: 0;
+  height: calc(100% - 0.5rem);
+  border-radius: 9px;
+  background: var(--surface);
+  box-shadow: var(--shadow-sm);
+  pointer-events: none;
+  transition: transform var(--dur-spring) var(--ease-spring), width var(--dur-spring) var(--ease-spring);
+}
+.showcase-thumb.is-placing { transition: none; }
+.has-thumb .showcase-tab { position: relative; z-index: 1; }
+.has-thumb .showcase-tab[aria-selected="true"] { background: none; box-shadow: none; }
 @media (hover: hover) {
   .showcase-tab:hover { color: var(--text); }
 }
@@ -884,22 +1017,29 @@ main:focus { outline: none; }
 .showcase-panel + .showcase-panel { border-top: 1px solid var(--border); }
 .js .showcase-panel + .showcase-panel { border-top: 0; }
 .js .showcase-panel[data-hidden] { display: none; }
-.showcase-panel.is-entering { animation: panelIn 0.42s var(--ease-out); }
+/* The new panel comes in from the side of the tab that was picked
+   (site.js sets --enter-x to plus or minus), hinting where it came from. */
+.showcase-panel.is-entering { animation: panelIn var(--dur-spring) var(--ease-spring); }
 @keyframes panelIn {
-  from { opacity: 0; transform: translateY(8px); }
+  from { opacity: 0; transform: translateX(var(--enter-x, 0)); }
+  40% { opacity: 1; }
   to { opacity: 1; transform: none; }
+}
+@keyframes panelFade {
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
 .showcase-tile { --tile: 3.5rem; }
 .showcase-name {
   margin-top: 1.25rem;
   font-size: clamp(1.5rem, 1.2rem + 1.2vw, 2.125rem);
   font-weight: 800;
-  letter-spacing: -0.035em;
+  letter-spacing: var(--track-title-2);
 }
 .showcase-tagline { max-width: 30rem; margin-top: 0.625rem; color: var(--text-2); font-size: 1.0625rem; text-wrap: pretty; }
 .showcase-copy .check-list { margin-top: 1.5rem; }
 .showcase-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 0.75rem 1.5rem; margin-top: 1.75rem; }
-.store-note { margin-top: 0.75rem; color: var(--text-3); font-size: 0.8125rem; }
+.store-note { margin-top: 0.75rem; color: var(--text-3); font-size: 0.8125rem; letter-spacing: var(--track-small); }
 
 .showcase-stage {
   position: relative;
@@ -943,7 +1083,7 @@ main:focus { outline: none; }
   background: #0b0b12;
 }
 .phone-tile { --tile: 4.5rem; }
-.phone-name { font-size: 0.9375rem; font-weight: 700; letter-spacing: -0.02em; }
+.phone-name { font-size: 0.9375rem; font-weight: 700; letter-spacing: var(--track-headline); }
 
 @media (min-width: 760px) {
   .showcase-panel { grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); gap: 3rem; }
@@ -952,12 +1092,12 @@ main:focus { outline: none; }
   .showcase-stage { min-height: 0; padding-block: 1.75rem; }
   .phone { width: 8rem; }
   .phone-tile { --tile: 3.25rem; }
-  .phone-name { font-size: 0.8125rem; }
+  .phone-name { font-size: 0.8125rem; letter-spacing: var(--track-small); }
 }
 @media (max-width: 599.98px) {
   .showcase-bar { grid-template-columns: 1fr; padding: 0.5rem; }
   .showcase-dots, .showcase-bar-end { display: none; }
-  .showcase-tab { flex: 1 0 6rem; padding-inline: 0.375rem; font-size: 0.8125rem; text-align: center; }
+  .showcase-tab { flex: 1 0 6rem; padding-inline: 0.375rem; font-size: 0.8125rem; letter-spacing: var(--track-small); text-align: center; }
   .showcase-tab-tile { display: none; }
 }
 
@@ -976,10 +1116,17 @@ main:focus { outline: none; }
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: 20px;
-  transition: border-color 0.25s ease, box-shadow 0.25s ease, transform 0.25s var(--ease-out);
+  transition: border-color 0.25s ease, box-shadow 0.25s ease, transform var(--dur-spring) var(--ease-spring);
 }
+/* Pressing anywhere on a card presses the card (its link covers it). */
+.app-card:has(.app-card-name a:active) {
+  transform: scale(0.985);
+  transition-duration: var(--dur-press);
+  transition-timing-function: ease-out;
+}
+.app-card-name a { -webkit-tap-highlight-color: transparent; }
 .app-card-tile { --tile: 3.25rem; }
-.app-card-name { margin-top: 1.25rem; font-size: 1.25rem; font-weight: 700; letter-spacing: -0.02em; }
+.app-card-name { margin-top: 1.25rem; font-size: 1.25rem; font-weight: 700; letter-spacing: var(--track-headline); }
 .app-card-name a { color: inherit; text-decoration: none; }
 .app-card-name a::after { content: ""; position: absolute; inset: 0; z-index: 1; border-radius: inherit; }
 .app-card-name a:focus-visible { outline: none; }
@@ -1028,9 +1175,10 @@ main:focus { outline: none; }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .showcase-panel.is-entering { animation: none; }
-  .app-card { transition: none; }
-  .app-card:hover { transform: none; }
+  .showcase-panel.is-entering { animation: panelFade 0.2s ease; }
+  .showcase-thumb { transition: none; }
+  .app-card { transition: border-color 0.25s ease, box-shadow 0.25s ease; }
+  .app-card:hover, .app-card:has(.app-card-name a:active) { transform: none; }
 }
 
 /* ---------- Tables ---------- (legal pages, app compare tables) */
@@ -1043,7 +1191,7 @@ main:focus { outline: none; }
   border: 1px solid var(--border);
   border-radius: 14px;
 }
-.table-scroll table { width: 100%; min-width: 36rem; border-collapse: collapse; font-size: 0.875rem; line-height: 1.5; }
+.table-scroll table { width: 100%; min-width: 36rem; border-collapse: collapse; font-size: 0.875rem; line-height: 1.5; letter-spacing: var(--track-small); }
 .table-scroll th {
   padding: 0.75rem 1rem;
   background: var(--bg-alt);
@@ -1067,7 +1215,7 @@ main:focus { outline: none; }
     color: var(--text-3);
     font-size: 0.75rem;
     font-weight: 600;
-    letter-spacing: 0.08em;
+    letter-spacing: var(--track-caps);
     text-transform: uppercase;
   }
 }
