@@ -1,0 +1,33 @@
+---
+layout: default
+title: "Fuzon Apps: Cloud Storage, Smart Switch and GPS Navigation"
+description: "Fuzon Apps makes three phone apps: Cloud Storage for your files and photos, Smart Switch to move to a new phone, and GPS Voice Navigation."
+permalink: /
+css: home
+# Company-level questions only, each answered from the owner's Privacy
+# Policy and Terms of Service. Rendered visibly (faq-section.html) and as
+# FAQPage schema (home/schema.html) from this one list.
+faqs:
+  - q: "What apps does Fuzon Apps make?"
+    a: "Three phone apps: Cloud Storage, for storing, syncing and sharing your files and photos; Smart Switch – Data Transfer, for copying your contacts, messages, photos, apps and settings to a new phone; and GPS Voice Navigation, for maps, live traffic and turn-by-turn voice directions."
+  - q: "Does Smart Switch upload my data?"
+    a: "No. Smart Switch sends the data you choose directly from one phone to the other over a local wireless link or a cable. It doesn't upload your transferred content to our servers, and we keep no copy."
+  - q: "Do I need an account?"
+    a: "Cloud Storage uses an account to store and sync your files. In GPS Voice Navigation, signing in lets you sync your saved places and trip history. Smart Switch moves your data straight between your two phones."
+  - q: "How do I delete my account or my data?"
+    a: "In Cloud Storage, delete files or your whole account in Settings > Account. In GPS Voice Navigation, view, delete or turn off trip history and saved places in Settings > Privacy. You can also email console@fuzonapps.com."
+  - q: "How do I get help with an app?"
+    a: "Email console@fuzonapps.com. Tell us which app you're using, your phone model and what happened. Please don't include your password."
+---
+{%- comment -%}
+  Homepage. Follows the Cloudly template's order (PLAN.md section 6.1):
+  hero, showcase window, facts strip (in place of the template's customer
+  logos), apps, data, FAQ, black CTA band. Each section is its own
+  include in _includes/home/.
+{%- endcomment -%}
+{% include home/schema.html %}
+{% include home/hero.html %}
+{% include home/apps.html %}
+{% include home/data.html %}
+{% include faq-section.html faqs=page.faqs id="faq" alt=true heading="Questions people ask" sub="About the apps, your data and getting help." %}
+{% include cta-band.html %}

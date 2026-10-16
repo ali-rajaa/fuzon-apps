@@ -1,0 +1,9 @@
+{%- comment -%}
+  The Fuzon Apps mark: the gradient hexagon with the rocket. Redrawn as
+  SVG from the owner's logo screenshot (16 Oct; _reference/logo-source.png),
+  replace assets/icons/logo.svg if the original file turns up.
+  An <img>, so the file is cached once for every page. Decorative where
+  used, because the wordmark "Fuzon Apps" always sits beside it.
+  Params: class (optional).
+{%- endcomment -%}
+<img class="{{ include.class | default: 'logo-mark' }}" src="{{ '/assets/icons/logo.svg' | relative_url }}" width="241" height="280" alt="" decoding="async">

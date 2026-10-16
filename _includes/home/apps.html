@@ -1,0 +1,40 @@
+{%- comment -%}
+  "Three apps. One place." The template's "Everything you need" row of
+  three white cards on a grey band, one card per app in its tone: tile,
+  name, tagline, the three points as chips, a link to its page, and the
+  template's large faded icon in the corner (tinted with the app's tone).
+
+  Store buttons appear here only once apps.yml has store links (none
+  yet), so nothing points at a store listing we can't confirm.
+{%- endcomment -%}
+<section class="section section--alt" id="apps" aria-labelledby="apps-title">
+  <div class="wrap">
+    <div class="section-head section-head--center reveal">
+      <h2 id="apps-title">Three apps. One place.</h2>
+      <p class="section-sub">Pick the one for the job. Each app has its own page with what it does, the permissions it asks for and how it handles your data.</p>
+    </div>
+    <ul class="app-cards" role="list">
+      {%- for app in site.data.apps %}
+      {%- assign _url = '/' | append: app.slug | relative_url %}
+      <li class="app-card tone-{{ app.tone }} reveal">
+        {% include app-tile.html app=app class="app-card-tile" %}
+        <h3 class="app-card-name"><a href="{{ _url }}">{{ app.name | escape }}</a></h3>
+        <p class="app-card-text">{{ app.tagline | escape }}</p>
+        <ul class="chips" role="list">
+          {%- for point in app.points %}
+          <li class="chip-sm">{{ point | escape }}</li>
+          {%- endfor %}
+        </ul>
+        {%- if app.android_url != "" or app.ios_url != "" %}
+        <p class="app-card-stores">
+          {%- if app.android_url != "" %}<a class="btn btn--secondary btn--sm" href="{{ app.android_url }}">Google Play</a>{% endif %}
+          {%- if app.ios_url != "" %}<a class="btn btn--secondary btn--sm" href="{{ app.ios_url }}">App Store</a>{% endif %}
+        </p>
+        {%- endif %}
+        <span class="link-arrow app-card-more" aria-hidden="true">About {{ app.short | escape }}<svg class="icon"><use href="#i-arrow-right"/></svg></span>
+        <svg class="icon app-card-bg" aria-hidden="true"><use href="#i-{{ app.glyph }}"/></svg>
+      </li>
+      {%- endfor %}
+    </ul>
+  </div>
+</section>

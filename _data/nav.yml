@@ -1,0 +1,25 @@
+# Support and company links, shared by the header's Support menu and the
+# footer, so the two can never list different pages. App links come from
+# apps.yml. `icon` is an icon-sprite symbol.
+
+support:
+  - label: "Contact support"
+    url: "/contact"
+    icon: "mail"
+    blurb: "Email us about any app"
+  - label: "Delete your account"
+    url: "/delete-account"
+    icon: "trash"
+    blurb: "Remove your account and data"
+  - label: "Privacy Policy"
+    url: "/privacy-policy"
+    icon: "shield"
+    blurb: "What we collect and why"
+  - label: "Terms of Service"
+    url: "/terms-of-service"
+    icon: "file"
+    blurb: "The rules for using the apps"
+
+company:
+  - label: "About"
+    url: "/about"

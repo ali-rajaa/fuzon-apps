@@ -1,0 +1,31 @@
+---
+layout: default
+title: "Page not found | Fuzon Apps"
+description: "This page doesn't exist. Go to the homepage or open one of our apps."
+permalink: /404.html
+css: upcoming
+noindex: true
+---
+{%- comment -%}
+  Not-found page (playbook 9.8): a short message, the way home, and a link
+  to each app. noindex, no canonical (default.html skips it for
+  /404.html), left out of the sitemap. GitHub Pages serves it with a real
+  404 status.
+{%- endcomment -%}
+<section class="upcoming hero-glow-host" aria-labelledby="page-title">
+  {% include hero-glow.html %}
+  <div class="wrap hero-glow-content upcoming-inner">
+    <p class="upcoming-code" aria-hidden="true">404</p>
+    <h1 id="page-title" class="upcoming-title">We can't find that page</h1>
+    <p class="upcoming-lead">The address may be mistyped, or the page may have moved. Try the homepage, or go straight to an app.</p>
+    <div class="upcoming-actions upcoming-actions--center">
+      <a class="btn btn--primary" href="{{ '/' | relative_url }}">Go to the homepage</a>
+      <a class="btn btn--secondary" href="{{ '/contact' | relative_url }}">Contact support</a>
+    </div>
+    <ul class="notfound-apps" role="list">
+      {%- for app in site.data.apps %}
+      <li><a class="notfound-app" href="{{ '/' | append: app.slug | relative_url }}">{% include app-tile.html app=app class="notfound-tile" %}<span>{{ app.short | escape }}</span><svg class="icon" aria-hidden="true"><use href="#i-arrow-right"/></svg></a></li>
+      {%- endfor %}
+    </ul>
+  </div>
+</section>

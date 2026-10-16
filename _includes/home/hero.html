@@ -1,0 +1,87 @@
+{%- comment -%}
+  Homepage hero band: the template's first screen, adapted for three apps.
+
+  1. Chip (the template's "Live Demo Webinar" pill), linking to the apps.
+  2. H1, one line per app: store (Cloud Storage), move (Smart Switch),
+     find your way (GPS). Lead names all three. Two buttons: black
+     primary, grey secondary, as in the template.
+  3. Showcase window (the template's big browser mock-up): three tabs, one
+     per app. Each panel shows the app's tile, tagline, three points and a
+     phone frame. The phone shows the app's tile and name until real
+     screenshots arrive (STATUS.md section 10), never invented app UI.
+     Tabs follow the ARIA tabs pattern (site.js). Without JavaScript the
+     tab list is hidden and all three panels show, stacked.
+  4. Facts strip, in place of the template's "Meet Our Customers" logos
+     (playbook 2: no other companies' logos, no unbacked claims). Each
+     line restates the owner's Privacy Policy.
+
+  None of it uses .reveal: it's the first screen (playbook 9.2).
+{%- endcomment -%}
+{%- assign _apps = site.data.apps -%}
+<section class="home-hero hero-glow-host" aria-labelledby="hero-title">
+  {% include hero-glow.html %}
+  <div class="wrap hero-glow-content">
+    <div class="hero-copy">
+      <a class="chip" href="#apps">
+        <span class="chip-dot" aria-hidden="true"></span>
+        <span class="chip-full">{% for app in _apps %}{{ app.short | escape }}{% unless forloop.last %}<span class="chip-sep">, </span>{% endunless %}{% endfor %}</span>
+        <span class="chip-short">Three apps for your phone</span>
+        <svg class="icon chip-arrow" aria-hidden="true"><use href="#i-chevron-right"/></svg>
+      </a>
+      <h1 id="hero-title" class="hero-title">Store it. Move it.<br> Find your way.</h1>
+      <p class="hero-lead">Fuzon Apps makes three phone apps: Cloud Storage for your files and photos, Smart Switch to move your data to a new phone, and GPS Voice Navigation for turn-by-turn directions.</p>
+      <div class="hero-actions">
+        <a class="btn btn--primary btn--lg" href="#apps">See the apps</a>
+        <a class="btn btn--secondary btn--lg" href="{{ '/contact' | relative_url }}">Get support</a>
+      </div>
+    </div>
+
+    <div class="showcase" data-tabs>
+      <div class="showcase-bar">
+        <span class="showcase-dots" aria-hidden="true"><i></i><i></i><i></i></span>
+        <div class="showcase-tabs" role="tablist" aria-label="Fuzon apps">
+          {%- for app in _apps %}
+          <button class="showcase-tab" type="button" role="tab" id="tab-{{ app.slug }}" aria-controls="panel-{{ app.slug }}" aria-selected="{% if forloop.first %}true{% else %}false{% endif %}"{% unless forloop.first %} tabindex="-1"{% endunless %}>
+            {% include app-tile.html app=app class="showcase-tab-tile" %}<span>{{ app.short | escape }}</span>
+          </button>
+          {%- endfor %}
+        </div>
+        <span class="showcase-bar-end" aria-hidden="true"></span>
+      </div>
+
+      {%- for app in _apps %}
+      <div class="showcase-panel tone-{{ app.tone }}" role="tabpanel" id="panel-{{ app.slug }}" aria-labelledby="tab-{{ app.slug }}"{% unless forloop.first %} data-hidden{% endunless %}>
+        <div class="showcase-copy">
+          {% include app-tile.html app=app class="showcase-tile" %}
+          <h2 class="showcase-name">{{ app.name | escape }}</h2>
+          <p class="showcase-tagline">{{ app.tagline | escape }}</p>
+          <ul class="check-list" role="list">
+            {%- for point in app.points %}
+            <li><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg><span>{{ point | escape }}</span></li>
+            {%- endfor %}
+          </ul>
+          <a class="link-arrow" href="{{ '/' | append: app.slug | relative_url }}">About {{ app.short | escape }}<svg class="icon" aria-hidden="true"><use href="#i-arrow-right"/></svg></a>
+        </div>
+        <div class="showcase-stage" aria-hidden="true">
+          <div class="phone">
+            <div class="phone-screen">
+              <span class="phone-notch"></span>
+              {% include app-tile.html app=app class="phone-tile" %}
+              <span class="phone-name">{{ app.short | escape }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      {%- endfor %}
+    </div>
+
+    <div class="facts">
+      <p class="facts-label">From our <a href="{{ '/privacy-policy' | relative_url }}">privacy policy</a></p>
+      <ul class="facts-list" role="list">
+        <li><svg class="icon" aria-hidden="true"><use href="#i-phones"/></svg><span>Smart Switch sends your data straight from phone to phone. We keep no copy.</span></li>
+        <li><svg class="icon" aria-hidden="true"><use href="#i-lock"/></svg><span>Cloud Storage encrypts your files in transit and at rest.</span></li>
+        <li><svg class="icon" aria-hidden="true"><use href="#i-shield"/></svg><span>We don't sell your personal information.</span></li>
+      </ul>
+    </div>
+  </div>
+</section>

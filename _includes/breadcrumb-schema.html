@@ -1,0 +1,23 @@
+{%- comment -%}
+  BreadcrumbList structured data (playbook Appendix G5). Param: crumbs, a
+  list of {name, url} from the homepage down, url site-relative. Renders
+  nothing if crumbs is missing or empty.
+{%- endcomment -%}
+{%- if include.crumbs and include.crumbs.size > 0 -%}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {%- for crumb in include.crumbs %}
+    {
+      "@type": "ListItem",
+      "position": {{ forloop.index }},
+      "name": {{ crumb.name | jsonify }},
+      "item": {{ crumb.url | absolute_url | jsonify }}
+    }{% unless forloop.last %},{% endunless %}
+    {%- endfor %}
+  ]
+}
+</script>
+{%- endif -%}

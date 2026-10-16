@@ -1,0 +1,21 @@
+{%- comment -%}
+  Decorative glow behind a hero (playbook 9.2 and Appendix G6): three
+  large soft radial gradients in the logo's colours, drifting slowly, plus
+  a faint static dot grid. Replaces the grey cloud texture in the
+  template. aria-hidden and pointer-events:none.
+
+  Plain divs with radial gradients rather than blurred SVG: gradients are
+  already soft, and transform-only animation stays on the GPU. Each blob
+  takes 19s, 23s or 27s per cycle, so the pattern never visibly repeats,
+  and all of it stops under prefers-reduced-motion.
+
+  On an app page the tone class swaps the three colours for the app's.
+
+  Usage: first child of a container with .hero-glow-host; the real
+  content inside it carries .hero-glow-content.
+{%- endcomment -%}
+<div class="hero-glow" aria-hidden="true">
+  <div class="hero-glow-blob hero-glow-blob--a"></div>
+  <div class="hero-glow-blob hero-glow-blob--b"></div>
+  <div class="hero-glow-blob hero-glow-blob--c"></div>
+</div>

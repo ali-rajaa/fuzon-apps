@@ -1,0 +1,64 @@
+# One entry per app. The header menu, homepage showcase and cards, the CTA
+# band, the footer, the 404 page and the homepage schema all read this
+# list, so an app's name or link is typed once.
+#
+# Every line of copy here comes from the owner's Privacy Policy and Terms
+# of Service (Oct 2026). Nothing is invented: when a store listing exists
+# its wording can replace these.
+#
+#   name        full app name, as the owner's documents write it
+#   short       short name for menus and buttons
+#   slug        page address (/<slug>)
+#   tone        colour identity from the logo (shell.scss "App tones")
+#   glyph       icon-sprite symbol drawn on the app's tile
+#   tagline     one line, from the documents' app descriptions
+#   points      three things the app does (showcase and cards)
+#   android_url / ios_url
+#               store links. Empty until the owner supplies them; store
+#               buttons and "Android and iPhone" are derived from these,
+#               never typed.
+#   built       true once the app's full page exists. Until then its
+#               address serves the "upcoming" placeholder, so every link
+#               still works.
+
+- name: "Cloud Storage"
+  short: "Cloud Storage"
+  slug: "cloud-storage"
+  tone: "cloud"
+  glyph: "cloud"
+  tagline: "Upload, store, sync, organise and share your files and photos across your devices."
+  points:
+    - "Sync files across your devices"
+    - "Share files and folders with a link"
+    - "Previews and version history"
+  android_url: ""
+  ios_url: ""
+  built: false
+
+- name: "Smart Switch – Data Transfer"
+  short: "Smart Switch"
+  slug: "smart-switch"
+  tone: "switch"
+  glyph: "transfer"
+  tagline: "Copy your contacts, messages, photos, apps and settings from one phone to another."
+  points:
+    - "Phone to phone over Wi-Fi or cable"
+    - "Pair with a one-time code or QR code"
+    - "Your data never goes through our servers"
+  android_url: ""
+  ios_url: ""
+  built: false
+
+- name: "GPS Voice Navigation"
+  short: "GPS Navigation"
+  slug: "gps-voice-navigation"
+  tone: "gps"
+  glyph: "navigation"
+  tagline: "Maps, live traffic and turn-by-turn directions with voice guidance."
+  points:
+    - "Turn-by-turn voice guidance"
+    - "Live traffic and hazard alerts"
+    - "Optional offline maps"
+  android_url: ""
+  ios_url: ""
+  built: false

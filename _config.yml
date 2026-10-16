@@ -1,0 +1,61 @@
+title: Fuzon Apps
+description: Fuzon Apps makes Cloud Storage, Smart Switch and GPS Voice Navigation, three phone apps for your files, your data and your directions.
+
+# ---------------------------------------------------------------------------
+# Site address. Two states; see STATUS.md section 7.
+#
+#   Preview (now)    url: "https://ali-rajaa.github.io"  baseurl: "/fuzon-apps"  staging: true
+#   Live (cutover)   url: "https://fuzonapps.com"        baseurl: ""             staging: false
+#
+# Every internal link goes through relative_url and every full URL through
+# absolute_url, and both read these values, so the switch is these three
+# lines and nothing else. The custom domain itself is set in the repo's
+# Settings > Pages > Custom domain: Actions deployments ignore a CNAME file.
+# ---------------------------------------------------------------------------
+url: "https://ali-rajaa.github.io"
+baseurl: "/fuzon-apps"
+
+# true adds noindex to every page and blocks crawling in robots.txt, so the
+# preview can never be indexed. Set to false only at the cutover.
+staging: true
+
+timezone: Australia/Perth
+
+plugins: []
+
+# Stylesheets are written as plain CSS in .scss files (assets/css/) so
+# Jekyll's built-in Sass compiles them to minified .css at build time.
+# The source keeps every comment; the served file has none.
+sass:
+  style: compressed
+  sourcemap: never
+
+# Fail the build on a Liquid or front matter mistake instead of shipping a
+# page with the mistake rendered into it. strict_variables stays off on
+# purpose: optional front matter (css, tone, noindex) is read as unset.
+strict_front_matter: true
+liquid:
+  error_mode: strict
+  strict_filters: true
+
+# The company behind the apps. legal_name is written exactly as the owner's
+# Privacy Policy and Terms of Service write it ("FUZON APS PTY LIMITED"),
+# still to be confirmed against ASIC (STATUS.md section 10). It appears on
+# the legal pages only; the rest of the site says Fuzon Apps.
+# support_email is the owner's choice (16 Oct) and is used site-wide.
+company:
+  legal_name: "FUZON APS PTY LIMITED"
+  support_email: "console@fuzonapps.com"
+
+exclude:
+  - Gemfile
+  - Gemfile.lock
+  - README.md
+  - STATUS.md
+  - PLAN.md
+  - SITE-PLAYBOOK.md
+  - _reference
+  - .github
+  - .claude
+  - vendor
+  - node_modules

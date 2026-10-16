@@ -1,0 +1,89 @@
+{%- comment -%}
+  Site header, in the Cloudly template's style: logo and wordmark on the
+  left, a few plain links beside it, one black button on the right. No
+  "Log in" (owner, 16 Oct: there is no login, it is just a website).
+
+  Items: Apps (menu of every app in apps.yml), Support (menu from
+  nav.yml), About (plain link), and "Get the apps" (to the homepage's
+  app list).
+
+  Behaviour (site.js, playbook 9.1): sticky; a hairline and shadow appear
+  once content scrolls under it. On 760px and up the menus are flyouts,
+  opening on click or on hover after a short intent delay. Below 760px a
+  menu button opens a sheet in which Apps and Support fold open. Escape
+  closes and returns focus; clicking outside closes.
+
+  Without JavaScript the menus open on hover and keyboard focus
+  (shell.scss "Header"), and on phones the links show as a plain list.
+{%- endcomment -%}
+{%- assign _home = '/' | relative_url -%}
+{%- assign _apps_href = '/' | relative_url | append: '#apps' -%}
+<header class="site-header" id="site-header">
+  <div class="wrap header-bar">
+    <a class="brand" href="{{ _home }}"{% if page.url == "/" %} aria-current="page"{% endif %}>
+      {% include logo.html class="brand-mark" %}
+      <span class="brand-name">Fuzon Apps</span>
+    </a>
+
+    <nav class="site-nav" id="site-nav" aria-label="Main">
+      <ul class="nav-list" role="list">
+        <li class="nav-item nav-item--menu">
+          <button class="nav-trigger" type="button" aria-expanded="false" aria-controls="menu-apps">
+            <span>Apps</span><svg class="icon nav-chevron" aria-hidden="true"><use href="#i-chevron-down"/></svg>
+          </button>
+          <div class="nav-panel nav-panel--apps" id="menu-apps">
+            <ul class="nav-menu" role="list">
+              {%- for app in site.data.apps %}
+              {%- assign _url = '/' | append: app.slug %}
+              <li>
+                <a class="nav-menu-link" href="{{ _url | relative_url }}"{% if page.url == _url %} aria-current="page"{% endif %}>
+                  {% include app-tile.html app=app class="nav-menu-tile" %}
+                  <span class="nav-menu-text">
+                    <span class="nav-menu-title">{{ app.short | escape }}</span>
+                    <span class="nav-menu-blurb">{{ app.tagline | escape }}</span>
+                  </span>
+                </a>
+              </li>
+              {%- endfor %}
+            </ul>
+          </div>
+        </li>
+        <li class="nav-item nav-item--menu">
+          <button class="nav-trigger" type="button" aria-expanded="false" aria-controls="menu-support">
+            <span>Support</span><svg class="icon nav-chevron" aria-hidden="true"><use href="#i-chevron-down"/></svg>
+          </button>
+          <div class="nav-panel nav-panel--support" id="menu-support">
+            <ul class="nav-menu" role="list">
+              {%- for item in site.data.nav.support %}
+              <li>
+                <a class="nav-menu-link" href="{{ item.url | relative_url }}"{% if page.url == item.url %} aria-current="page"{% endif %}>
+                  <span class="nav-menu-icon" aria-hidden="true"><svg class="icon"><use href="#i-{{ item.icon }}"/></svg></span>
+                  <span class="nav-menu-text">
+                    <span class="nav-menu-title">{{ item.label | escape }}</span>
+                    <span class="nav-menu-blurb">{{ item.blurb | escape }}</span>
+                  </span>
+                </a>
+              </li>
+              {%- endfor %}
+            </ul>
+          </div>
+        </li>
+        {%- for item in site.data.nav.company %}
+        <li class="nav-item">
+          <a class="nav-link nav-link--page" href="{{ item.url | relative_url }}"{% if page.url == item.url %} aria-current="page"{% endif %}>{{ item.label | escape }}</a>
+        </li>
+        {%- endfor %}
+      </ul>
+      <a class="btn btn--primary nav-sheet-cta" href="{{ _apps_href }}">Get the apps</a>
+    </nav>
+
+    <div class="header-actions">
+      <a class="btn btn--primary btn--sm header-cta" href="{{ _apps_href }}">Get the apps</a>
+      <button class="nav-toggle" id="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav" aria-label="Open menu">
+        <svg class="icon nav-toggle-open" aria-hidden="true"><use href="#i-menu"/></svg>
+        <svg class="icon nav-toggle-close" aria-hidden="true"><use href="#i-close"/></svg>
+      </button>
+    </div>
+  </div>
+</header>
+<div class="nav-scrim" id="nav-scrim" aria-hidden="true"></div>

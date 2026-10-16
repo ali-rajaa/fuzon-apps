@@ -1,0 +1,24 @@
+{%- comment -%}
+  The template's black closing band: small caps eyebrow, white heading,
+  a white button with a soft glow, grey small print. For Fuzon the one
+  button becomes one white button per app (from apps.yml), each opening
+  that app's page, with a faint logo-gradient glow behind them.
+
+  The template's "No credit card required · Free 14-day trial" line is
+  replaced with the support email: no pricing claim is confirmed.
+  Params: heading, sub (both optional).
+{%- endcomment -%}
+<section class="cta-band" aria-labelledby="cta-title">
+  <div class="cta-glow" aria-hidden="true"></div>
+  <div class="wrap cta-inner reveal">
+    <p class="cta-eyebrow">Ready when you are</p>
+    <h2 id="cta-title" class="cta-title">{{ include.heading | default: "Pick the app you need" | escape }}</h2>
+    <p class="cta-sub">{{ include.sub | default: "Each app has its own page with its features, the permissions it asks for and how it handles your data." | escape }}</p>
+    <ul class="cta-apps" role="list">
+      {%- for app in site.data.apps %}
+      <li><a class="btn btn--light btn--lg" href="{{ '/' | append: app.slug | relative_url }}">{% include app-tile.html app=app class="cta-tile" %}{{ app.short | escape }}</a></li>
+      {%- endfor %}
+    </ul>
+    <p class="cta-small">Questions? Email <a href="mailto:{{ site.company.support_email }}">{{ site.company.support_email }}</a></p>
+  </div>
+</section>

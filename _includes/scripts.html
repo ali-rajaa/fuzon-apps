@@ -1,0 +1,4 @@
+{%- comment -%} The one script on the site, deferred and cache-stamped like
+the stylesheets. Each block in it checks for its own elements, so it is
+safe on every page. {%- endcomment -%}
+<script src="{{ '/assets/js/site.js' | relative_url }}?v={{ site.time | date: '%s' }}" defer></script>

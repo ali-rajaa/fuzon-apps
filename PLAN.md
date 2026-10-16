@@ -440,7 +440,7 @@ build carries on.
 | 6 | Decisions on the legal issues in section 7 | Legal pages |
 | 7 | Keep the name "Smart Switch"? | App page, before launch |
 | 8 | Domain: registrar / Cloudflare access; is the console@ mailbox live? | Launch |
-| 9 | **Branches:** the playbook says push to `main` only, but this session works on `claude/vigilant-volta-hjzpr2`. Pages deploys from `main`. Merge that branch to `main` when you approve, or allow pushes straight to `main`? | Step 3 |
+| 9 | ~~Branches~~ Decided (owner, 16 Oct): always push to `main`. | Done |
 | 10 | Guides hub at launch, or phase 2? | Scope |
 | 11 | OK with the hero line "Store it. Move it. Find your way." and hexagon app tiles? | Step 2 |
 | 12 | Analytics: none (recommended; no cookie banner), or which? | Privacy page |

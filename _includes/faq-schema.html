@@ -1,0 +1,26 @@
+{%- comment -%}
+  FAQPage structured data (playbook Appendix G4). Param: faqs, a list of
+  {q, a}. Renders nothing if faqs is missing or empty. Values go through
+  jsonify, so a quote mark or ampersand in an answer can't break the JSON.
+  Usage: {% include faq-schema.html faqs=page.faqs %}
+{%- endcomment -%}
+{%- if include.faqs and include.faqs.size > 0 -%}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {%- for item in include.faqs %}
+    {
+      "@type": "Question",
+      "name": {{ item.q | jsonify }},
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": {{ item.a | jsonify }}
+      }
+    }{% unless forloop.last %},{% endunless %}
+    {%- endfor %}
+  ]
+}
+</script>
+{%- endif -%}

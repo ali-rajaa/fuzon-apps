@@ -1,0 +1,18 @@
+---
+---
+{%- comment -%}
+  Two states, from _config.yml's `staging` flag: the preview blocks all
+  crawling (every page also carries noindex); the live site allows it and
+  points crawlers at the sitemap. The empty front matter fence above is
+  required, or Jekyll copies this file unrendered.
+{%- endcomment -%}
+{%- if site.staging -%}
+# Preview copy of fuzonapps.com, not for indexing.
+User-agent: *
+Disallow: /
+{%- else -%}
+User-agent: *
+Allow: /
+
+Sitemap: {{ '/sitemap.xml' | absolute_url }}
+{%- endif %}

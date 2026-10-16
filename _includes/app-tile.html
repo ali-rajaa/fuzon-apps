@@ -1,0 +1,14 @@
+{%- comment -%}
+  An app's tile: a white line glyph on a rounded hexagon in the app's
+  tone. The hexagon echoes the Fuzon logo. Used everywhere an app needs a
+  picture (menu, showcase, cards, CTA band, 404) instead of the real store
+  icon: the site never shows app store icons (playbook 2 and 8.6).
+
+  The shape is a CSS mask and the colours come from the tone class
+  (shell.scss "App tones"), so a tile is plain HTML with no image request.
+  Always decorative: the app's name is always given in text beside it.
+
+  Params: app (an apps.yml entry), class (optional size/position classes).
+  Usage: {% include app-tile.html app=app class="card-tile" %}
+{%- endcomment -%}
+<span class="app-tile tone-{{ include.app.tone }}{% if include.class %} {{ include.class }}{% endif %}" aria-hidden="true"><svg class="icon"><use href="#i-{{ include.app.glyph }}"/></svg></span>

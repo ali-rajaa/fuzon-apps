@@ -1,0 +1,61 @@
+{%- comment -%}
+  Site footer, in the template's layout: logo and one line on the left,
+  link columns on the right. Apps come from apps.yml and the rest from
+  nav.yml, so it always matches the header.
+
+  "© <year> Fuzon Apps": the trading name. The registered company name
+  appears on the legal pages only (playbook 2 and 15.4).
+{%- endcomment -%}
+<footer class="site-footer">
+  <div class="wrap footer-grid">
+    <div class="footer-brand">
+      <a class="brand" href="{{ '/' | relative_url }}">
+        {% include logo.html class="brand-mark" %}
+        <span class="brand-name">Fuzon Apps</span>
+      </a>
+      <p class="footer-line">Cloud Storage, Smart Switch and GPS Voice Navigation: three phone apps for your files, your data and your directions.</p>
+      <a class="footer-email" href="mailto:{{ site.company.support_email }}">
+        <svg class="icon" aria-hidden="true"><use href="#i-mail"/></svg>{{ site.company.support_email }}
+      </a>
+    </div>
+
+    <nav class="footer-cols" aria-label="Footer">
+      <div class="footer-col">
+        <h2 class="footer-head">Apps</h2>
+        <ul role="list">
+          {%- for app in site.data.apps %}
+          <li><a href="{{ '/' | append: app.slug | relative_url }}">{{ app.short | escape }}</a></li>
+          {%- endfor %}
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h2 class="footer-head">Support</h2>
+        <ul role="list">
+          <li><a href="{{ '/contact' | relative_url }}">Contact support</a></li>
+          <li><a href="{{ '/delete-account' | relative_url }}">Delete your account</a></li>
+          <li><a href="{{ '/' | relative_url }}#faq">FAQ</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h2 class="footer-head">Company</h2>
+        <ul role="list">
+          {%- for item in site.data.nav.company %}
+          <li><a href="{{ item.url | relative_url }}">{{ item.label | escape }}</a></li>
+          {%- endfor %}
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h2 class="footer-head">Legal</h2>
+        <ul role="list">
+          <li><a href="{{ '/privacy-policy' | relative_url }}">Privacy Policy</a></li>
+          <li><a href="{{ '/terms-of-service' | relative_url }}">Terms of Service</a></li>
+        </ul>
+      </div>
+    </nav>
+  </div>
+  <div class="wrap">
+    <div class="footer-bottom">
+      <p>&copy; {{ site.time | date: "%Y" }} Fuzon Apps</p>
+    </div>
+  </div>
+</footer>
