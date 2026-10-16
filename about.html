@@ -1,0 +1,90 @@
+---
+layout: support
+title: "About Fuzon Apps"
+description: "Fuzon Apps makes Android apps that each do one everyday job well: storing your files, moving to a new phone and getting directions. Free to download."
+permalink: /about
+css: support
+schema_type: AboutPage
+eyebrow: "About us"
+heading: "About Fuzon Apps"
+lead: "We make Android apps that each do one everyday job well, and we make them free to download on Google Play."
+---
+{%- comment -%}
+  About page. Only facts the owner has confirmed: what Fuzon Apps makes
+  (from apps.yml), where to get the apps, how the apps are paid for, and
+  how to reach us. No team, history, location, numbers or awards (none
+  confirmed; the legal name and address stay on the legal pages).
+{%- endcomment -%}
+<section class="support-section" aria-labelledby="who-title">
+  <div class="wrap support-grid">
+    <div class="support-prose">
+      <p class="eyebrow">Who we are</p>
+      <h2 id="who-title">Apps for the everyday jobs on your phone</h2>
+      <p>Fuzon Apps builds Android apps for the jobs people do on their phones every day. Keeping photos and files safe somewhere other than the phone. Moving everything across when it's time for a new handset. Getting to an address you've never been to before.</p>
+      <p>Each of our apps sets out to do one of those jobs properly, rather than trying to do everything at once. That keeps them focused and easier to use, and it means every app has a page on this site that explains exactly what it does and how to get started.</p>
+      <p>All of our apps are free to download from Google Play. Some features are available as optional in-app purchases, handled by Google Play, so you can try an app before deciding whether you need more from it.</p>
+    </div>
+    <div class="side-card">
+      <p class="eyebrow" id="facts-title">At a glance</p>
+      <ul class="link-list" role="list">
+        <li><a href="{{ site.play_developer_url }}"><svg class="icon" aria-hidden="true"><use href="#i-download"/></svg>Our apps on Google Play<svg class="icon" aria-hidden="true"><use href="#i-arrow-right"/></svg></a></li>
+        <li><a href="mailto:{{ site.company.support_email }}"><svg class="icon" aria-hidden="true"><use href="#i-mail"/></svg>{{ site.company.support_email }}<svg class="icon" aria-hidden="true"><use href="#i-arrow-right"/></svg></a></li>
+        <li><a href="{{ '/privacy-policy' | relative_url }}"><svg class="icon" aria-hidden="true"><use href="#i-shield"/></svg>Privacy Policy<svg class="icon" aria-hidden="true"><use href="#i-arrow-right"/></svg></a></li>
+        <li><a href="{{ '/terms-of-service' | relative_url }}"><svg class="icon" aria-hidden="true"><use href="#i-file"/></svg>Terms of Service<svg class="icon" aria-hidden="true"><use href="#i-arrow-right"/></svg></a></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section class="support-section" aria-labelledby="make-title">
+  <div class="wrap">
+    <p class="eyebrow">What we make</p>
+    <h2 id="make-title">Our apps</h2>
+    <p class="section-intro">Each one has its own page with what it does, how to start and practical tips.</p>
+    <ul class="app-mails" role="list">
+      {%- for app in site.data.apps %}
+      <li>
+        <a class="app-mail tone-{{ app.tone }}" href="{{ '/' | append: app.slug | relative_url }}">
+          {% include app-tile.html app=app class="app-mail-tile" %}
+          <span class="app-mail-text">
+            <span class="app-mail-name">{{ app.name | escape }}</span>
+            <span class="app-mail-sub">{{ app.tagline | escape }}</span>
+          </span>
+          <svg class="icon" aria-hidden="true"><use href="#i-arrow-right"/></svg>
+        </a>
+      </li>
+      {%- endfor %}
+    </ul>
+  </div>
+</section>
+
+<section class="support-section" aria-labelledby="how-title">
+  <div class="wrap">
+    <p class="eyebrow">How we work</p>
+    <h2 id="how-title">What you can expect from us</h2>
+    <div class="tips">
+      <div class="tip">
+        <span class="tip-icon" aria-hidden="true"><svg class="icon"><use href="#i-check"/></svg></span>
+        <h3>One job, done properly</h3>
+        <p>Every app is built around one everyday task, so it's clear what it's for the moment you open it.</p>
+      </div>
+      <div class="tip">
+        <span class="tip-icon" aria-hidden="true"><svg class="icon"><use href="#i-download"/></svg></span>
+        <h3>Free to download</h3>
+        <p>You can install any of our apps from Google Play at no cost. Optional in-app purchases are available through Google Play.</p>
+      </div>
+      <div class="tip">
+        <span class="tip-icon" aria-hidden="true"><svg class="icon"><use href="#i-file"/></svg></span>
+        <h3>Plain explanations</h3>
+        <p>This site explains what each app does in plain English, with guides that help whether or not you use our apps.</p>
+      </div>
+      <div class="tip">
+        <span class="tip-icon" aria-hidden="true"><svg class="icon"><use href="#i-mail"/></svg></span>
+        <h3>Help by email</h3>
+        <p>If something isn't working, <a href="{{ '/contact' | relative_url }}">email our support team</a> and tell us what happened.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% include cta-band.html %}

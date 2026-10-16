@@ -1,0 +1,87 @@
+---
+layout: support
+title: "Delete your account | Fuzon Apps"
+description: "How to ask Fuzon Apps to delete your account and the data linked to it, for any of our apps, and what to do before you ask."
+permalink: /delete-account
+css: support
+eyebrow: "Support"
+heading: "Delete your account"
+lead: "You can ask us to delete your account and the data linked to it at any time, for any Fuzon app. Here's how."
+---
+{%- comment -%}
+  The Google Play "Delete account URL" for every Fuzon app. It names the
+  developer and the apps, gives clear steps to request deletion that
+  don't need the app installed (email, one prefilled message per app),
+  and links to the Privacy Policy for what is deleted, what is kept and
+  for how long. That detail is legal-document content, so it is linked,
+  not copied (owner, 16 Oct: legal content on the legal pages only).
+{%- endcomment -%}
+{%- assign _mail = site.company.support_email -%}
+<section class="support-section" aria-labelledby="how-title">
+  <div class="wrap support-grid">
+    <div>
+      <p class="eyebrow">How to ask</p>
+      <h2 id="how-title">Request deletion by email</h2>
+      <p class="section-intro">This works for every Fuzon app, even if you've already uninstalled it.</p>
+      <ol class="num-steps">
+        <li><strong>Email {{ _mail }}</strong><p>If you can, send it from the email address linked to your account, so we can find it.</p></li>
+        <li><strong>Use the subject "Delete my account"</strong><p>The buttons below fill this in for you, with the app's name included.</p></li>
+        <li><strong>Tell us which app, and how to find your account</strong><p>Include the email address or username you signed up with. Please don't send your password.</p></li>
+        <li><strong>Confirm it's you</strong><p>To protect your account, we may reply to check the request came from you before we delete anything.</p></li>
+      </ol>
+
+      <h2 id="per-app-title" class="per-app-title">Start your request</h2>
+      <p class="section-intro">Choose the app. Your email opens with the subject line ready.</p>
+      <ul class="app-mails" role="list" aria-labelledby="per-app-title">
+        {%- for app in site.data.apps %}
+        <li>
+          <a class="app-mail tone-{{ app.tone }}" href="mailto:{{ _mail }}?subject={{ 'Delete my account: ' | append: app.name | uri_escape }}">
+            {% include app-tile.html app=app class="app-mail-tile" %}
+            <span class="app-mail-text">
+              <span class="app-mail-name">{{ app.name | escape }}</span>
+              <span class="app-mail-sub">Delete my {{ app.short | escape }} account</span>
+            </span>
+            <svg class="icon" aria-hidden="true"><use href="#i-arrow-right"/></svg>
+          </a>
+        </li>
+        {%- endfor %}
+      </ul>
+    </div>
+
+    <div class="side-card">
+      <p class="eyebrow" id="data-title">What happens to your data</p>
+      <p class="section-intro">Our Privacy Policy explains what is deleted, anything we may need to keep, and for how long.</p>
+      <ul class="link-list" role="list">
+        <li><a href="{{ '/privacy-policy' | relative_url }}#data-retention"><svg class="icon" aria-hidden="true"><use href="#i-shield"/></svg>How long we keep data<svg class="icon" aria-hidden="true"><use href="#i-arrow-right"/></svg></a></li>
+        <li><a href="{{ '/privacy-policy' | relative_url }}#your-rights-and-choices"><svg class="icon" aria-hidden="true"><use href="#i-file"/></svg>Your rights and choices<svg class="icon" aria-hidden="true"><use href="#i-arrow-right"/></svg></a></li>
+        <li><a href="{{ '/contact' | relative_url }}"><svg class="icon" aria-hidden="true"><use href="#i-mail"/></svg>Contact support<svg class="icon" aria-hidden="true"><use href="#i-arrow-right"/></svg></a></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section class="support-section" aria-labelledby="before-title">
+  <div class="wrap">
+    <p class="eyebrow">Before you ask</p>
+    <h2 id="before-title">Things to do first</h2>
+    <p class="section-intro">Deleting an account is meant to be final, so take a moment to check these.</p>
+    <div class="tips">
+      <div class="tip">
+        <span class="tip-icon" aria-hidden="true"><svg class="icon"><use href="#i-download"/></svg></span>
+        <h3>Download anything you want to keep</h3>
+        <p>If you've stored files or photos in one of our apps, save copies of the ones you want before you ask us to delete your account.</p>
+      </div>
+      <div class="tip">
+        <span class="tip-icon" aria-hidden="true"><svg class="icon"><use href="#i-card"/></svg></span>
+        <h3>Cancel any subscription in Google Play</h3>
+        <p>Subscriptions are billed through Google Play, and deleting an account doesn't cancel one. Open the Play Store, tap your profile picture, then Payments &amp; subscriptions.</p>
+      </div>
+      <div class="tip">
+        <span class="tip-icon" aria-hidden="true"><svg class="icon"><use href="#i-smartphone"/></svg></span>
+        <h3>Uninstalling isn't the same as deleting</h3>
+        <p>Removing an app from your phone doesn't delete your account. To have your account deleted, send us a request using the steps above.</p>
+      </div>
+    </div>
+  </div>
+</section>
+

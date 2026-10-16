@@ -74,7 +74,7 @@
   text-decoration: none;
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
-.notfound-app .icon:last-child { margin-left: auto; color: var(--text-2); }
+.notfound-app > .icon:last-child { margin-left: auto; color: var(--text-2); }
 .notfound-tile { --tile: 2.5rem; }
 @media (hover: hover) {
   .notfound-app:hover { border-color: var(--border-strong); box-shadow: var(--shadow-sm); }

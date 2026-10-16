@@ -1,0 +1,43 @@
+---
+layout: default
+---
+{%- comment -%}
+  Support and company pages (Contact support, Delete your account,
+  About): a left-aligned hero with breadcrumbs, eyebrow, H1 and lead, then
+  the page body (HTML sections styled by pages/support.scss).
+
+  Required front matter: title, description, permalink, css: support,
+  eyebrow, heading (the H1), lead.
+  Copy rules (STATUS.md 2): nothing from the legal documents (link to
+  the Privacy Policy instead), no reply-time promises, no app counts.
+{%- endcomment -%}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": {% if page.schema_type %}{{ page.schema_type | jsonify }}{% else %}"WebPage"{% endif %},
+  "name": {{ page.heading | jsonify }},
+  "url": {{ page.url | absolute_url | jsonify }},
+  "publisher": { "@id": {{ '/' | absolute_url | append: '#organization' | jsonify }} },
+  "breadcrumb": {
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      { "@type": "ListItem", "position": 1, "name": "Home", "item": {{ '/' | absolute_url | jsonify }} },
+      { "@type": "ListItem", "position": 2, "name": {{ page.heading | jsonify }}, "item": {{ page.url | absolute_url | jsonify }} }
+    ]
+  }
+}
+</script>
+<section class="support-hero hero-glow-host" aria-labelledby="page-title">
+  {% include hero-glow.html %}
+  <div class="wrap hero-glow-content">
+    <nav class="breadcrumbs" aria-label="Breadcrumb">
+      <a href="{{ '/' | relative_url }}">Home</a>
+      <svg class="icon" aria-hidden="true"><use href="#i-chevron-right"/></svg>
+      <span aria-current="page">{{ page.heading | escape }}</span>
+    </nav>
+    <p class="eyebrow">{{ page.eyebrow | escape }}</p>
+    <h1 id="page-title" class="support-title">{{ page.heading | escape }}</h1>
+    <p class="support-lead">{{ page.lead | escape }}</p>
+  </div>
+</section>
+{{ content }}

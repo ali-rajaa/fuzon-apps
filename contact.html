@@ -1,0 +1,104 @@
+---
+layout: support
+title: "Contact support | Fuzon Apps"
+description: "Get help with any Fuzon app. Email console@fuzonapps.com, with tips on what to include so we can help, plus links to common answers."
+permalink: /contact
+css: support
+schema_type: ContactPage
+eyebrow: "Support"
+heading: "Contact support"
+lead: "Questions about one of our apps, a problem to report, or something else? Email us and tell us what's going on."
+---
+{%- comment -%}
+  Contact page (playbook 9.6): the support email on a raised card with
+  "Write an email" and "Copy address" (shown only where the clipboard
+  works), one prefilled email per app from apps.yml, what to put in an
+  email, and links to common answers. No phone number, address, hours or
+  reply-time promise (not confirmed).
+{%- endcomment -%}
+{%- assign _mail = site.company.support_email -%}
+<section class="support-section" aria-labelledby="email-title">
+  <div class="wrap support-grid">
+    <div>
+      <div class="mail-card">
+        <p class="eyebrow" id="email-title">Email us</p>
+        <a class="mail-address" href="mailto:{{ _mail }}">{{ _mail }}</a>
+        <div class="mail-actions">
+          <a class="btn btn--primary btn--lg" href="mailto:{{ _mail }}"><svg class="icon" aria-hidden="true"><use href="#i-mail"/></svg>Write an email</a>
+          <button class="btn btn--secondary btn--lg" type="button" data-copy="{{ _mail }}" aria-describedby="copy-status" hidden><svg class="icon" aria-hidden="true"><use href="#i-copy"/></svg><span class="copy-text">Copy address</span></button>
+        </div>
+        <p class="mail-status" id="copy-status" role="status"></p>
+        <p class="mail-note"><svg class="icon" aria-hidden="true"><use href="#i-key"/></svg><span>Please don't include your password or payment card details. We'll never ask for them.</span></p>
+      </div>
+
+      <h2 id="per-app-title" class="per-app-title">Email about a specific app</h2>
+      <p class="section-intro">Pick the app and your email opens with its name already in the subject line.</p>
+      <ul class="app-mails" role="list" aria-labelledby="per-app-title">
+        {%- for app in site.data.apps %}
+        <li>
+          <a class="app-mail tone-{{ app.tone }}" href="mailto:{{ _mail }}?subject={{ 'Help with ' | append: app.name | uri_escape }}">
+            {% include app-tile.html app=app class="app-mail-tile" %}
+            <span class="app-mail-text">
+              <span class="app-mail-name">{{ app.name | escape }}</span>
+              <span class="app-mail-sub">Email us about {{ app.short | escape }}</span>
+            </span>
+            <svg class="icon" aria-hidden="true"><use href="#i-arrow-right"/></svg>
+          </a>
+        </li>
+        {%- endfor %}
+      </ul>
+    </div>
+
+    <div class="side-card">
+      <p class="eyebrow" id="answers-title">Quick answers</p>
+      <ul class="link-list" role="list">
+        <li><a href="{{ '/' | relative_url }}#faq"><svg class="icon" aria-hidden="true"><use href="#i-help"/></svg>Questions people ask<svg class="icon" aria-hidden="true"><use href="#i-arrow-right"/></svg></a></li>
+        {%- for app in site.data.apps %}
+        <li><a href="{{ '/' | append: app.slug | relative_url }}#guide"><svg class="icon" aria-hidden="true"><use href="#i-{{ app.glyph }}"/></svg>{{ app.short | escape }} guide<svg class="icon" aria-hidden="true"><use href="#i-arrow-right"/></svg></a></li>
+        {%- endfor %}
+        <li><a href="{{ '/delete-account' | relative_url }}"><svg class="icon" aria-hidden="true"><use href="#i-trash"/></svg>Delete your account<svg class="icon" aria-hidden="true"><use href="#i-arrow-right"/></svg></a></li>
+        <li><a href="{{ '/privacy-policy' | relative_url }}"><svg class="icon" aria-hidden="true"><use href="#i-shield"/></svg>Privacy Policy<svg class="icon" aria-hidden="true"><use href="#i-arrow-right"/></svg></a></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section class="support-section" aria-labelledby="include-title">
+  <div class="wrap">
+    <p class="eyebrow">Before you send</p>
+    <h2 id="include-title">What to put in your email</h2>
+    <p class="section-intro">The more we know, the sooner we can help. A few details make a big difference.</p>
+    <ol class="num-steps">
+      <li><strong>Which app you're using</strong><p>Tell us the app's name. If you use more than one of our apps, say which one the problem is in.</p></li>
+      <li><strong>Your phone</strong><p>The make and model of your phone, and its Android version if you know it. You'll usually find this in Settings, under About phone.</p></li>
+      <li><strong>What you were doing</strong><p>The steps that led to the problem, in order. For example: opened the app, tapped a button, then this happened.</p></li>
+      <li><strong>What happened, and what you expected</strong><p>Any message you saw, word for word if you can. A screenshot often explains it best.</p></li>
+    </ol>
+  </div>
+</section>
+
+<section class="support-section" aria-labelledby="other-title">
+  <div class="wrap">
+    <p class="eyebrow">Other things you might need</p>
+    <h2 id="other-title">Common requests</h2>
+    <div class="tips">
+      <div class="tip">
+        <span class="tip-icon" aria-hidden="true"><svg class="icon"><use href="#i-card"/></svg></span>
+        <h3>Manage a subscription</h3>
+        <p>In-app purchases and subscriptions are handled by Google Play. To manage or cancel one, open the Play Store, tap your profile picture, then Payments &amp; subscriptions.</p>
+      </div>
+      <div class="tip">
+        <span class="tip-icon" aria-hidden="true"><svg class="icon"><use href="#i-trash"/></svg></span>
+        <h3>Delete your account</h3>
+        <p>Want your account and its data removed? Our <a href="{{ '/delete-account' | relative_url }}">Delete your account</a> page explains how to ask.</p>
+      </div>
+      <div class="tip">
+        <span class="tip-icon" aria-hidden="true"><svg class="icon"><use href="#i-download"/></svg></span>
+        <h3>Get our apps</h3>
+        <p>Every Fuzon app is free to download. Find them all on our <a href="{{ site.play_developer_url }}">Google Play developer page</a>.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% include cta-band.html %}

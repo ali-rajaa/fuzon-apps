@@ -225,6 +225,35 @@ branch → `main`; Environments → github-pages → deployment branches →
 allow `main`. Then re-run the latest run. Branch deletion is blocked
 from Claude's environment, so the old branch is deleted in the GitHub UI.
 
+### 5i. Deploy fixed, site live (16 Oct)
+Owner changed the default branch to `main`, deleted the old branch and
+allowed `main` in the github-pages environment. Run #8 (re-run, no
+push) built and deployed green. Every push to `main` now publishes to
+fuzon.fixmypcperth.com.
+
+### 5j. Contact, Delete your account, About (16 Oct)
+Owner: "continue what you were fixing, finish fully".
+
+- `_layouts/support.html` (left-aligned hero, WebPage/ContactPage/
+  AboutPage schema with breadcrumbs) and `assets/css/pages/support.scss`.
+- `/contact`: email card (Write an email, Copy address shown only where
+  the clipboard works, status announced), one prefilled email per app,
+  what to put in your email, quick answers, common requests
+  (subscriptions via Google Play, delete account, get the apps). No
+  phone, address, hours or reply-time promise.
+- `/delete-account` (Google Play "Delete account URL"): request steps by
+  email that work without the app, one prefilled "Delete my account:
+  <app>" email per app, things to do first; what is deleted and kept is
+  linked to the Privacy Policy (#data-retention), not copied.
+- `/about`: facts only (what we make, free to download, optional
+  in-app purchases, how to reach us). No team, history, location or
+  numbers.
+- No placeholders left; the `upcoming` layout is kept for future pages.
+  Sitemap now lists 9 pages.
+- Checked: axe zero violations on all pages at 1440/390, no overflow at
+  15 widths, html-validate clean, 89 links, 23 interaction checks, legal
+  name on legal pages only.
+
 ## 6. SEO and routing
 
 - Clean URLs (`/cloud-storage`), canonicals generated from `page.url`.
@@ -280,8 +309,7 @@ records for console@ intact.
 ## 9. Execution order (next)
 
 1. App pages: done (5g).
-2. Legal pages (layout `legal`, owner's text verbatim), Contact, Delete
-   your account, About.
+2. Legal pages, Contact, Delete your account, About: done (5e, 5j).
 3. llms.txt, per-app share cards, app-ads.txt if the apps run ads.
 4. Full QA, then cutover.
 

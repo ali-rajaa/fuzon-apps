@@ -248,6 +248,31 @@
     if (phone.addEventListener) phone.addEventListener('change', sync);
   });
 
+  /* ---- Copy button (Contact page) ----
+     Hidden in the markup and shown only where the clipboard can be used,
+     so it never appears as a button that does nothing. The status line
+     announces the result to screen readers too (playbook 9.6). */
+  document.querySelectorAll('[data-copy]').forEach(function (btn) {
+    if (!navigator.clipboard || !window.isSecureContext) return;
+    var label = btn.querySelector('.copy-text');
+    var status = document.getElementById(btn.getAttribute('aria-describedby'));
+    var timer;
+    btn.hidden = false;
+    btn.addEventListener('click', function () {
+      navigator.clipboard.writeText(btn.getAttribute('data-copy')).then(function () {
+        if (label) label.textContent = 'Copied';
+        if (status) status.textContent = 'Email address copied.';
+        clearTimeout(timer);
+        timer = setTimeout(function () {
+          if (label) label.textContent = 'Copy address';
+          if (status) status.textContent = '';
+        }, 2500);
+      }, function () {
+        if (status) status.textContent = 'Couldn\'t copy. Select the address above instead.';
+      });
+    });
+  });
+
   /* ---- Reveal on scroll ----
      .reveal-ready (which hides .reveal content) is added only after the
      observer that shows it again exists. If anything here fails, the
