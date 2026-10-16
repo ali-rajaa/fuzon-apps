@@ -54,7 +54,7 @@
   android_url: "https://play.google.com/store/apps/details?id=com.smartswitch.shareit.datashare.phoneclone"
   ios_url: ""
   ads: true
-  built: false
+  built: true
 
 - name: "GPS Navigation & Directions"
   short: "GPS Navigation"
@@ -70,4 +70,4 @@
   android_url: "https://play.google.com/store/apps/details?id=com.gpsnavigation.directions.gpsmaps"
   ios_url: ""
   ads: true
-  built: false
+  built: true

@@ -192,9 +192,13 @@
       });
     });
   }
-  var tocLinks = document.querySelectorAll('.legal-toc-list a');
+  /* The same highlighting drives the app pages' sticky section bar
+     (.page-nav-list). That bar scrolls sideways on phones, so the active
+     link is scrolled into view within it when it changes. */
+  var tocLinks = document.querySelectorAll('.legal-toc-list a, .page-nav-list a');
   if (tocLinks.length && 'IntersectionObserver' in window) {
     var targets = [];
+    var lastActive = null;
     tocLinks.forEach(function (a) {
       var el = document.getElementById(decodeURIComponent(a.hash.slice(1)));
       if (el) targets.push({ link: a, el: el });
@@ -208,6 +212,13 @@
         t.link.classList.toggle('is-active', on);
         if (on) t.link.setAttribute('aria-current', 'true'); else t.link.removeAttribute('aria-current');
       });
+      if (current && current !== lastActive) {
+        lastActive = current;
+        var bar = current.link.closest('.page-nav-list');
+        if (bar && bar.scrollWidth > bar.clientWidth) {
+          bar.scrollTo({ left: Math.max(0, current.link.offsetLeft - 16), behavior: 'smooth' });
+        }
+      }
     };
     var spy = new IntersectionObserver(setActive, { rootMargin: '-30% 0px -65% 0px' });
     targets.forEach(function (t) { spy.observe(t.el); });

@@ -108,43 +108,7 @@
 .prose strong { color: var(--text); font-weight: 650; }
 .prose a { color: var(--text); font-weight: 500; }
 
-/* Tables: scroll sideways in a labelled box on wide screens; on phones
-   each row becomes a card with the column name beside each value
-   (site.js writes data-label from the header row). */
-.table-scroll {
-  margin-top: 1.25rem;
-  overflow-x: auto;
-  border: 1px solid var(--border);
-  border-radius: 14px;
-}
-.table-scroll table { width: 100%; min-width: 36rem; border-collapse: collapse; font-size: 0.875rem; line-height: 1.5; }
-.table-scroll th {
-  padding: 0.75rem 1rem;
-  background: var(--bg-alt);
-  color: var(--text);
-  font-weight: 600;
-  text-align: left;
-  vertical-align: bottom;
-}
-.table-scroll td { padding: 0.75rem 1rem; border-top: 1px solid var(--border); vertical-align: top; }
-.table-scroll td:first-child { color: var(--text); font-weight: 500; }
-@media (max-width: 599.98px) {
-  .table-scroll:has(.is-stackable) { overflow: visible; border: 0; border-radius: 0; }
-  .table-scroll .is-stackable, .is-stackable tbody, .is-stackable tr, .is-stackable td { display: block; min-width: 0; }
-  .is-stackable thead { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
-  .is-stackable tr { padding: 0.75rem 1rem; border: 1px solid var(--border); border-radius: 12px; }
-  .is-stackable tr + tr { margin-top: 0.75rem; }
-  .is-stackable td { padding: 0.375rem 0; border: 0; }
-  .is-stackable td::before {
-    content: attr(data-label);
-    display: block;
-    color: var(--text-3);
-    font-size: 0.75rem;
-    font-weight: 600;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-  }
-}
+/* Tables: shared, see shell.scss "Tables". */
 
 /* GPS safety notice (Terms 9) */
 .legal-callout {

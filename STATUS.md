@@ -196,6 +196,35 @@ Owner: "do the next page".
 - **Waiting on owner sign-off** before Smart Switch and GPS Navigation
   get the same layout.
 
+### 5g. In-depth app pages (16 Oct)
+Owner: "structure of these pages need 1,500 visible word content, deeper
+content and can't be a copy of homepage, make it more unique and better UI".
+
+- `_layouts/app.html` rebuilt: split hero (text left, phone on a tone
+  stage right), sticky underline section bar (highlights the current
+  section), overview + "At a glance" card, "When it helps" cards, bento
+  features (lead card full width, the rest auto-fit), timeline steps,
+  compare table and/or checklist, a long guide (the page's Markdown
+  body), FAQ, compact "More from Fuzon Apps" list, black band.
+- All three app pages built: Cloud Storage, Smart Switch, GPS
+  Navigation. Visible words (header/footer excluded, FAQ closed):
+  1,501 / 1,530 / 1,527; with FAQ answers 1,683 / 1,726 / 1,694.
+- App claims only from the Play listings; the depth is general, true
+  advice (organising files, preparing two phones, driving safely). No
+  voice or offline claims for GPS (not on the listing).
+- Share cards for Smart Switch and GPS. Table styles moved to shell.scss.
+- Checked: axe zero violations on all pages at 1440/390, no overflow,
+  html-validate clean, 83 links, 23 interaction checks.
+
+### 5h. Deploy blocked (16 Oct)
+Every Actions run built fine but the deploy job was rejected in ~2s
+with no log: the repo's default branch was still
+`claude/vigilant-volta-hjzpr2`, and the `github-pages` environment only
+allows the default branch to deploy. Fix (owner, in Settings): default
+branch → `main`; Environments → github-pages → deployment branches →
+allow `main`. Then re-run the latest run. Branch deletion is blocked
+from Claude's environment, so the old branch is deleted in the GitHub UI.
+
 ## 6. SEO and routing
 
 - Clean URLs (`/cloud-storage`), canonicals generated from `page.url`.
@@ -250,7 +279,7 @@ records for console@ intact.
 
 ## 9. Execution order (next)
 
-1. App pages: Cloud Storage done (5f); Smart Switch and GPS Navigation after sign-off.
+1. App pages: done (5g).
 2. Legal pages (layout `legal`, owner's text verbatim), Contact, Delete
    your account, About.
 3. llms.txt, per-app share cards, app-ads.txt if the apps run ads.
