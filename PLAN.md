@@ -373,7 +373,7 @@ STATUS.md, SITE-PLAYBOOK.md, PLAN.md, _reference/   excluded from the build
 ## 10. Hosting and domain
 
 - **Preview:** GitHub Pages from Actions at
-  `https://ali-rajaa.github.io/fuzon-apps/` (`baseurl: /fuzon-apps`,
+  `https://fuzon.fixmypcperth.com` (owner, 16 Oct; `baseurl: ""`,
   `staging: true`, so noindex everywhere and robots `Disallow`). Owner
   step: Settings > Pages > Source > **GitHub Actions** (don't click
   "Configure").

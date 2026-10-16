@@ -117,14 +117,38 @@ workable links ready to make after."
 - **Owner setup needed once:** repo Settings > Pages > Source > **GitHub
   Actions** (don't click "Configure"). Until then the deploy job fails
   at "configure-pages".
-- Preview address: `https://ali-rajaa.github.io/fuzon-apps/`.
+- Preview address: **`https://fuzon.fixmypcperth.com`** (owner, 16 Oct),
+  noindex. `_config.yml` has `url` set to it and `baseurl: ""`.
+
+### 7a. Setting up the preview subdomain (owner, once)
+
+1. **Cloudflare** (the fixmypcperth.com zone) > DNS > Records > Add record:
+   Type `CNAME`, Name `fuzon`, Target `ali-rajaa.github.io`,
+   Proxy status **DNS only** (grey cloud), TTL Auto. Grey cloud matters:
+   GitHub can't issue the HTTPS certificate through Cloudflare's proxy.
+2. **GitHub** > `ali-rajaa/fuzon-apps` > Settings > Pages:
+   - Source: **GitHub Actions** (don't click "Configure").
+   - Custom domain: `fuzon.fixmypcperth.com` > Save. Wait for "DNS check
+     successful" (minutes, sometimes up to an hour).
+   - Tick **Enforce HTTPS** once it stops being greyed out (the
+     certificate can take up to about an hour).
+3. Actions > "Build and deploy" > re-run the latest run (or push any
+   change) so it deploys after Pages is switched on.
+4. Check: `https://fuzon.fixmypcperth.com` loads the homepage, and
+   `https://fuzon.fixmypcperth.com/robots.txt` says `Disallow: /`.
+
+The custom domain lives in the repo's Pages settings, not in a `CNAME`
+file: Actions deployments ignore that file, so there isn't one.
+Nothing in the fixmypcperth repo changes; it's one DNS record.
 - Local build in this environment: `bundle exec jekyll build` (if the
   binstub is missing, run `bundle exec ruby $(bundle info jekyll --path)/exe/jekyll build`).
 
 ## 8. Domain cutover (later)
 
 `fuzonapps.com` has no DNS records yet (checked 16 Oct). At cutover:
-Settings > Pages > Custom domain `fuzonapps.com`; apex A records to
+Settings > Pages > Custom domain `fuzonapps.com` (replacing
+`fuzon.fixmypcperth.com`), then delete the `fuzon` CNAME from the
+fixmypcperth.com zone; apex A records to
 185.199.108-111.153 and `www` CNAME to `ali-rajaa.github.io` (DNS only on
 Cloudflare); Enforce HTTPS; in `_config.yml` set `url:
 "https://fuzonapps.com"`, `baseurl: ""`, `staging: false`. Keep the mail

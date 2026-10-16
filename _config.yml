@@ -4,16 +4,21 @@ description: Fuzon Apps makes Cloud Storage, Smart Switch and GPS Voice Navigati
 # ---------------------------------------------------------------------------
 # Site address. Two states; see STATUS.md section 7.
 #
-#   Preview (now)    url: "https://ali-rajaa.github.io"  baseurl: "/fuzon-apps"  staging: true
-#   Live (cutover)   url: "https://fuzonapps.com"        baseurl: ""             staging: false
+#   Preview (now)    url: "https://fuzon.fixmypcperth.com"  baseurl: ""  staging: true
+#   Live (cutover)   url: "https://fuzonapps.com"           baseurl: ""  staging: false
+#
+# The preview borrows a subdomain of fixmypcperth.com (owner, 16 Oct), the
+# same way Daily Utility's preview used staging.fixmypcperth.com. At the
+# cutover the custom domain moves to fuzonapps.com and the fuzon DNS
+# record on fixmypcperth.com is deleted.
 #
 # Every internal link goes through relative_url and every full URL through
 # absolute_url, and both read these values, so the switch is these three
 # lines and nothing else. The custom domain itself is set in the repo's
 # Settings > Pages > Custom domain: Actions deployments ignore a CNAME file.
 # ---------------------------------------------------------------------------
-url: "https://ali-rajaa.github.io"
-baseurl: "/fuzon-apps"
+url: "https://fuzon.fixmypcperth.com"
+baseurl: ""
 
 # true adds noindex to every page and blocks crawling in robots.txt, so the
 # preview can never be indexed. Set to false only at the cutover.
