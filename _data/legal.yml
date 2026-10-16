@@ -7,8 +7,8 @@
 # The legal name and support email are in _config.yml (company:).
 
 # Shown in the company details card at the end of both legal pages.
-abn: ""            # ABN and/or ACN
-address: ""        # registered or postal address
+abn: "ABN 56 679 075 775 · ACN 679 075 775"   # ABN advice letter (ABR), entity FUZON APS PTY LIMITED
+address: "7 Barraberry Rtt, Canning Vale WA 6155"   # postal address on the ABN advice letter
 
 # Terms of Service, "Governing Law and Dispute Resolution". In the owner's
 # document these are the placeholders [Country/State], [Jurisdiction] and

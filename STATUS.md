@@ -26,7 +26,7 @@ colours. There is no login (owner, 16 Oct).
 | App names and what each does | Owner's Privacy Policy and Terms of Service (.docx, 16 Oct) |
 | Taglines, points and chips for each app | Play listing titles and screenshot captions (Play can't be fetched from this environment) |
 | Support email `console@fuzonapps.com` | Owner, 16 Oct |
-| Legal name as written in the documents: "FUZON APS PTY LIMITED" | Documents. **Not confirmed against ASIC** (see 10) |
+| Legal name "FUZON APS PTY LIMITED", ABN 56 679 075 775, ACN 679 075 775, Australian private company; postal address 7 Barraberry Rtt, Canning Vale WA 6155 | ABN advice letter from the Australian Business Register (owner, 16 Oct). The letter also lists a business address in Craigieburn VIC; the site shows the postal address only |
 | Light theme only; no login | Owner, 16 Oct |
 | Logo colours: `#FDA94E`, `#F755FA`, `#42C6FE` (3-stop horizontal gradient) | Sampled from `_reference/logo-source.png` |
 | Template look | Owner's Cloudly screenshots, `_reference/template/` |
@@ -105,8 +105,9 @@ workable links ready to make after."
   facts strip from the privacy policy (replaces the template's customer
   logos); "Three apps. One place." cards; "How we handle your data"; FAQ
   (5 questions, plus FAQPage schema); black CTA band; footer.
-- **App tiles** are rounded hexagons (CSS mask) in each app's tone, with a
-  white line glyph: cloud, arrows, navigation arrow.
+- **App tiles** are rounded squares (border-radius 26%; owner, 16 Oct: "not
+  hexagon") in each app's tone, with a white line glyph: cloud, arrows,
+  navigation arrow.
 - **Placeholders**: every linked page exists on the `upcoming` layout
   (noindex, out of the sitemap), so no link 404s. Each says the page is
   being written, what it will cover, and gives the email.
@@ -254,6 +255,20 @@ Owner: "continue what you were fixing, finish fully".
   15 widths, html-validate clean, 89 links, 23 interaction checks, legal
   name on legal pages only.
 
+### 5k. Square tiles, CSS fix, company details (16 Oct)
+- App tiles changed from hexagons to rounded squares everywhere (menu,
+  showcase, cards, CTA band, 404, contact rows); OG images re-rendered.
+- `assets/css/shell.scss` held a second, duplicate copy of itself (about
+  1,000 lines from a faulty edit script). Removed; no visual change.
+- `_data/legal.yml` filled from the owner's ABN advice letter: ABN/ACN and
+  the postal address. Shown only in the company details card on the two
+  legal pages. The letter's entity name matches the documents, so the
+  legal text is unchanged (verify: Privacy 163/163, Terms 72/72).
+- Not in the letter, still blank: governing law, jurisdiction,
+  arbitration, effective and last-updated dates.
+- Checked: axe, overflow, tap targets, 89 links, 23 interaction checks,
+  html-validate clean.
+
 ## 6. SEO and routing
 
 - Clean URLs (`/cloud-storage`), canonicals generated from `page.url`.
@@ -321,7 +336,7 @@ records for console@ intact.
 | 2 | ~~Store links~~ Done (Google Play). App Store links if iPhone versions ever exist |
 | 3 | Per app: 3 to 6 plain app screenshots (not the Play marketing images) for the showcase window and app pages |
 | 4 | AdMob publisher ID (`pub-…`) for `app-ads.txt`: Smart Switch and GPS show ads |
-| 5 | Fill `_data/legal.yml`: ABN/ACN, address, governing law, jurisdiction, arbitration (or remove that clause), effective and last-updated dates. Confirm the legal name is "FUZON APS PTY LIMITED" (as both documents write it) |
+| 5 | Fill the rest of `_data/legal.yml`: governing law, jurisdiction, arbitration (or remove that clause), effective and last-updated dates. ABN/ACN, postal address and legal name are done (ABN advice letter) |
 | 6 | Decisions on the legal-document issues in PLAN.md section 7 |
 | 7 | ~~Smart Switch name~~ Kept (owner) |
 | 8 | Domain access, and confirm the console@ mailbox works |
