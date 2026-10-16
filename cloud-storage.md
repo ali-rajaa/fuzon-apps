@@ -1,20 +1,19 @@
 ---
 layout: upcoming
-title: "Cloud Storage: store, sync and share your files | Fuzon Apps"
-description: "Cloud Storage by Fuzon Apps: upload, store, sync, organise and share your files and photos across your devices."
+title: "Cloud Storage & Cloud Drive | Fuzon Apps"
+description: "Cloud Storage & Cloud Drive by Fuzon Apps: store your files and photos in the cloud, keep them organised and share them. Free to download on Google Play."
 permalink: /cloud-storage
 css: upcoming
 tone: cloud
 app: cloud-storage
 noindex: true
-heading: "Cloud Storage"
-lead: "Upload, store, sync, organise and share your files and photos across your devices."
+heading: "Cloud Storage & Cloud Drive"
+lead: "Store your files and photos in the cloud, keep them organised and share them when you need to."
 breadcrumbs:
-  - name: "Cloud Storage"
+  - name: "Cloud Storage & Cloud Drive"
     url: "/cloud-storage"
 coming:
   - "What the app does and how to get started"
-  - "Plans and storage limits"
-  - "The permissions it asks for, and why"
-  - "How your files are stored, shared and deleted"
+  - "Storing, organising and sharing your files"
+  - "Help and common questions"
 ---

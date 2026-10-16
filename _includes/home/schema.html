@@ -1,8 +1,9 @@
 {%- comment -%}
   Homepage structured data (playbook Appendix G2). The Organization lives
-  here and only here; later app pages point back at its @id. No legal
-  name, address or social profiles: the registered name appears on the
-  legal pages only.
+  here and only here; later app pages point back at its @id. sameAs is
+  the Google Play developer page. No legal name or address: legal details
+  appear on the legal pages only (owner, 16 Oct). No aggregateRating or
+  download counts, ever (owner, 16 Oct).
 {%- endcomment -%}
 {%- assign _home = '/' | absolute_url -%}
 <script type="application/ld+json">
@@ -16,6 +17,7 @@
       "url": {{ _home | jsonify }},
       "logo": {{ '/assets/icons/icon-512.png' | absolute_url | jsonify }},
       "email": {{ site.company.support_email | jsonify }},
+      "sameAs": [{{ site.play_developer_url | jsonify }}],
       "contactPoint": {
         "@type": "ContactPoint",
         "contactType": "customer support",

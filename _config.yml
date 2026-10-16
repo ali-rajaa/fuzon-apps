@@ -1,5 +1,5 @@
 title: Fuzon Apps
-description: Fuzon Apps makes Cloud Storage, Smart Switch and GPS Voice Navigation, three phone apps for your files, your data and your directions.
+description: Fuzon Apps makes Android apps for everyday jobs, free to download on Google Play.
 
 # ---------------------------------------------------------------------------
 # Site address. Two states; see STATUS.md section 7.
@@ -51,6 +51,11 @@ liquid:
 company:
   legal_name: "FUZON APS PTY LIMITED"
   support_email: "console@fuzonapps.com"
+
+# Fuzon Apps' developer page on Google Play (owner, 16 Oct): every app in
+# one place. Linked as "All our apps on Google Play" and used as sameAs in
+# the Organization schema.
+play_developer_url: "https://play.google.com/store/apps/dev?id=8522805663199379420"
 
 exclude:
   - Gemfile

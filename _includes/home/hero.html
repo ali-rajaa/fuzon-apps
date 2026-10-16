@@ -1,19 +1,25 @@
 {%- comment -%}
-  Homepage hero band: the template's first screen, adapted for three apps.
+  Homepage hero band: the template's first screen, for every app in
+  apps.yml. No app counts anywhere ("three apps"): the copy has to stay
+  true when an app is added (owner, 16 Oct). Lists, tabs and cards are
+  all generated from apps.yml.
 
   1. Chip (the template's "Live Demo Webinar" pill), linking to the apps.
-  2. H1, one line per app: store (Cloud Storage), move (Smart Switch),
-     find your way (GPS). Lead names all three. Two buttons: black
-     primary, grey secondary, as in the template.
-  3. Showcase window (the template's big browser mock-up): three tabs, one
-     per app. Each panel shows the app's tile, tagline, three points and a
-     phone frame. The phone shows the app's tile and name until real
-     screenshots arrive (STATUS.md section 10), never invented app UI.
+  2. H1 and a lead that describe what Fuzon makes without counting or
+     listing the apps. Two buttons, as in the
+     template: black primary to the apps, grey secondary to the developer
+     page on Google Play.
+  3. Showcase window (the template's big browser mock-up): one tab per
+     app. Each panel: tile, tagline, points, the app's page and
+     its Google Play button, and a phone frame. The phone shows the app's
+     tile and name until real screenshots arrive, never invented app UI.
      Tabs follow the ARIA tabs pattern (site.js). Without JavaScript the
-     tab list is hidden and all three panels show, stacked.
-  4. Facts strip, in place of the template's "Meet Our Customers" logos
-     (playbook 2: no other companies' logos, no unbacked claims). Each
-     line restates the owner's Privacy Policy.
+     tab list is hidden and every panel shows, stacked. The tab list
+     scrolls sideways if there are ever more tabs than fit.
+  4. Store strip, in place of the template's "Meet Our Customers" logos
+     (no other companies' logos, playbook 2): where to get the apps.
+     Facts from the Play listings only: free to download, in-app
+     purchases. No ratings, reviews or download numbers (owner, 16 Oct).
 
   None of it uses .reveal: it's the first screen (playbook 9.2).
 {%- endcomment -%}
@@ -24,15 +30,14 @@
     <div class="hero-copy">
       <a class="chip" href="#apps">
         <span class="chip-dot" aria-hidden="true"></span>
-        <span class="chip-full">{% for app in _apps %}{{ app.short | escape }}{% unless forloop.last %}<span class="chip-sep">, </span>{% endunless %}{% endfor %}</span>
-        <span class="chip-short">Three apps for your phone</span>
+        <span>Free to download on Google Play</span>
         <svg class="icon chip-arrow" aria-hidden="true"><use href="#i-chevron-right"/></svg>
       </a>
-      <h1 id="hero-title" class="hero-title">Store it. Move it.<br> Find your way.</h1>
-      <p class="hero-lead">Fuzon Apps makes three phone apps: Cloud Storage for your files and photos, Smart Switch to move your data to a new phone, and GPS Voice Navigation for turn-by-turn directions.</p>
+      <h1 id="hero-title" class="hero-title">Apps for the everyday<br> jobs on your phone.</h1>
+      <p class="hero-lead">Fuzon Apps makes Android apps that do one job well, from keeping your files in the cloud to moving to a new phone and finding your way.</p>
       <div class="hero-actions">
         <a class="btn btn--primary btn--lg" href="#apps">See the apps</a>
-        <a class="btn btn--secondary btn--lg" href="{{ '/contact' | relative_url }}">Get support</a>
+        <a class="btn btn--secondary btn--lg" href="{{ site.play_developer_url }}">All apps on Google Play</a>
       </div>
     </div>
 
@@ -60,7 +65,15 @@
             <li><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg><span>{{ point | escape }}</span></li>
             {%- endfor %}
           </ul>
-          <a class="link-arrow" href="{{ '/' | append: app.slug | relative_url }}">About {{ app.short | escape }}<svg class="icon" aria-hidden="true"><use href="#i-arrow-right"/></svg></a>
+          <div class="showcase-actions">
+            {%- if app.android_url != "" %}
+            {% include store-badge.html url=app.android_url name=app.short %}
+            {%- endif %}
+            <a class="link-arrow" href="{{ '/' | append: app.slug | relative_url }}">About {{ app.short | escape }}<svg class="icon" aria-hidden="true"><use href="#i-arrow-right"/></svg></a>
+          </div>
+          {%- if app.store_name != app.name %}
+          <p class="store-note">On Google Play as “{{ app.store_name | escape }}”</p>
+          {%- endif %}
         </div>
         <div class="showcase-stage" aria-hidden="true">
           <div class="phone">
@@ -75,13 +88,16 @@
       {%- endfor %}
     </div>
 
-    <div class="facts">
-      <p class="facts-label">From our <a href="{{ '/privacy-policy' | relative_url }}">privacy policy</a></p>
-      <ul class="facts-list" role="list">
-        <li><svg class="icon" aria-hidden="true"><use href="#i-phones"/></svg><span>Smart Switch sends your data straight from phone to phone. We keep no copy.</span></li>
-        <li><svg class="icon" aria-hidden="true"><use href="#i-lock"/></svg><span>Cloud Storage encrypts your files in transit and at rest.</span></li>
-        <li><svg class="icon" aria-hidden="true"><use href="#i-shield"/></svg><span>We don't sell your personal information.</span></li>
-      </ul>
+    <div class="store-strip">
+      <p class="facts-label">Where to get them</p>
+      <div class="store-strip-row">
+        {% include store-badge.html url=site.play_developer_url %}
+        <ul class="store-strip-facts" role="list">
+          <li><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg>Free to download</li>
+          <li><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg>Optional in-app purchases</li>
+          <li><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg>For Android phones</li>
+        </ul>
+      </div>
     </div>
   </div>
 </section>

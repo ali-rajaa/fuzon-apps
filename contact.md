@@ -1,7 +1,7 @@
 ---
 layout: upcoming
 title: "Contact support | Fuzon Apps"
-description: "Get help with Cloud Storage, Smart Switch or GPS Voice Navigation. Email console@fuzonapps.com."
+description: "Get help with any Fuzon app. Email console@fuzonapps.com."
 permalink: /contact
 css: upcoming
 noindex: true

@@ -1,0 +1,23 @@
+{%- comment -%}
+  "Get it on Google Play" button, drawn in SVG and HTML rather than a
+  downloaded badge image (playbook 9.10), so it stays sharp and matches the
+  site's type. The triangle is a plain white glyph, not Google's coloured
+  logo. Opens the listing in the same tab.
+
+  Params: url (the listing or developer page), name (the app name, for the
+  accessible name "Get <name> on Google Play"; leave out for the developer
+  page, which reads "See all our apps on Google Play"), class (optional),
+  light (true for the white version on the black CTA band).
+  Usage: {% include store-badge.html url=app.android_url name=app.short %}
+{%- endcomment -%}
+{%- if include.name -%}
+  {%- assign _label = "Get " | append: include.name | append: " on Google Play" -%}
+  {%- assign _top = "Get it on" -%}
+{%- else -%}
+  {%- assign _label = "See all our apps on Google Play" -%}
+  {%- assign _top = "All our apps on" -%}
+{%- endif -%}
+<a class="store-badge{% if include.light %} store-badge--light{% endif %}{% if include.class %} {{ include.class }}{% endif %}" href="{{ include.url }}" aria-label="{{ _label | escape }}">
+  <svg class="store-badge-mark" viewBox="0 0 24 24" aria-hidden="true"><path d="M5.2 2.6c-.4.3-.7.8-.7 1.5v15.8c0 .7.3 1.2.7 1.5l9.1-9.4-9.1-9.4Zm10.4 8.1 2.6-2.7-10.6-6.1c-.4-.2-.8-.3-1.1-.2l9.1 9Zm0 2.6-9.1 9c.3.1.7 0 1.1-.2l10.6-6.1-2.6-2.7Zm4.3-4.3-2.5-1.5-2.9 2.5 2.9 2.5 2.5-1.5c.8-.4.8-1.6 0-2Z"/></svg>
+  <span class="store-badge-text" aria-hidden="true"><span class="store-badge-top">{{ _top }}</span><span class="store-badge-name">Google Play</span></span>
+</a>

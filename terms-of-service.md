@@ -1,7 +1,7 @@
 ---
 layout: upcoming
 title: "Terms of Service | Fuzon Apps"
-description: "The terms for using Fuzon Apps: Cloud Storage, Smart Switch and GPS Voice Navigation."
+description: "The terms for using apps made by Fuzon Apps."
 permalink: /terms-of-service
 css: upcoming
 noindex: true
@@ -13,5 +13,5 @@ breadcrumbs:
 coming:
   - "The full terms, with a section for each app"
   - "Subscriptions, payments and cancelling"
-  - "The safety notice for GPS Voice Navigation"
+  - "The safety notice for GPS Navigation & Directions"
 ---

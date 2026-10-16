@@ -35,18 +35,10 @@
   background: var(--logo-magenta);
   box-shadow: 0 0 0 3px color-mix(in srgb, var(--logo-magenta) 22%, transparent);
 }
-/* Shown as a middle dot; screen readers get the comma. */
-.chip-sep { font-size: 0; }
-.chip-sep::before { content: "·"; margin-inline: 0.4em; font-size: 0.8125rem; color: var(--text-3); }
-.chip-short { display: none; }
 .chip-arrow { width: 1rem; height: 1rem; color: var(--text-2); transition: transform 0.2s var(--ease-out); }
 @media (hover: hover) {
   .chip:hover { border-color: var(--border-strong); box-shadow: var(--shadow-md); }
   .chip:hover .chip-arrow { transform: translateX(2px); }
-}
-@media (max-width: 479.98px) {
-  .chip-full { display: none; }
-  .chip-short { display: inline; }
 }
 
 .hero-title {
@@ -89,7 +81,7 @@
 }
 .showcase-bar {
   display: grid;
-  grid-template-columns: 1fr auto 1fr;
+  grid-template-columns: 1fr minmax(0, auto) 1fr;
   align-items: center;
   gap: 1rem;
   padding: 0.625rem 1rem;
@@ -109,6 +101,11 @@
   background: var(--surface-sunk);
 }
 .js .showcase-tabs { display: flex; }
+/* Room for any number of apps: if the tabs ever outgrow the bar, the
+   list scrolls sideways instead of squeezing or wrapping. */
+.showcase-tabs { max-width: 100%; overflow-x: auto; scrollbar-width: none; }
+.showcase-tabs::-webkit-scrollbar { display: none; }
+.showcase-tab { flex: none; }
 .showcase-tab {
   display: inline-flex;
   align-items: center;
@@ -155,7 +152,8 @@
 }
 .showcase-tagline { max-width: 30rem; margin-top: 0.625rem; color: var(--text-2); font-size: 1.0625rem; text-wrap: pretty; }
 .showcase-copy .check-list { margin-top: 1.5rem; }
-.showcase-copy .link-arrow { margin-top: 1.25rem; }
+.showcase-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 0.75rem 1.5rem; margin-top: 1.75rem; }
+.store-note { margin-top: 0.75rem; color: var(--text-3); font-size: 0.8125rem; }
 
 .showcase-stage {
   position: relative;
@@ -213,30 +211,27 @@
 @media (max-width: 599.98px) {
   .showcase-bar { grid-template-columns: 1fr; padding: 0.5rem; }
   .showcase-dots, .showcase-bar-end { display: none; }
-  .showcase-tab { flex: 1 1 0; padding-inline: 0.375rem; font-size: 0.8125rem; text-align: center; }
+  .showcase-tab { flex: 1 0 6rem; padding-inline: 0.375rem; font-size: 0.8125rem; text-align: center; }
   .showcase-tab-tile { display: none; }
 }
 
-/* ---------- Facts strip ----------
-   In place of the template's "Meet Our Customers" logo row: same small
-   grey label, then three plain lines from the privacy policy. */
-.facts { max-width: 62rem; margin: clamp(2.75rem, 6vw, 4rem) auto 0; text-align: center; }
+/* ---------- Store strip ----------
+   In place of the template's "Meet Our Customers" logo row: the same
+   small grey label, then the Google Play button (developer page) and the
+   confirmed facts from the listings. */
+.store-strip { max-width: 62rem; margin: clamp(2.75rem, 6vw, 4rem) auto 0; text-align: center; }
 .facts-label { color: var(--text-3); font-size: 0.8125rem; font-weight: 500; }
-.facts-label a { color: var(--text-2); }
-.facts-list {
-  display: grid;
-  gap: 1rem 2.5rem;
-  margin-top: 1.25rem;
-  text-align: left;
+.store-strip-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem 2rem;
+  margin-top: 1rem;
 }
-.facts-list li { display: flex; align-items: flex-start; gap: 0.75rem; color: var(--text-2); font-size: 0.9375rem; line-height: 1.5; }
-.facts-list .icon { width: 1.375rem; height: 1.375rem; color: var(--text); }
-@media (min-width: 760px) {
-  .facts-list { grid-template-columns: repeat(3, minmax(0, 1fr)); }
-}
-@media (max-width: 759.98px) {
-  .facts-list { max-width: 26rem; margin-inline: auto; }
-}
+.store-strip-facts { display: flex; flex-wrap: wrap; justify-content: center; gap: 0.5rem 1.5rem; }
+.store-strip-facts li { display: inline-flex; align-items: center; gap: 0.375rem; color: var(--text-2); font-size: 0.9375rem; }
+.store-strip-facts .icon { width: 1.125rem; height: 1.125rem; color: var(--text); stroke-width: 2.25; }
 
 /* ---------- App cards ----------
    The template's white feature cards with a large faded icon in the
@@ -263,8 +258,17 @@
 .app-card-name a:focus-visible::after { outline: 2px solid var(--brand-text); outline-offset: -2px; }
 .app-card-text { margin-top: 0.5rem; color: var(--text-2); font-size: 0.9375rem; }
 .app-card .chips { margin-top: 1.25rem; }
-.app-card-stores { position: relative; z-index: 2; display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 1.25rem; }
-.app-card-more { margin-top: auto; padding-top: 1.25rem; }
+.app-card-foot {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-top: auto;
+  padding-top: 1.5rem;
+}
+.app-card-store { position: relative; z-index: 2; }
+.app-card .store-note { margin-top: 1rem; }
 .app-card-bg {
   position: absolute;
   right: -1.75rem;
@@ -289,30 +293,6 @@
 }
 @media (min-width: 600px) and (max-width: 899.98px) {
   .app-cards { max-width: 38rem; margin-inline: auto; }
-}
-
-/* ---------- Data points ---------- */
-.points { display: grid; gap: 1rem; }
-.point {
-  padding: 1.5rem;
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 18px;
-}
-.point-icon {
-  display: grid;
-  place-items: center;
-  width: 2.75rem;
-  height: 2.75rem;
-  border-radius: 12px;
-  background: var(--surface-sunk);
-  color: var(--text);
-}
-.point-icon .icon { width: 1.375rem; height: 1.375rem; }
-.point-title { margin-top: 1rem; font-size: 1.0625rem; font-weight: 700; }
-.point p { margin-top: 0.375rem; color: var(--text-2); font-size: 0.9375rem; }
-@media (min-width: 600px) {
-  .points { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 
 @media (prefers-reduced-motion: reduce) {

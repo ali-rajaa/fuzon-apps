@@ -24,13 +24,27 @@ colours. There is no login (owner, 16 Oct).
 | Fact | Source |
 |---|---|
 | App names and what each does | Owner's Privacy Policy and Terms of Service (.docx, 16 Oct) |
-| Every point, chip, FAQ answer and data statement on the homepage | The same two documents. Nothing else is claimed |
+| Taglines, points and chips for each app | Play listing titles and screenshot captions (Play can't be fetched from this environment) |
 | Support email `console@fuzonapps.com` | Owner, 16 Oct |
 | Legal name as written in the documents: "FUZON APS PTY LIMITED" | Documents. **Not confirmed against ASIC** (see 10) |
 | Light theme only; no login | Owner, 16 Oct |
 | Logo colours: `#FDA94E`, `#F755FA`, `#42C6FE` (3-stop horizontal gradient) | Sampled from `_reference/logo-source.png` |
 | Template look | Owner's Cloudly screenshots, `_reference/template/` |
 | Always push to `main` | Owner, 16 Oct |
+| Google Play listings: Cloud Storage & Cloud Drive (`com.cloudstorageapp.cloudbackup.storagespace.databackup`), Transfer My Data – Phone Clone (`com.smartswitch.shareit.datashare.phoneclone`), GPS Navigation & Directions (`com.gpsnavigation.directions.gpsmaps`); developer page `dev?id=8522805663199379420` | Owner's links and screenshots, 16 Oct |
+| All free to download, all with in-app purchases; Smart Switch and GPS also "Contains ads" | Play listings (screenshots) |
+| Android only (no App Store links) | Play listings |
+| Keep the name "Smart Switch" (it's also our name); on Play it's "Transfer My Data – Phone Clone" | Owner, 16 Oct |
+| The logo is the one the owner supplied (traced to SVG, no other file) | Owner, 16 Oct |
+| Domain move to fuzonapps.com happens last | Owner, 16 Oct |
+
+**Standing content rules (owner, 16 Oct):**
+- Legal-document content (privacy, terms, data handling, legal name) on
+  the legal pages only. Nowhere else, not even paraphrased.
+- Never mention ratings, reviews or download/install numbers.
+- No app counts ("three apps", "all three"). Copy must stay true when an
+  app is added; lists, menus, tabs and cards come from `_data/apps.yml`.
+- "Free to download", never a bare "free".
 
 ## 3. Directory tree
 
@@ -50,7 +64,7 @@ assets/icons/                 logo.svg (redrawn), apple-touch-icon, icon-192/512
 assets/og/default.jpg         1200x630 share card
 assets/js/site.js             header state, menus + phone sheet, showcase tabs, reveal
 index.html                    homepage (built)
-cloud-storage.md, smart-switch.md, gps-voice-navigation.md, about.md, contact.md,
+cloud-storage.md, smart-switch.md, gps-navigation.md, about.md, contact.md,
 delete-account.md, privacy-policy.md, terms-of-service.md     placeholders (layout: upcoming)
 404.html, sitemap.xml, robots.txt, site.webmanifest, favicon.ico
 .htmlvalidate.json            html-validate config (no-redundant-role off: role="list" is
@@ -101,6 +115,26 @@ workable links ready to make after."
   correct; all 22 internal links resolve; 23 scripted interaction checks
   (menus by click, hover, Escape, click outside; phone sheet; tabs by
   click, arrows, Home; no-JS fallback) all pass.
+
+### 5c. Google Play, content rules (16 Oct)
+- `apps.yml`: Play titles, links, `store_name`, `ads`; copy from the
+  listings. GPS page moved to `/gps-navigation`.
+- Drawn "Get it on Google Play" button (`_includes/store-badge.html`) on
+  the showcase panels and app cards; the developer page from the hero,
+  the store strip, the CTA band and the footer.
+- Removed everything taken from the legal documents outside the legal
+  pages: the "From our privacy policy" strip (now a "Where to get them"
+  store strip), the "How we handle your data" section, and the FAQ
+  answers about data and deletion. New FAQ: what we make, are they free,
+  which phones, why Smart Switch has another name on Play, help.
+- Removed app counts: new hero "Apps for the everyday jobs on your phone."
+  (the old "Store it. Move it. Find your way." named exactly three
+  jobs); "Find the app for the job."; chip "Free to download on Google
+  Play". The tab bar scrolls if more apps are added.
+- Share card redone without app names or counts.
+- Checked: axe zero violations, no overflow, html-validate clean, 26
+  links, 23 interaction checks, no app counts and no legal or ratings
+  wording on non-legal pages.
 
 ## 6. SEO and routing
 
@@ -166,13 +200,13 @@ records for console@ intact.
 
 | # | Item |
 |---|---|
-| 1 | Original logo file (SVG or large transparent PNG) to replace the redraw, if one exists |
-| 2 | Per app: Play / App Store links, package IDs, live or not; store buttons appear once added to `apps.yml` |
-| 3 | Per app: 3 to 6 real screenshots for the showcase window and app pages |
-| 4 | Free to download? In-app purchases or subscriptions? Ads, and the ad network? |
+| 1 | ~~Logo~~ Done: use the supplied logo (traced SVG) |
+| 2 | ~~Store links~~ Done (Google Play). App Store links if iPhone versions ever exist |
+| 3 | Per app: 3 to 6 plain app screenshots (not the Play marketing images) for the showcase window and app pages |
+| 4 | AdMob publisher ID (`pub-…`) for `app-ads.txt`: Smart Switch and GPS show ads |
 | 5 | Exact legal name (APS or Apps), ACN/ABN, address, governing state, effective date |
 | 6 | Decisions on the legal-document issues in PLAN.md section 7 |
-| 7 | Keep the name "Smart Switch" (Samsung's product name)? |
+| 7 | ~~Smart Switch name~~ Kept (owner) |
 | 8 | Domain access, and confirm the console@ mailbox works |
 | 9 | Enable GitHub Pages (section 7) |
 | 10 | Guides hub at launch or later? Analytics: none (recommended) or which? |

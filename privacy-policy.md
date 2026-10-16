@@ -1,7 +1,7 @@
 ---
 layout: upcoming
 title: "Privacy Policy | Fuzon Apps"
-description: "How Fuzon Apps collects, uses, shares and protects your information across Cloud Storage, Smart Switch and GPS Voice Navigation."
+description: "How Fuzon Apps collects, uses, shares and protects your information across our apps."
 permalink: /privacy-policy
 css: upcoming
 noindex: true
