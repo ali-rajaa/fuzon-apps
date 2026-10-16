@@ -1,0 +1,29 @@
+{%- comment -%}
+  One app's card (homepage app list, "More from Fuzon Apps" on app pages):
+  tile, name, tagline, tick list, Google Play button, and the template's
+  large faded icon in the corner, all in the app's tone. The app name is
+  the card's link and stretches over the whole card; the Play button sits
+  above that link so both can be clicked. Where the Play title differs
+  from the site name (Smart Switch) a note says what to look for.
+  Params: app (an apps.yml entry).
+{%- endcomment -%}
+<li class="app-card tone-{{ include.app.tone }} reveal">
+  {% include app-tile.html app=include.app class="app-card-tile" %}
+  <h3 class="app-card-name"><a href="{{ '/' | append: include.app.slug | relative_url }}">{{ include.app.name | escape }}</a></h3>
+  <p class="app-card-text">{{ include.app.tagline | escape }}</p>
+  <ul class="check-list" role="list">
+    {%- for point in include.app.points %}
+    <li><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg><span>{{ point | escape }}</span></li>
+    {%- endfor %}
+  </ul>
+  {%- if include.app.store_name != include.app.name %}
+  <p class="store-note">On Google Play as “{{ include.app.store_name | escape }}”</p>
+  {%- endif %}
+  <div class="app-card-foot">
+    {%- if include.app.android_url != "" %}
+    {% include store-badge.html url=include.app.android_url name=include.app.short class="app-card-store" %}
+    {%- endif %}
+    <span class="link-arrow app-card-more" aria-hidden="true">About<svg class="icon"><use href="#i-arrow-right"/></svg></span>
+  </div>
+  <svg class="icon app-card-bg" aria-hidden="true"><use href="#i-{{ include.app.glyph }}"/></svg>
+</li>

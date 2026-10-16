@@ -1,0 +1,108 @@
+---
+---
+/* App pages (_layouts/app.html): centred hero with the app's tile and
+   Google Play button, the window with the phone, the feature cards and
+   the numbered steps. The window frame, phone, app cards, FAQ and CTA
+   band are shared (shell.scss). Colours come from the app's tone class
+   on <main>. */
+
+.app-hero {
+  padding-top: clamp(1.5rem, 4vw, 3rem);
+  padding-bottom: clamp(3.5rem, 8vw, 5.5rem);
+  background: linear-gradient(180deg, #fbfbfc 0%, var(--bg) 70%);
+}
+.app-hero .breadcrumbs { justify-content: center; }
+.app-hero-copy { max-width: 46rem; margin: 1.5rem auto 0; text-align: center; }
+.app-hero-tile { --tile: 5rem; margin-bottom: 1.25rem; }
+.app-title {
+  margin-top: 0.75rem;
+  font-size: clamp(2.5rem, 1.5rem + 4.2vw, 4.5rem);
+  font-weight: 800;
+  line-height: 1.03;
+  letter-spacing: -0.045em;
+}
+.app-lead {
+  max-width: 36rem;
+  margin: 1.25rem auto 0;
+  color: var(--text-2);
+  font-size: clamp(1.0625rem, 1rem + 0.4vw, 1.25rem);
+  line-height: 1.55;
+  text-wrap: pretty;
+}
+.app-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 0.75rem;
+  margin-top: 2rem;
+}
+.app-hero-copy .store-note { margin-top: 1rem; }
+@media (max-width: 479.98px) {
+  .app-actions { flex-direction: column; align-items: stretch; }
+  .app-actions .store-badge { justify-content: center; }
+}
+
+/* The window: the shared showcase frame with the app's name where the
+   tabs sit on the homepage, and one wide phone stage. */
+.app-window-title { color: var(--text-2); font-size: 0.875rem; font-weight: 600; text-align: center; }
+.app-window-stage { min-height: 26rem; margin: clamp(1rem, 3vw, 1.5rem); }
+@media (max-width: 599.98px) {
+  .app-window .showcase-bar { grid-template-columns: 1fr auto 1fr; padding: 0.625rem 1rem; }
+  .app-window .showcase-dots { display: flex; }
+  .app-window-stage { min-height: 0; }
+}
+
+/* What it does */
+.features { display: grid; gap: 1.25rem; }
+@media (min-width: 760px) {
+  .features { grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr)); }
+}
+.feature {
+  padding: clamp(1.5rem, 3vw, 2rem);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+}
+.feature-icon {
+  display: grid;
+  place-items: center;
+  width: 3rem;
+  height: 3rem;
+  border-radius: 14px;
+  background: var(--tone-soft);
+  color: var(--tone-text);
+}
+.feature-icon .icon { width: 1.5rem; height: 1.5rem; }
+.feature-title { margin-top: 1.25rem; font-size: 1.125rem; font-weight: 700; letter-spacing: -0.015em; }
+.feature p { margin-top: 0.5rem; color: var(--text-2); font-size: 0.9375rem; }
+
+/* How it works */
+.steps { display: grid; gap: 1rem; margin: 0; padding: 0; list-style: none; }
+.step {
+  display: flex;
+  gap: 1.25rem;
+  align-items: flex-start;
+  padding: 1.5rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+}
+.step-num {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 12px;
+  background: var(--btn);
+  color: var(--on-btn);
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+.step-title { font-size: 1.0625rem; font-weight: 700; }
+.step p { margin-top: 0.375rem; color: var(--text-2); font-size: 0.9375rem; }
+.steps-cta { margin-top: 1.75rem; }
+@media (max-width: 899.98px) {
+  .steps-cta { display: none; }
+}

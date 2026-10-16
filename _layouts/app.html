@@ -1,0 +1,161 @@
+---
+layout: default
+---
+{%- comment -%}
+  One app's page (playbook 9.4, in the Cloudly template's style). Built
+  from front matter plus the app's entry in _data/apps.yml; the page body
+  is empty. Order: hero with the Google Play button, the window with the
+  phone, what it does, how it works, FAQ, more from Fuzon Apps, then the
+  black closing band.
+
+  Required front matter: title, description, permalink, css: app,
+  app (apps.yml slug), tone (the app's tone, for <main>), features (list
+  of {icon, title, text}; icon is an icon-sprite name), steps (list of
+  {title, text}), faqs (list of {q, a}).
+  Optional: features_heading, features_sub, og_image, og_image_alt.
+
+  Copy rules (owner, 16 Oct; STATUS.md 2): only what the Google Play
+  listing and the owner confirm. Nothing from the legal documents, no
+  ratings, reviews or download numbers, no app counts, no pills.
+  "Free to download", never a bare "free".
+{%- endcomment -%}
+{%- assign _app = site.data.apps | where: "slug", page.app | first -%}
+{%- assign _home = '/' | absolute_url -%}
+{%- assign _others = site.data.apps | where_exp: "a", "a.slug != page.app" -%}
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "MobileApplication",
+      "name": {{ _app.name | jsonify }},
+      "alternateName": {{ _app.store_name | jsonify }},
+      "description": {{ _app.tagline | jsonify }},
+      "url": {{ page.url | absolute_url | jsonify }},
+      "operatingSystem": "Android",
+      "applicationCategory": "UtilitiesApplication",
+      {%- if _app.android_url != "" %}
+      "installUrl": {{ _app.android_url | jsonify }},
+      {%- endif %}
+      "offers": { "@type": "Offer", "price": "0", "priceCurrency": "AUD" },
+      "publisher": { "@id": {{ _home | append: '#organization' | jsonify }} }
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Home", "item": {{ _home | jsonify }} },
+        { "@type": "ListItem", "position": 2, "name": {{ _app.name | jsonify }}, "item": {{ page.url | absolute_url | jsonify }} }
+      ]
+    }
+  ]
+}
+</script>
+{% include faq-schema.html faqs=page.faqs %}
+
+<section class="app-hero hero-glow-host" aria-labelledby="app-title">
+  {% include hero-glow.html %}
+  <div class="wrap hero-glow-content">
+    <nav class="breadcrumbs" aria-label="Breadcrumb">
+      <a href="{{ '/' | relative_url }}">Home</a>
+      <svg class="icon" aria-hidden="true"><use href="#i-chevron-right"/></svg>
+      <span aria-current="page">{{ _app.name | escape }}</span>
+    </nav>
+    <div class="app-hero-copy">
+      {% include app-tile.html app=_app class="app-hero-tile" %}
+      <p class="eyebrow">Free to download on Google Play</p>
+      <h1 id="app-title" class="app-title">{{ _app.name | escape }}</h1>
+      <p class="app-lead">{{ _app.tagline | escape }}</p>
+      <div class="app-actions" id="download">
+        {%- if _app.android_url != "" %}
+        {% include store-badge.html url=_app.android_url name=_app.short %}
+        {%- endif %}
+        <a class="btn btn--secondary btn--lg" href="#how-it-works">How it works</a>
+      </div>
+      {%- if _app.store_name != _app.name %}
+      <p class="store-note">On Google Play as “{{ _app.store_name | escape }}”</p>
+      {%- endif %}
+    </div>
+
+    <div class="showcase app-window" aria-hidden="true">
+      <div class="showcase-bar">
+        <span class="showcase-dots"><i></i><i></i><i></i></span>
+        <span class="app-window-title">{{ _app.short | escape }}</span>
+        <span class="showcase-bar-end"></span>
+      </div>
+      <div class="showcase-stage app-window-stage">
+        <div class="phone">
+          <div class="phone-screen">
+            <span class="phone-notch"></span>
+            {% include app-tile.html app=_app class="phone-tile" %}
+            <span class="phone-name">{{ _app.short | escape }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="features" aria-labelledby="features-title">
+  <div class="wrap">
+    <div class="section-head section-head--center reveal">
+      <p class="eyebrow">What it does</p>
+      <h2 id="features-title">{{ page.features_heading | default: "What it does" | escape }}</h2>
+      {%- if page.features_sub %}
+      <p class="section-sub">{{ page.features_sub | escape }}</p>
+      {%- endif %}
+    </div>
+    <ul class="features" role="list">
+      {%- for f in page.features %}
+      <li class="feature reveal">
+        <span class="feature-icon" aria-hidden="true"><svg class="icon"><use href="#i-{{ f.icon }}"/></svg></span>
+        <h3 class="feature-title">{{ f.title | escape }}</h3>
+        <p>{{ f.text | escape }}</p>
+      </li>
+      {%- endfor %}
+    </ul>
+  </div>
+</section>
+
+<section class="section section--alt" id="how-it-works" aria-labelledby="steps-title">
+  <div class="wrap split">
+    <div class="section-head split-head reveal">
+      <p class="eyebrow">Get started</p>
+      <h2 id="steps-title">How it works</h2>
+      {%- if _app.android_url != "" %}
+      <div class="steps-cta">{% include store-badge.html url=_app.android_url name=_app.short %}</div>
+      {%- endif %}
+    </div>
+    <ol class="steps">
+      {%- for s in page.steps %}
+      <li class="step reveal">
+        <span class="step-num" aria-hidden="true">{{ forloop.index }}</span>
+        <div>
+          <h3 class="step-title">{{ s.title | escape }}</h3>
+          <p>{{ s.text | escape }}</p>
+        </div>
+      </li>
+      {%- endfor %}
+    </ol>
+  </div>
+</section>
+
+{% include faq-section.html faqs=page.faqs id="faq" eyebrow="Help" heading="Questions people ask" %}
+
+{%- if _others.size > 0 %}
+<section class="section section--alt" aria-labelledby="more-title">
+  <div class="wrap">
+    <div class="section-head section-head--center reveal">
+      <p class="eyebrow">More from Fuzon Apps</p>
+      <h2 id="more-title">Find the app for the job.</h2>
+    </div>
+    <ul class="app-cards" role="list">
+      {%- for app in _others %}
+      {% include app-card.html app=app %}
+      {%- endfor %}
+    </ul>
+  </div>
+</section>
+{%- endif %}
+
+{% include cta-band.html app=_app %}

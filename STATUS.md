@@ -175,6 +175,27 @@ make a blank".
 - Checked: wording 235/235 paragraphs; legal name on no other page; axe
   zero violations; no overflow; html-validate clean; 61 links.
 
+### 5f. First app page: Cloud Storage & Cloud Drive (16 Oct)
+Owner: "do the next page".
+
+- `_layouts/app.html`: hero (tile, eyebrow, name, tagline, Google Play
+  button, "How it works"), a window with the phone, "What it does"
+  feature cards, numbered "How it works" steps, FAQ, "More from Fuzon
+  Apps" (every other app in apps.yml, so it grows with the list), and the
+  black band in app mode ("Get <app>" with the white Play button).
+  Schema: MobileApplication (Android, price 0 AUD, installUrl, publisher
+  → Organization; no rating) + BreadcrumbList + FAQPage.
+- `/cloud-storage` now uses it (`built: true`); share card
+  `assets/og/cloud-storage.jpg`. Copy restates the listing and the
+  points only: no plan sizes, prices, ratings or legal content.
+- Shared pieces moved into shell.scss (showcase window, phone, app
+  cards) and `_includes/app-card.html`; app card grid is auto-fit so it
+  holds any number of apps. New icons: folder, share, upload, download.
+- Checked: axe zero violations, no overflow, html-validate clean, 62
+  links, 23 interaction checks, no banned content.
+- **Waiting on owner sign-off** before Smart Switch and GPS Navigation
+  get the same layout.
+
 ## 6. SEO and routing
 
 - Clean URLs (`/cloud-storage`), canonicals generated from `page.url`.
@@ -229,7 +250,7 @@ records for console@ intact.
 
 ## 9. Execution order (next)
 
-1. App pages (layout `app`, one first for sign-off, then the other two).
+1. App pages: Cloud Storage done (5f); Smart Switch and GPS Navigation after sign-off.
 2. Legal pages (layout `legal`, owner's text verbatim), Contact, Delete
    your account, About.
 3. llms.txt, per-app share cards, app-ads.txt if the apps run ads.

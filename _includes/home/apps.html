@@ -20,27 +20,7 @@
     </div>
     <ul class="app-cards" role="list">
       {%- for app in site.data.apps %}
-      {%- assign _url = '/' | append: app.slug | relative_url %}
-      <li class="app-card tone-{{ app.tone }} reveal">
-        {% include app-tile.html app=app class="app-card-tile" %}
-        <h3 class="app-card-name"><a href="{{ _url }}">{{ app.name | escape }}</a></h3>
-        <p class="app-card-text">{{ app.tagline | escape }}</p>
-        <ul class="check-list" role="list">
-          {%- for point in app.points %}
-          <li><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg><span>{{ point | escape }}</span></li>
-          {%- endfor %}
-        </ul>
-        {%- if app.store_name != app.name %}
-        <p class="store-note">On Google Play as “{{ app.store_name | escape }}”</p>
-        {%- endif %}
-        <div class="app-card-foot">
-          {%- if app.android_url != "" %}
-          {% include store-badge.html url=app.android_url name=app.short class="app-card-store" %}
-          {%- endif %}
-          <span class="link-arrow app-card-more" aria-hidden="true">About<svg class="icon"><use href="#i-arrow-right"/></svg></span>
-        </div>
-        <svg class="icon app-card-bg" aria-hidden="true"><use href="#i-{{ app.glyph }}"/></svg>
-      </li>
+      {% include app-card.html app=app %}
       {%- endfor %}
     </ul>
   </div>

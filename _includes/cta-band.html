@@ -1,17 +1,34 @@
 {%- comment -%}
   The template's black closing band: small caps eyebrow, white heading,
-  a white button with a soft glow, grey small print. For Fuzon the one
-  button becomes one white button per app (from apps.yml), each opening
-  that app's page, with a faint logo-gradient glow behind them.
+  white button(s) with a soft glow, grey small print, and a faint
+  logo-gradient glow behind.
 
-  The template's "No credit card required · Free 14-day trial" line
-  becomes the confirmed facts from Google Play (free to download, optional
-  in-app purchases) and a link to the developer page.
-  Params: heading, sub (both optional).
+  Two modes:
+  - Homepage (no app): one white button per app in apps.yml, each to
+    that app's page; small print with the Google Play facts and the
+    developer page.
+  - App page (app=<apps.yml entry>): "Get <app>", that app's white Google
+    Play button, and the support email.
+  The template's "No credit card required · Free 14-day trial" line is
+  replaced with confirmed facts only (free to download, optional in-app
+  purchases).
+  Params: app, heading, sub (all optional).
 {%- endcomment -%}
 <section class="cta-band" aria-labelledby="cta-title">
   <div class="cta-glow" aria-hidden="true"></div>
   <div class="wrap cta-inner reveal">
+    {%- if include.app %}
+    {%- assign _cta_heading = "Get " | append: include.app.short %}
+    <p class="eyebrow">Free to download</p>
+    <h2 id="cta-title" class="cta-title">{{ include.heading | default: _cta_heading | escape }}</h2>
+    <p class="cta-sub">{{ include.sub | default: "Download it from Google Play. Optional in-app purchases." | escape }}</p>
+    <div class="cta-apps">
+      {%- if include.app.android_url != "" %}
+      {% include store-badge.html url=include.app.android_url name=include.app.short light=true %}
+      {%- endif %}
+    </div>
+    <p class="cta-small">Questions? Email <a href="mailto:{{ site.company.support_email }}">{{ site.company.support_email }}</a></p>
+    {%- else %}
     <p class="eyebrow">Ready when you are</p>
     <h2 id="cta-title" class="cta-title">{{ include.heading | default: "Pick the app you need" | escape }}</h2>
     <p class="cta-sub">{{ include.sub | default: "Each app has its own page with what it does and how to get started." | escape }}</p>
@@ -21,5 +38,6 @@
       {%- endfor %}
     </ul>
     <p class="cta-small">Free to download · Optional in-app purchases · <a href="{{ site.play_developer_url }}">All our apps on Google Play</a></p>
+    {%- endif %}
   </div>
 </section>
