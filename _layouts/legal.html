@@ -1,0 +1,86 @@
+---
+layout: default
+---
+{%- comment -%}
+  Privacy Policy and Terms of Service (playbook 9.7 and Appendix G1).
+
+  The body is the owner's document, word for word (playbook 2: legal text
+  is the owner's). It is generated from the .docx and checked against it
+  (STATUS.md 5e). Only placeholders change: the support email and legal
+  name come from _config.yml, everything not yet supplied from
+  _data/legal.yml, shown as a highlighted blank until it is filled.
+
+  Legal content lives on these pages only (owner, 16 Oct).
+
+  Required front matter: title, description, permalink, css: legal,
+  heading (the H1), doc ("privacy" or "terms": picks the dates in
+  _data/legal.yml), sections (list of {id, label} for the contents; each
+  id must match a heading id in the body).
+{%- endcomment -%}
+{%- assign _heading = page.heading | default: page.title -%}
+{%- assign _eff_key = page.doc | append: "_effective" -%}
+{%- assign _upd_key = page.doc | append: "_last_updated" -%}
+{%- assign _eff = site.data.legal[_eff_key] -%}
+{%- assign _upd = site.data.legal[_upd_key] -%}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    { "@type": "ListItem", "position": 1, "name": "Home", "item": {{ '/' | absolute_url | jsonify }} },
+    { "@type": "ListItem", "position": 2, "name": {{ _heading | jsonify }}, "item": {{ page.url | absolute_url | jsonify }} }
+  ]
+}
+</script>
+
+<section class="legal-hero hero-glow-host" aria-labelledby="legal-title">
+  {% include hero-glow.html %}
+  <div class="wrap hero-glow-content">
+    <nav class="breadcrumbs" aria-label="Breadcrumb">
+      <a href="{{ '/' | relative_url }}">Home</a>
+      <svg class="icon" aria-hidden="true"><use href="#i-chevron-right"/></svg>
+      <span aria-current="page">{{ _heading | escape }}</span>
+    </nav>
+    <p class="eyebrow">Legal</p>
+    <h1 id="legal-title" class="legal-title">{{ _heading | escape }}</h1>
+    <p class="legal-dates">
+      <span>Effective {% if _eff and _eff != "" %}<time datetime="{{ _eff | date: '%Y-%m-%d' }}">{{ _eff | date: "%-d %B %Y" }}</time>{% else %}{% include legal-field.html value="" %}{% endif %}</span>
+      <span aria-hidden="true">·</span>
+      <span>Last updated {% if _upd and _upd != "" %}<time datetime="{{ _upd | date: '%Y-%m-%d' }}">{{ _upd | date: "%-d %B %Y" }}</time>{% else %}{% include legal-field.html value="" %}{% endif %}</span>
+    </p>
+  </div>
+</section>
+
+<div class="section legal-layout">
+  <div class="wrap legal-grid">
+    {%- if page.sections %}
+    <nav class="legal-toc" aria-label="On this page">
+      {%- comment -%} Open in the HTML so it works without JavaScript;
+      site.js folds it on phones and closes it after a link is tapped. {%- endcomment %}
+      <details class="legal-toc-fold" open>
+        <summary class="legal-toc-summary"><span class="eyebrow">On this page</span><svg class="icon" aria-hidden="true"><use href="#i-chevron-down"/></svg></summary>
+        <ol class="legal-toc-list">
+          {%- for item in page.sections %}
+          <li><a href="#{{ item.id }}">{{ item.label | escape }}</a></li>
+          {%- endfor %}
+        </ol>
+      </details>
+    </nav>
+    {%- endif %}
+    <div class="legal-main">
+      <div class="prose legal-body">
+        {{ content }}
+      </div>
+
+      <aside class="legal-company" aria-labelledby="legal-company-title">
+        <p class="eyebrow" id="legal-company-title">Company details</p>
+        <dl>
+          <div><dt>Legal name</dt><dd>{{ site.company.legal_name }}</dd></div>
+          <div><dt>ABN / ACN</dt><dd>{% include legal-field.html value=site.data.legal.abn %}</dd></div>
+          <div><dt>Address</dt><dd>{% include legal-field.html value=site.data.legal.address %}</dd></div>
+          <div><dt>Email</dt><dd><a href="mailto:{{ site.company.support_email }}">{{ site.company.support_email }}</a></dd></div>
+        </dl>
+      </aside>
+    </div>
+  </div>
+</div>

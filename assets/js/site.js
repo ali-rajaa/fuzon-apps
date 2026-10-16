@@ -173,6 +173,70 @@
     });
   });
 
+  /* ---- Legal pages: contents fold, current section, tables ----
+     The contents list is open in the HTML (works without JavaScript);
+     on phones it starts folded and folds again after a link is tapped.
+     The link for the section being read gets .is-active. Each table
+     cell is labelled with its column heading so rows can stack as cards
+     on phones (legal.scss); without this the table scrolls sideways. */
+  var folds = document.querySelectorAll('.legal-toc-fold');
+  if (folds.length) {
+    var wideToc = window.matchMedia('(min-width: 900px)');
+    var syncFolds = function () { folds.forEach(function (d) { d.open = wideToc.matches; }); };
+    syncFolds();
+    if (wideToc.addEventListener) wideToc.addEventListener('change', syncFolds);
+    folds.forEach(function (d) {
+      d.addEventListener('click', function (e) {
+        if (wideToc.matches && e.target.closest('summary')) e.preventDefault();
+        if (!wideToc.matches && e.target.closest('a')) d.open = false;
+      });
+    });
+  }
+  var tocLinks = document.querySelectorAll('.legal-toc-list a');
+  if (tocLinks.length && 'IntersectionObserver' in window) {
+    var targets = [];
+    tocLinks.forEach(function (a) {
+      var el = document.getElementById(decodeURIComponent(a.hash.slice(1)));
+      if (el) targets.push({ link: a, el: el });
+    });
+    var setActive = function () {
+      var current = null;
+      var line = window.innerHeight * 0.3;
+      targets.forEach(function (t) { if (t.el.getBoundingClientRect().top <= line) current = t; });
+      targets.forEach(function (t) {
+        var on = t === current;
+        t.link.classList.toggle('is-active', on);
+        if (on) t.link.setAttribute('aria-current', 'true'); else t.link.removeAttribute('aria-current');
+      });
+    };
+    var spy = new IntersectionObserver(setActive, { rootMargin: '-30% 0px -65% 0px' });
+    targets.forEach(function (t) { spy.observe(t.el); });
+    setActive();
+  }
+  document.querySelectorAll('.table-scroll table').forEach(function (table) {
+    var heads = Array.prototype.map.call(table.querySelectorAll('thead th'), function (th) {
+      return th.textContent.trim();
+    });
+    if (!heads.length) return;
+    table.querySelectorAll('tbody tr').forEach(function (tr) {
+      Array.prototype.forEach.call(tr.children, function (cell, i) {
+        if (heads[i]) cell.setAttribute('data-label', heads[i]);
+      });
+    });
+    table.classList.add('is-stackable');
+    // Stacked, the box no longer scrolls, so it drops its tab stop and
+    // "scrolls sideways" label until the screen widens again.
+    var wrap = table.parentNode;
+    var label = wrap.getAttribute('aria-label');
+    var phone = window.matchMedia('(max-width: 599.98px)');
+    var sync = function () {
+      if (phone.matches) { wrap.removeAttribute('tabindex'); wrap.setAttribute('aria-label', label.replace(' (table, scrolls sideways)', ' (table)')); }
+      else { wrap.setAttribute('tabindex', '0'); wrap.setAttribute('aria-label', label); }
+    };
+    sync();
+    if (phone.addEventListener) phone.addEventListener('change', sync);
+  });
+
   /* ---- Reveal on scroll ----
      .reveal-ready (which hides .reveal content) is added only after the
      observer that shows it again exists. If anything here fails, the

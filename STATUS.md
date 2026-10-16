@@ -146,6 +146,35 @@ feature chips and the placeholder "being written" badge replaced: one
 band, placeholder card) and tick lists on the cards, matching the
 showcase. Checks rerun: all pass.
 
+### 5e. Legal pages (16 Oct)
+Owner: "now do all the legal pages with info I sent, any missing just
+make a blank".
+
+- `/privacy-policy` and `/terms-of-service` built on `_layouts/legal.html`
+  from the owner's .docx, **word for word** (typos and all: "FUZON APS",
+  "Terms of Services", "Contact US"). Headings carry Word's own automatic
+  numbering (Privacy 1 to 15 with 2.1 to 2.5; Terms 1 to 20), so the Terms'
+  "Sections 7 to 9" point at the three app sections as written.
+- Structure only: tables get header rows (stack as cards on phones), the
+  GPS safety notice is a callout, a contents list (sticky on desktop,
+  folded on phones) and a company details card.
+- Placeholders: `[privacy@…]`, `[dmca@…]` and `fuzon.apps@gmail.com` became
+  `console@fuzonapps.com`; `[Company Name]` the legal name from
+  `_config.yml`. Still unknown, shown as highlighted blanks from
+  `_data/legal.yml`: governing law, jurisdiction, arbitration, ABN/ACN,
+  address, and the effective / last-updated dates.
+- Two paragraphs split by page breaks in the .docx were joined ("…IN THE
+  12 / MONTHS…", "…indemnification / and governing law…").
+- Regenerate after the owner edits a document:
+  `pandoc <docx> -t html --wrap=none -o x.html`, then
+  `python3 _tools/legal/legal_build.py x.html body.html privacy|terms`,
+  paste the body under the page's front matter, build, and run
+  `python3 _tools/legal/legal_verify.py <unzipped docx>/word/document.xml
+  _site/<page>.html`. It must report 0 missing (Privacy 163 paragraphs,
+  Terms 72).
+- Checked: wording 235/235 paragraphs; legal name on no other page; axe
+  zero violations; no overflow; html-validate clean; 61 links.
+
 ## 6. SEO and routing
 
 - Clean URLs (`/cloud-storage`), canonicals generated from `page.url`.
@@ -214,7 +243,7 @@ records for console@ intact.
 | 2 | ~~Store links~~ Done (Google Play). App Store links if iPhone versions ever exist |
 | 3 | Per app: 3 to 6 plain app screenshots (not the Play marketing images) for the showcase window and app pages |
 | 4 | AdMob publisher ID (`pub-…`) for `app-ads.txt`: Smart Switch and GPS show ads |
-| 5 | Exact legal name (APS or Apps), ACN/ABN, address, governing state, effective date |
+| 5 | Fill `_data/legal.yml`: ABN/ACN, address, governing law, jurisdiction, arbitration (or remove that clause), effective and last-updated dates. Confirm the legal name is "FUZON APS PTY LIMITED" (as both documents write it) |
 | 6 | Decisions on the legal-document issues in PLAN.md section 7 |
 | 7 | ~~Smart Switch name~~ Kept (owner) |
 | 8 | Domain access, and confirm the console@ mailbox works |

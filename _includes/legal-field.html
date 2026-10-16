@@ -1,0 +1,6 @@
+{%- comment -%}
+  One fact on a legal page: prints the value, or a highlighted blank when
+  _data/legal.yml doesn't have it yet. The blank reads "to be confirmed"
+  to screen readers. Usage: {% include legal-field.html value=site.data.legal.abn %}
+{%- endcomment -%}
+{%- if include.value and include.value != "" -%}{{ include.value | escape }}{%- else -%}<span class="legal-blank"><span class="visually-hidden">to be confirmed</span></span>{%- endif -%}

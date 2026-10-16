@@ -1,0 +1,24 @@
+# Facts the legal pages need that the owner hasn't supplied yet (16 Oct:
+# "any missing just make a blank"). Each empty value shows on the page as
+# a highlighted blank (_includes/legal-field.html), so nothing ships with
+# a made-up value and nothing is hidden. Fill a value here and every
+# place it appears updates.
+#
+# The legal name and support email are in _config.yml (company:).
+
+# Shown in the company details card at the end of both legal pages.
+abn: ""            # ABN and/or ACN
+address: ""        # registered or postal address
+
+# Terms of Service, "Governing Law and Dispute Resolution". In the owner's
+# document these are the placeholders [Country/State], [Jurisdiction] and
+# "[or by binding arbitration under (Arbitration Rules)]".
+governing_law: ""
+jurisdiction: ""
+arbitration: ""
+
+# Dates shown under each page heading. Format: 2026-10-16.
+privacy_effective: ""
+privacy_last_updated: ""
+terms_effective: ""
+terms_last_updated: ""
