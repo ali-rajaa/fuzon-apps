@@ -42,7 +42,15 @@
 
   <meta property="og:site_name" content="{{ site.title }}">
   <meta property="og:locale" content="en_AU">
+  {%- if page.layout == "guide" %}
+  <meta property="og:type" content="article">
+  <meta property="article:published_time" content="{{ page.date | date_to_xmlschema }}">
+  <meta property="article:modified_time" content="{{ page.updated | default: page.date | date_to_xmlschema }}">
+  {%- assign _sec = site.data.topics | where: "slug", page.topic | first %}
+  <meta property="article:section" content="{{ _sec.name | escape }}">
+  {%- else %}
   <meta property="og:type" content="website">
+  {%- endif %}
   <meta property="og:title" content="{{ _title | escape }}">
   <meta property="og:description" content="{{ _desc | escape }}">
   {%- unless _is_404 %}

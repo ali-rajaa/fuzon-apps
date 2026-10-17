@@ -196,7 +196,7 @@
     });
   });
 
-  /* ---- Legal pages: contents fold, current section, tables ----
+  /* ---- Legal pages and guides: contents fold, current section, tables ----
      The contents list is open in the HTML (works without JavaScript);
      on phones it starts folded and folds again after a link is tapped.
      The link for the section being read gets .is-active. Each table
@@ -269,6 +269,107 @@
     };
     sync();
     if (phone.addEventListener) phone.addEventListener('change', sync);
+  });
+
+  /* ---- Guides hub: topic switcher ----
+     Buttons with aria-pressed filter the grid by data-topic. The choice
+     goes into the address (?topic=) so a filtered view can be shared or
+     linked to (topic cards, guide pages), and a white thumb slides to the
+     chosen button like the homepage tabs. The status line tells screen
+     readers what is showing. Without this script every guide shows. */
+  document.querySelectorAll('[data-filter]').forEach(function (bar) {
+    var btns = Array.prototype.slice.call(bar.querySelectorAll('[data-topic]'));
+    var grid = document.querySelector('.hub-grid');
+    if (!btns.length || !grid) return;
+    var cards = Array.prototype.slice.call(grid.querySelectorAll('.guide-card'));
+    var status = document.getElementById('filter-status');
+    var thumb = document.createElement('span');
+    thumb.className = 'seg-thumb is-placing';
+    thumb.setAttribute('aria-hidden', 'true');
+    bar.insertBefore(thumb, bar.firstChild);
+    var current = btns[0];
+    var place = function (instant) {
+      if (instant) thumb.classList.add('is-placing');
+      thumb.style.width = current.offsetWidth + 'px';
+      thumb.style.height = current.offsetHeight + 'px';
+      thumb.style.transform = 'translate(' + current.offsetLeft + 'px, ' + current.offsetTop + 'px)';
+      if (instant) { void thumb.offsetWidth; thumb.classList.remove('is-placing'); }
+    };
+    var choose = function (btn, opts) {
+      opts = opts || {};
+      current = btn;
+      var topic = btn.getAttribute('data-topic');
+      btns.forEach(function (b) { b.setAttribute('aria-pressed', String(b === btn)); });
+      cards.forEach(function (c) {
+        var show = topic === 'all' || c.getAttribute('data-topic') === topic;
+        var was = !c.hidden;
+        c.hidden = !show;
+        c.classList.remove('is-entering');
+        if (show && !opts.first) { void c.offsetWidth; c.classList.add('is-entering'); }
+        if (!show && was) c.classList.remove('is-entering');
+      });
+      place(opts.first);
+      if (status && !opts.first) status.textContent = topic === 'all' ? 'Showing every guide.' : 'Showing ' + btn.textContent.trim() + ' guides.';
+      if (!opts.first && window.history && history.replaceState) {
+        var url = new URL(window.location.href);
+        if (topic === 'all') url.searchParams.delete('topic'); else url.searchParams.set('topic', topic);
+        history.replaceState(null, '', url.pathname + url.search + url.hash);
+      }
+    };
+    btns.forEach(function (b) { b.addEventListener('click', function () { choose(b); }); });
+    grid.addEventListener('animationend', function (e) { if (e.target.classList) e.target.classList.remove('is-entering'); });
+    var wanted = new URLSearchParams(window.location.search).get('topic');
+    var start = btns.filter(function (b) { return b.getAttribute('data-topic') === wanted; })[0] || btns[0];
+    choose(start, { first: true });
+    window.addEventListener('resize', function () { place(true); });
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(function () { place(true); });
+  });
+
+  /* ---- Guide pages: reading progress and share ----
+     The line under the header fills as the article is read (one rAF per
+     scroll, transform only). Share opens the phone's share sheet where
+     there is one, otherwise copies the link; the button stays hidden
+     where neither works. */
+  var progress = document.querySelector('.read-progress-bar');
+  var article = document.querySelector('.guide-main');
+  if (progress && article) {
+    var ticking = false;
+    var paint = function () {
+      ticking = false;
+      var r = article.getBoundingClientRect();
+      var total = r.height - window.innerHeight * 0.6;
+      var done = Math.min(1, Math.max(0, (window.innerHeight * 0.3 - r.top) / Math.max(total, 1)));
+      progress.style.transform = 'scaleX(' + done + ')';
+    };
+    window.addEventListener('scroll', function () { if (!ticking) { ticking = true; requestAnimationFrame(paint); } }, { passive: true });
+    window.addEventListener('resize', paint);
+    paint();
+  }
+  document.querySelectorAll('[data-share]').forEach(function (btn) {
+    var canShare = !!navigator.share;
+    var canCopy = !!(navigator.clipboard && window.isSecureContext);
+    if (!canShare && !canCopy) return;
+    var label = btn.querySelector('.share-text');
+    var status = document.getElementById(btn.getAttribute('aria-describedby'));
+    var link = (document.querySelector('link[rel="canonical"]') || {}).href || window.location.href;
+    var timer;
+    if (!canShare && label) label.textContent = 'Copy link';
+    btn.hidden = false;
+    btn.addEventListener('click', function () {
+      if (canShare) {
+        navigator.share({ title: document.title, url: link }).catch(function () {});
+        return;
+      }
+      navigator.clipboard.writeText(link).then(function () {
+        if (label) label.textContent = 'Link copied';
+        if (status) status.textContent = 'Link copied.';
+        clearTimeout(timer);
+        timer = setTimeout(function () {
+          if (label) label.textContent = 'Copy link';
+          if (status) status.textContent = '';
+        }, 2500);
+      });
+    });
   });
 
   /* ---- Copy button (Contact page) ----

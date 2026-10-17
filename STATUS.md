@@ -299,6 +299,53 @@ Owner: apply the apple-design skill across all CSS. What changed:
   html-validate clean; tab thumb, menus, sheet and header checked in
   screenshots, including mid-animation.
 
+### 5m. Fuzon Know-How: hub and 8 guide placeholders (17 Oct)
+Owner: guides section named Fuzon Know-How (recommended name), covering
+every app; build the hub and 8 guide pages as placeholders, no article
+text yet; owner confirms the design, then we write the pages. SEO
+targeted per page (searchfit on-page checklist).
+- `/guides/` hub (`guides/index.html`): hero with the first guide as a
+  featured card, a topic switcher (segmented control, `?topic=` in the
+  address), every guide as a card, topic cards with the app for each job,
+  the black band. CollectionPage + ItemList + BreadcrumbList schema.
+- `_layouts/guide.html`: question as H1, topic eyebrow, meta line (by
+  Fuzon Apps, date or "Being written", reading time), share button,
+  reading-progress line, contents rail (legal TOC classes, so site.js
+  folds and highlights it), "In short" card, sections, one "Do it with
+  <app>" panel, questions people ask, Keep reading, the app's band.
+  BlogPosting + BreadcrumbList; FAQPage once answers exist; og:type
+  article with published/modified/section.
+- `_data/topics.yml`: Cloud & backup, New phone & transfer, Maps &
+  driving (tone, glyph, app, blurb). Guides link from the header
+  (Guides), the footer (Support column) and nowhere else yet.
+- Includes: `guide-card`, `guide-placeholder` (grey lines + a dashed
+  "Text to come" note with the section brief), `guide-app`, `read-time`.
+  Styles in `assets/css/pages/guides.scss`; JS in site.js (topic switcher,
+  progress, share).
+- The 8 guides (`guides/*.md`), each with its target phrase in the title,
+  H1, description and slug; H2s for the sub-questions; FAQ questions
+  from what people search:
+
+  | Slug | Target phrase |
+  |---|---|
+  | back-up-photos-android | how to back up photos on android |
+  | free-up-storage-android | how to free up storage on android |
+  | cloud-storage-vs-phone-storage | cloud storage vs phone storage |
+  | transfer-data-android-to-android | how to transfer data from android to android |
+  | before-selling-your-android-phone | what to do before selling your android phone |
+  | transfer-photos-contacts-new-phone | transfer photos and contacts to new phone |
+  | plan-road-trip-route-multiple-stops | how to plan a road trip route with multiple stops |
+  | save-battery-data-gps-navigation | save battery and data gps navigation |
+
+- Every guide and the hub are `noindex` and out of the sitemap while
+  drafts. To publish a guide: write the body (Markdown, each H2 with its
+  section id), add `lead`, `takeaways` and FAQ answers, remove `draft`,
+  `noindex` and `words`. Then: the hub's noindex, an OG card per guide,
+  the homepage row, "Guides for this app" on app pages, feed.xml and
+  llms.txt.
+- Checked: axe, overflow, tap targets, 184 links, 23 interaction checks,
+  html-validate clean; screenshots at 1280 and 390.
+
 ## 6. SEO and routing
 
 - Clean URLs (`/cloud-storage`), canonicals generated from `page.url`.
@@ -371,4 +418,4 @@ records for console@ intact.
 | 7 | ~~Smart Switch name~~ Kept (owner) |
 | 8 | Domain access, and confirm the console@ mailbox works |
 | 9 | Enable GitHub Pages (section 7) |
-| 10 | Guides hub at launch or later? Analytics: none (recommended) or which? |
+| 10 | ~~Guides hub~~ Fuzon Know-How (5m): confirm the design, then the 8 guides get written. Analytics: none (recommended) or which? |

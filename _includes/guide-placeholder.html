@@ -1,0 +1,42 @@
+{%- comment -%}
+  Stand-in for a section of a guide that isn't written yet (owner, 17 Oct:
+  pages as placeholders first, to sign off the design before the text).
+  Grey lines show the shape and length of what's coming; the note above
+  them says what the section will cover, so nothing reads as real advice.
+  Every placeholder page is noindex and out of the sitemap.
+
+  Params: kind (text, steps, checklist, table, note), brief (what the
+  section will cover). Usage:
+  {% include guide-placeholder.html kind="steps" brief="..." %}
+{%- endcomment -%}
+<div class="ph">
+  <p class="ph-note"><svg class="icon" aria-hidden="true"><use href="#i-file"/></svg><span><strong>Text to come.</strong> {{ include.brief | escape }}</span></p>
+  <div class="ph-lines" aria-hidden="true"><i class="w-100"></i><i class="w-95"></i><i class="w-60"></i></div>
+  {%- case include.kind %}
+  {%- when "steps" %}
+  <ol class="ph-steps" aria-hidden="true">
+    {%- for i in (1..3) %}
+    <li><i class="w-40 is-strong"></i><i class="w-90"></i><i class="w-70"></i></li>
+    {%- endfor %}
+  </ol>
+  {%- when "checklist" %}
+  <ul class="ph-checks" aria-hidden="true">
+    {%- for i in (1..4) %}
+    <li><svg class="icon"><use href="#i-check"/></svg><i class="w-{% cycle '80', '65', '90', '55' %}"></i></li>
+    {%- endfor %}
+  </ul>
+  {%- when "table" %}
+  <div class="ph-table" aria-hidden="true">
+    {%- for r in (1..4) %}
+    <div class="ph-row{% if r == 1 %} is-head{% endif %}"><i></i><i></i><i></i></div>
+    {%- endfor %}
+  </div>
+  {%- when "note" %}
+  <div class="guide-note ph-callout" aria-hidden="true">
+    <svg class="icon"><use href="#i-info"/></svg>
+    <div><i class="w-30 is-strong"></i><i class="w-95"></i><i class="w-70"></i></div>
+  </div>
+  {%- else %}
+  <div class="ph-lines" aria-hidden="true"><i class="w-100"></i><i class="w-90"></i><i class="w-95"></i><i class="w-45"></i></div>
+  {%- endcase %}
+</div>

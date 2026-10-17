@@ -1,0 +1,8 @@
+{%- comment -%}
+  Minutes to read a guide at 200 words a minute, at least 1. A guide
+  still being written (draft: true) uses its planned length (words:), so
+  the meta line shows what the finished guide will be.
+  Param: guide (a page). Usage: {% include read-time.html guide=page %}
+{%- endcomment -%}
+{%- if include.guide.draft -%}{%- assign _w = include.guide.words | default: 1400 -%}{%- else -%}{%- assign _w = include.guide.content | strip_html | number_of_words -%}{%- endif -%}
+{%- assign _m = _w | divided_by: 200.0 | ceil -%}{%- if _m < 1 -%}{%- assign _m = 1 -%}{%- endif -%}{{ _m }}

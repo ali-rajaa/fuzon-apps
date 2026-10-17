@@ -4,8 +4,8 @@
   "Log in" (owner, 16 Oct: there is no login, it is just a website).
 
   Items: Apps (menu of every app in apps.yml), Support (menu from
-  nav.yml), About (plain link), and "Get the apps" (to the homepage's
-  app list).
+  nav.yml), Guides and About (plain links, nav.yml links), and "Get the
+  apps" (to the homepage's app list).
 
   Behaviour (site.js, playbook 9.1): sticky; a hairline and shadow appear
   once content scrolls under it. On 760px and up the menus are flyouts,
@@ -68,9 +68,13 @@
             </ul>
           </div>
         </li>
-        {%- for item in site.data.nav.company %}
+        {%- comment -%} Guides is marked current on the hub ("page") and on
+        every guide ("true": you're inside that section). {%- endcomment %}
+        {%- for item in site.data.nav.links %}
+        {%- assign _cur = "" %}
+        {%- if page.url == item.url %}{% assign _cur = "page" %}{% elsif item.url == "/guides/" and page.layout == "guide" %}{% assign _cur = "true" %}{% endif %}
         <li class="nav-item">
-          <a class="nav-link nav-link--page" href="{{ item.url | relative_url }}"{% if page.url == item.url %} aria-current="page"{% endif %}>{{ item.label | escape }}</a>
+          <a class="nav-link nav-link--page" href="{{ item.url | relative_url }}"{% if _cur != "" %} aria-current="{{ _cur }}"{% endif %}>{{ item.label | escape }}</a>
         </li>
         {%- endfor %}
       </ul>

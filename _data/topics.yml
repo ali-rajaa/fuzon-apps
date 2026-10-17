@@ -1,0 +1,31 @@
+# Guide topics for Fuzon Know-How (/guides/). One per app area, so a new
+# app adds a topic here and its guides set `topic:` to the slug. The hub's
+# topic switcher, topic cards, guide cards and guide pages all read this.
+#
+#   slug   used in guide front matter (topic:) and the hub filter (?topic=)
+#   name   shown on cards, the switcher and guide pages
+#   tone   colour, the same tones as the apps (shell.scss "App tones")
+#   glyph  icon-sprite symbol on the topic's banner and tile
+#   app    the apps.yml slug of the app that does this job
+#   blurb  one line on what the topic covers
+
+- slug: "cloud-backup"
+  name: "Cloud & backup"
+  tone: "cloud"
+  glyph: "upload"
+  app: "cloud-storage"
+  blurb: "Back up your photos and files, and free up space on your phone."
+
+- slug: "new-phone"
+  name: "New phone & transfer"
+  tone: "switch"
+  glyph: "smartphone"
+  app: "smart-switch"
+  blurb: "Move your things to a new phone and get the old one ready to go."
+
+- slug: "maps-driving"
+  name: "Maps & driving"
+  tone: "gps"
+  glyph: "route"
+  app: "gps-navigation"
+  blurb: "Plan your route and get more from navigation on the road."

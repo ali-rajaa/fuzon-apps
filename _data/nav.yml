@@ -20,6 +20,13 @@ support:
     icon: "file"
     blurb: "The rules for using the apps"
 
+# Plain links in the header bar, after the Apps and Support menus.
+links:
+  - label: "Guides"
+    url: "/guides/"
+  - label: "About"
+    url: "/about"
+
 company:
   - label: "About"
     url: "/about"

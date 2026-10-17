@@ -1,0 +1,22 @@
+{%- comment -%}
+  "Do it with <app>" panel inside a guide: the app that does the job the
+  guide describes. Confirmed facts only, from apps.yml (name, tagline,
+  Google Play link). Shown once per guide. A div, not an aside: an aside
+  inside the article trips axe's landmark rule.
+  Param: app (an apps.yml entry).
+{%- endcomment -%}
+{%- assign _a = include.app -%}
+<div class="guide-app tone-{{ _a.tone }}">
+  {% include app-tile.html app=_a class="guide-app-tile" %}
+  <div class="guide-app-copy">
+    <p class="eyebrow">An app by Fuzon Apps</p>
+    <p class="guide-app-title">Do it with {{ _a.name | escape }}</p>
+    <p class="guide-app-text">{{ _a.tagline | escape }} Free to download, with optional in-app purchases.</p>
+    <div class="guide-app-actions">
+      {%- if _a.android_url != "" %}
+      {% include store-badge.html url=_a.android_url name=_a.short %}
+      {%- endif %}
+      <a class="link-arrow" href="{{ '/' | append: _a.slug | relative_url }}">About {{ _a.short | escape }}<svg class="icon" aria-hidden="true"><use href="#i-arrow-right"/></svg></a>
+    </div>
+  </div>
+</div>

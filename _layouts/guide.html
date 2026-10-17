@@ -1,0 +1,236 @@
+---
+layout: default
+---
+{%- comment -%}
+  One Fuzon Know-How guide (/guides/<slug>). A reading layout, unlike the
+  homepage and the app pages: a left-aligned hero with the question as the
+  H1, a contents rail beside the article on wide screens (folded on
+  phones), an "In short" card, the sections, one "Do it with <app>" panel,
+  the questions people ask, "Keep reading" and the app's black band. A
+  thin reading-progress line runs under the header.
+
+  Front matter:
+    Required: layout: guide, css: guides, title (the <title>, ending
+      " | Fuzon Apps"), headline (the H1: the question people search for),
+      crumb (short name for the breadcrumb), description (150 to 160
+      characters, used for the meta description and the cards),
+      permalink (/guides/<slug>), topic (a _data/topics.yml slug), tone
+      (the topic's tone), date, order (position on the hub), keyword
+      (the search phrase the page targets; not shown), sections (list of
+      {id, title, kind, brief}: the H2s in order), faqs (list of {q, a}).
+    Optional: updated, takeaways (list), lead, og_image, og_image_alt.
+    While being written: draft: true, noindex: true and words (planned
+      length). A draft draws each section as a placeholder
+      (guide-placeholder.html: kind and brief) and leaves out the FAQ
+      schema; once written, the page body is the article (each H2 with
+      the section's id) and sections only feeds the contents list.
+
+  SEO (searchfit on-page checklist, playbook 13.6): one target phrase per
+  guide, in the title, H1, description, first paragraph and slug; H2s
+  cover the sub-questions; FAQ questions are the ones people ask; 3 or
+  more internal links (the app panel, the app page, Keep reading, the
+  hub). BlogPosting, BreadcrumbList and (once answered) FAQPage schema.
+
+  Copy rules (STATUS.md 2, playbook 14): general advice that's true on any
+  Android phone, menu names may differ by phone maker; app claims only
+  from apps.yml; "free to download"; no ratings, reviews, download
+  numbers or app counts; nothing from the legal documents.
+{%- endcomment -%}
+{%- assign _topic = site.data.topics | where: "slug", page.topic | first -%}
+{%- assign _app = site.data.apps | where: "slug", _topic.app | first -%}
+{%- assign _home = '/' | absolute_url -%}
+{%- assign _hub = '/guides/' | absolute_url -%}
+{%- assign _url = page.url | absolute_url -%}
+{%- assign _updated = page.updated | default: page.date -%}
+{%- assign _og = page.og_image | default: "/assets/og/default.jpg" -%}
+{%- assign _mins = "" -%}{%- capture _mins %}{% include read-time.html guide=page %}{% endcapture -%}
+{%- assign _app_after = page.sections.size | plus: 1 | divided_by: 2 -%}
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "BlogPosting",
+      "@id": {{ _url | append: '#article' | jsonify }},
+      "headline": {{ page.headline | jsonify }},
+      "description": {{ page.description | jsonify }},
+      "url": {{ _url | jsonify }},
+      "mainEntityOfPage": {{ _url | jsonify }},
+      "datePublished": {{ page.date | date: "%Y-%m-%d" | jsonify }},
+      "dateModified": {{ _updated | date: "%Y-%m-%d" | jsonify }},
+      "inLanguage": "en-AU",
+      "articleSection": {{ _topic.name | jsonify }},
+      "keywords": {{ page.keyword | jsonify }},
+      "image": {{ _og | absolute_url | jsonify }},
+      "author": { "@id": {{ _home | append: '#organization' | jsonify }} },
+      "publisher": { "@id": {{ _home | append: '#organization' | jsonify }} },
+      "isPartOf": { "@id": {{ _hub | append: '#collection' | jsonify }} }
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Home", "item": {{ _home | jsonify }} },
+        { "@type": "ListItem", "position": 2, "name": "Fuzon Know-How", "item": {{ _hub | jsonify }} },
+        { "@type": "ListItem", "position": 3, "name": {{ page.crumb | jsonify }}, "item": {{ _url | jsonify }} }
+      ]
+    }
+  ]
+}
+</script>
+{%- unless page.draft %}
+{% include faq-schema.html faqs=page.faqs %}
+{%- endunless %}
+
+<div class="read-progress" aria-hidden="true"><span class="read-progress-bar"></span></div>
+
+<section class="guide-hero hero-glow-host" aria-labelledby="guide-title">
+  {% include hero-glow.html %}
+  <div class="wrap hero-glow-content">
+    <nav class="breadcrumbs" aria-label="Breadcrumb">
+      <a href="{{ '/' | relative_url }}">Home</a>
+      <svg class="icon" aria-hidden="true"><use href="#i-chevron-right"/></svg>
+      <a href="{{ '/guides/' | relative_url }}">Fuzon Know-How</a>
+      <svg class="icon" aria-hidden="true"><use href="#i-chevron-right"/></svg>
+      <span aria-current="page">{{ page.crumb | escape }}</span>
+    </nav>
+    <div class="guide-hero-copy">
+      <a class="guide-topic" href="{{ '/guides/' | relative_url }}?topic={{ _topic.slug }}#all-guides">
+        <span class="guide-topic-tile" aria-hidden="true"><svg class="icon"><use href="#i-{{ _topic.glyph }}"/></svg></span>
+        <span class="eyebrow">{{ _topic.name | escape }}</span>
+      </a>
+      <h1 id="guide-title" class="guide-title">{{ page.headline | escape }}</h1>
+      {%- if page.draft %}
+      <div class="guide-lead ph-lines ph-lines--lead" aria-hidden="true"><i class="w-100"></i><i class="w-75"></i></div>
+      {%- else %}
+      <p class="guide-lead">{{ page.lead | escape }}</p>
+      {%- endif %}
+      <div class="guide-meta">
+        <p class="guide-meta-line">
+          <span>By Fuzon Apps</span>
+          <span aria-hidden="true">·</span>
+          {%- if page.draft %}
+          <span>Being written</span>
+          {%- else %}
+          <span>Updated <time datetime="{{ _updated | date: '%Y-%m-%d' }}">{{ _updated | date: "%-d %B %Y" }}</time></span>
+          {%- endif %}
+          <span aria-hidden="true">·</span>
+          <span>{{ _mins }} min read</span>
+        </p>
+        <button class="btn btn--secondary btn--sm guide-share" type="button" data-share hidden aria-describedby="share-status">
+          <svg class="icon" aria-hidden="true"><use href="#i-share"/></svg><span class="share-text">Share</span>
+        </button>
+        <span class="visually-hidden" id="share-status" role="status"></span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="guide-layout section" aria-label="Guide">
+  <div class="wrap guide-grid">
+    <nav class="guide-toc" aria-label="Contents">
+      <details class="legal-toc-fold guide-toc-fold" open>
+        <summary class="legal-toc-summary">
+          <span class="eyebrow">In this guide</span>
+          <svg class="icon" aria-hidden="true"><use href="#i-chevron-down"/></svg>
+        </summary>
+        <ul class="legal-toc-list guide-toc-list" role="list">
+          <li><a href="#in-short">In short</a></li>
+          {%- for s in page.sections %}
+          <li><a href="#{{ s.id }}">{{ s.title | escape }}</a></li>
+          {%- endfor %}
+          {%- if page.faqs.size > 0 %}
+          <li><a href="#questions">Questions people ask</a></li>
+          {%- endif %}
+        </ul>
+      </details>
+    </nav>
+
+    <article class="guide-main" aria-labelledby="guide-title">
+      <div class="guide-short" id="in-short">
+        <p class="eyebrow">In short</p>
+        {%- if page.draft %}
+        <ul class="ph-checks" aria-hidden="true">
+          {%- for i in (1..3) %}
+          <li><svg class="icon"><use href="#i-check"/></svg><i class="w-{% cycle '85', '70', '90' %}"></i></li>
+          {%- endfor %}
+        </ul>
+        <p class="visually-hidden">The quick answer is still being written.</p>
+        {%- else %}
+        <ul class="check-list" role="list">
+          {%- for t in page.takeaways %}
+          <li><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg><span>{{ t | escape }}</span></li>
+          {%- endfor %}
+        </ul>
+        {%- endif %}
+      </div>
+
+      {%- if page.draft %}
+      {%- for s in page.sections %}
+      <section class="guide-section" aria-labelledby="{{ s.id }}">
+        <h2 id="{{ s.id }}">{{ s.title | escape }}</h2>
+        {% include guide-placeholder.html kind=s.kind brief=s.brief %}
+      </section>
+      {%- if forloop.index == _app_after %}
+      {% include guide-app.html app=_app %}
+      {%- endif %}
+      {%- endfor %}
+      {%- else %}
+      <div class="guide-body prose">
+        {{ content }}
+      </div>
+      {% include guide-app.html app=_app %}
+      {%- endif %}
+
+      {%- if page.faqs.size > 0 %}
+      <section class="guide-section guide-faq" aria-labelledby="questions">
+        <h2 id="questions">Questions people ask</h2>
+        <div class="faq-list">
+          {%- for item in page.faqs %}
+          <details class="faq-item">
+            <summary class="faq-q">
+              <span>{{ item.q | escape }}</span>
+              <svg class="icon faq-chevron" aria-hidden="true"><use href="#i-chevron-down"/></svg>
+            </summary>
+            <div class="faq-a">
+              {%- if item.a %}
+              <p>{{ item.a | escape }}</p>
+              {%- else %}
+              <div class="ph-lines" aria-hidden="true"><i class="w-100"></i><i class="w-80"></i></div>
+              <p class="visually-hidden">Answer still being written.</p>
+              {%- endif %}
+            </div>
+          </details>
+          {%- endfor %}
+        </div>
+      </section>
+      {%- endif %}
+
+      <p class="guide-back">
+        <a class="link-arrow" href="{{ '/guides/' | relative_url }}">All guides in Fuzon Know-How<svg class="icon" aria-hidden="true"><use href="#i-arrow-right"/></svg></a>
+      </p>
+    </article>
+  </div>
+</section>
+
+{%- assign _all = site.pages | where: "layout", "guide" | sort: "order" -%}
+{%- assign _same = _all | where: "topic", page.topic | where_exp: "g", "g.url != page.url" -%}
+{%- assign _other = _all | where_exp: "g", "g.topic != page.topic" -%}
+{%- assign _related = _same | concat: _other %}
+{%- if _related.size > 0 %}
+<section class="section section--alt guide-more" aria-labelledby="more-title">
+  <div class="wrap">
+    <div class="section-head">
+      <p class="eyebrow">Fuzon Know-How</p>
+      <h2 id="more-title">Keep reading</h2>
+    </div>
+    <div class="guide-cards">
+      {%- for g in _related limit: 3 %}
+      {% include guide-card.html guide=g %}
+      {%- endfor %}
+    </div>
+  </div>
+</section>
+{%- endif %}
+
+{% include cta-band.html app=_app %}

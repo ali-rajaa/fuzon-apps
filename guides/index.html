@@ -1,0 +1,139 @@
+---
+layout: default
+title: "Fuzon Know-How: Android phone guides | Fuzon Apps"
+description: "Plain-English guides for your Android phone: back up photos, free up storage, move to a new phone and plan a road trip. From the makers of Fuzon Apps."
+permalink: /guides/
+css: guides
+# Noindex and out of the sitemap until the guides are written (owner,
+# 17 Oct: placeholders first, design sign-off, then the text). Remove
+# when the first guide goes live.
+noindex: true
+keyword: "android guides"
+---
+{%- comment -%}
+  Fuzon Know-How, the guides hub (playbook 9.5, owner 17 Oct). Hero with
+  the newest guide as a large featured card; a topic switcher (All plus
+  one per topic in topics.yml) that filters the grid and keeps the choice
+  in the address (?topic=), so a filtered view can be shared; topic cards
+  with the app that does each job; the black band.
+
+  Without JavaScript the switcher is hidden and every guide shows. Guides
+  come from every page with layout: guide, ordered by `order`, so a new
+  guide appears here, in "Keep reading" and in the sitemap by itself.
+  No counts anywhere ("12 guides"), no pills (owner, 16 Oct).
+{%- endcomment -%}
+{%- assign _guides = site.pages | where: "layout", "guide" | sort: "order" -%}
+{%- assign _featured = _guides | first -%}
+{%- assign _home = '/' | absolute_url -%}
+{%- assign _hub = page.url | absolute_url -%}
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "CollectionPage",
+      "@id": {{ _hub | append: '#collection' | jsonify }},
+      "name": "Fuzon Know-How",
+      "description": {{ page.description | jsonify }},
+      "url": {{ _hub | jsonify }},
+      "inLanguage": "en-AU",
+      "publisher": { "@id": {{ _home | append: '#organization' | jsonify }} },
+      "mainEntity": {
+        "@type": "ItemList",
+        "itemListElement": [
+          {%- for g in _guides %}
+          { "@type": "ListItem", "position": {{ forloop.index }}, "url": {{ g.url | absolute_url | jsonify }}, "name": {{ g.headline | jsonify }} }{% unless forloop.last %},{% endunless %}
+          {%- endfor %}
+        ]
+      }
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Home", "item": {{ _home | jsonify }} },
+        { "@type": "ListItem", "position": 2, "name": "Fuzon Know-How", "item": {{ _hub | jsonify }} }
+      ]
+    }
+  ]
+}
+</script>
+
+<section class="hub-hero hero-glow-host" aria-labelledby="hub-title">
+  {% include hero-glow.html %}
+  <div class="wrap hero-glow-content">
+    <nav class="breadcrumbs" aria-label="Breadcrumb">
+      <a href="{{ '/' | relative_url }}">Home</a>
+      <svg class="icon" aria-hidden="true"><use href="#i-chevron-right"/></svg>
+      <span aria-current="page">Fuzon Know-How</span>
+    </nav>
+  </div>
+  <div class="wrap hero-glow-content hub-hero-grid">
+    <div class="hub-hero-copy">
+      <p class="eyebrow">Guides</p>
+      <h1 id="hub-title" class="hub-title">Fuzon Know-How</h1>
+      <p class="hub-lead">Plain-English guides to the everyday jobs on your Android phone, from backing up your photos to finding your way on a long drive.</p>
+      <div class="hub-actions">
+        <a class="btn btn--primary btn--lg" href="#all-guides">Browse the guides</a>
+        <a class="link-arrow" href="#topics">Choose a topic<svg class="icon" aria-hidden="true"><use href="#i-arrow-right"/></svg></a>
+      </div>
+    </div>
+    {%- if _featured %}
+    <div class="hub-featured">
+      <p class="eyebrow hub-featured-label">Start here</p>
+      {% include guide-card.html guide=_featured level="h2" class="guide-card--featured" %}
+    </div>
+    {%- endif %}
+  </div>
+</section>
+
+<section class="section hub-list" id="all-guides" aria-labelledby="all-title">
+  <div class="wrap">
+    <div class="hub-list-head">
+      <div class="section-head">
+        <p class="eyebrow">Every guide</p>
+        <h2 id="all-title">Find the guide you need</h2>
+      </div>
+      <div class="seg" role="group" aria-label="Show guides by topic" data-filter>
+        <button class="seg-btn" type="button" data-topic="all" aria-pressed="true">All</button>
+        {%- for t in site.data.topics %}
+        <button class="seg-btn tone-{{ t.tone }}" type="button" data-topic="{{ t.slug }}" aria-pressed="false">
+          <span class="seg-tile" aria-hidden="true"><svg class="icon"><use href="#i-{{ t.glyph }}"/></svg></span>{{ t.name | escape }}
+        </button>
+        {%- endfor %}
+      </div>
+    </div>
+    <p class="visually-hidden" role="status" id="filter-status"></p>
+    <div class="guide-cards hub-grid">
+      {%- for g in _guides %}
+      {% include guide-card.html guide=g %}
+      {%- endfor %}
+    </div>
+  </div>
+</section>
+
+<section class="section section--alt" id="topics" aria-labelledby="topics-title">
+  <div class="wrap">
+    <div class="section-head">
+      <p class="eyebrow">Topics</p>
+      <h2 id="topics-title">Browse by topic</h2>
+      <p class="section-sub">Each topic pairs plain advice with the Fuzon app that does the job.</p>
+    </div>
+    <div class="topic-cards">
+      {%- for t in site.data.topics %}
+      {%- assign _tapp = site.data.apps | where: "slug", t.app | first %}
+      <div class="topic-card tone-{{ t.tone }}">
+        <span class="topic-tile" aria-hidden="true"><svg class="icon"><use href="#i-{{ t.glyph }}"/></svg></span>
+        <h3 class="topic-name"><a href="{{ '/guides/' | relative_url }}?topic={{ t.slug }}#all-guides">{{ t.name | escape }}</a></h3>
+        <p class="topic-text">{{ t.blurb | escape }}</p>
+        <p class="topic-app">
+          {% include app-tile.html app=_tapp class="topic-app-tile" %}
+          <span>With <a href="{{ '/' | append: _tapp.slug | relative_url }}">{{ _tapp.short | escape }}</a></span>
+        </p>
+      </div>
+      {%- endfor %}
+    </div>
+  </div>
+</section>
+
+{% include cta-band.html %}

@@ -1,0 +1,24 @@
+{%- comment -%}
+  One guide as a card (hub grid, featured slot, "Keep reading"). A banner
+  in the topic's tone with the topic glyph on a white rounded square
+  (playbook 9.5: a topic picture, never an app icon), then the topic as an
+  eyebrow, the title (the card's link, stretched over the whole card), the
+  description and a meta line. No pills, no counts.
+
+  Params: guide (a page with layout: guide), level (heading tag, default
+  h3), class (extra classes, e.g. guide-card--featured).
+{%- endcomment -%}
+{%- assign _g = include.guide -%}
+{%- assign _t = site.data.topics | where: "slug", _g.topic | first -%}
+{%- assign _hl = include.level | default: "h3" -%}
+<article class="guide-card tone-{{ _t.tone }}{% if include.class %} {{ include.class }}{% endif %}" data-topic="{{ _t.slug }}">
+  <div class="guide-banner" aria-hidden="true">
+    <span class="guide-banner-tile"><svg class="icon"><use href="#i-{{ _t.glyph }}"/></svg></span>
+  </div>
+  <div class="guide-card-body">
+    <p class="eyebrow">{{ _t.name | escape }}</p>
+    <{{ _hl }} class="guide-card-title"><a href="{{ _g.url | relative_url }}">{{ _g.headline | escape }}</a></{{ _hl }}>
+    <p class="guide-card-text">{{ _g.description | escape }}</p>
+    <p class="guide-card-meta">{% if _g.draft %}Being written{% else %}Updated <time datetime="{{ _g.updated | default: _g.date | date: '%Y-%m-%d' }}">{{ _g.updated | default: _g.date | date: "%-d %B %Y" }}</time>{% endif %}<span aria-hidden="true"> · </span>{% include read-time.html guide=_g %} min read</p>
+  </div>
+</article>
