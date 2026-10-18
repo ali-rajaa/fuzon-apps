@@ -396,43 +396,37 @@ audit, on all 19 built pages.
 
 ## 7. Build and deploy
 
-- Push to `main`. `.github/workflows/pages.yml` builds and deploys to
-  GitHub Pages.
-- **Owner setup needed once:** repo Settings > Pages > Source > **GitHub
-  Actions** (don't click "Configure"). Until then the deploy job fails
-  at "configure-pages".
-- Preview address: **`https://fuzon.fixmypcperth.com`** (owner, 16 Oct),
-  noindex. `_config.yml` has `url` set to it and `baseurl: ""`.
-
-### 7a. Setting up the preview subdomain (owner, once)
-
-1. **Cloudflare** (the fixmypcperth.com zone) > DNS > Records > Add record:
-   Type `CNAME`, Name `fuzon`, Target `ali-rajaa.github.io`,
-   Proxy status **DNS only** (grey cloud), TTL Auto. Grey cloud matters:
-   GitHub can't issue the HTTPS certificate through Cloudflare's proxy.
-2. **GitHub** > `ali-rajaa/fuzon-apps` > Settings > Pages:
-   - Source: **GitHub Actions** (don't click "Configure").
-   - Custom domain: `fuzon.fixmypcperth.com` > Save. Wait for "DNS check
-     successful" (minutes, sometimes up to an hour).
-   - Tick **Enforce HTTPS** once it stops being greyed out (the
-     certificate can take up to about an hour).
-3. Actions > "Build and deploy" > re-run the latest run (or push any
-   change) so it deploys after Pages is switched on.
-4. Check: `https://fuzon.fixmypcperth.com` loads the homepage, and
-   `https://fuzon.fixmypcperth.com/robots.txt` says `Disallow: /`.
-
-The custom domain lives in the repo's Pages settings, not in a `CNAME`
-file: Actions deployments ignore that file, so there isn't one.
-Nothing in the fixmypcperth repo changes; it's one DNS record.
+- **Push to `main` = live.** `.github/workflows/ftp.yml` runs on every
+  push to main (except edits to STATUS.md, PLAN.md, SITE-PLAYBOOK.md,
+  README.md): it builds with the live address, checks the build, uploads
+  to fuzonapps.com over FTPS and runs the live checks. It can also be run
+  by hand from the Actions tab (look / upload / check). Section 8.
+- **Preview retired (owner, 18 Oct).** `pages.yml` was deleted and
+  `_config.yml` now holds the live values (`url: https://fuzonapps.com`,
+  `staging: false`). Owner steps to take fuzon.fixmypcperth.com down:
+  GitHub > Settings > Pages > remove the custom domain and unpublish the
+  site; Cloudflare (fixmypcperth.com) > DNS > delete the `fuzon` CNAME.
 - Local build in this environment: `bundle exec jekyll build` (if the
   binstub is missing, run `bundle exec ruby $(bundle info jekyll --path)/exe/jekyll build`).
 
 ## 8. Live site: fuzonapps.com on the web host (18 Oct)
 
 The owner's web host serves fuzonapps.com (FTPS host
-`ftps14.us.cloudlogin.co`, website folder `/www/fuzonapps.com`). The
-GitHub Pages preview at fuzon.fixmypcperth.com stays as the noindex
-preview; nothing about it changes.
+`ftps14.us.cloudlogin.co`; the FTP login lands straight in the website
+folder, `/www/fuzonapps.com` on the host's side, so `FTP_SERVER_DIR` is
+`.`). The host already redirects http to https and www to the bare
+domain (first look run, 18 Oct).
+
+**WordPress retired (owner, 18 Oct).** The folder held a WordPress
+install and an `app-ads.txt`. The owner chose to replace the site and
+remove WordPress: the first upload moves every WordPress file (and a
+`core` crash dump) into `.site-backups/wordpress-<time>/`, a rename on the
+server, so nothing is lost; `.site-backups/.htaccess` denies all access.
+`app-ads.txt` and `index.xhtml` aren't this site's, so they are left in
+place. The WordPress database is untouched (it lives with the host).
+Tested locally first: the move, the upload, `app-ads.txt` still served,
+`/wp-login.php`, `/wp-admin/` and `/xmlrpc.php` answering the site's 404,
+and the backup folder answering 403.
 
 - **`.github/workflows/ftp.yml`** (playbook Appendix K), run by hand from
   the Actions tab: `look` (log in, report the folder and how the site
@@ -459,11 +453,8 @@ preview; nothing about it changes.
   FTPS server (backup of the host's page, 43 files up, host folders left
   alone, a second run deleting only a page this site had uploaded, a
   clear error for a wrong password); actionlint and shellcheck clean.
-- **Needs from the owner first**: the two secrets; SSL switched on for
-  fuzonapps.com in the hosting panel (the upload refuses to run if
-  https doesn't answer, because .htaccess sends everyone there); DNS for
-  fuzonapps.com and www pointing at the host; keep the mail records for
-  console@.
+- **Owner setup done (18 Oct)**: the two secrets are in; https already
+  answers on fuzonapps.com.
 - **After the upload**: Search Console (add fuzonapps.com, submit
   /sitemap.xml); point the Google Play listings' website, privacy and
   support links at fuzonapps.com; `app-ads.txt` once the AdMob ID is in.

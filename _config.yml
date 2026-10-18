@@ -2,28 +2,21 @@ title: Fuzon Apps
 description: Fuzon Apps makes Android apps for everyday jobs, free to download on Google Play.
 
 # ---------------------------------------------------------------------------
-# Site address. Two states; see STATUS.md section 7.
-#
-#   Preview          url: "https://fuzon.fixmypcperth.com"  baseurl: ""  staging: true
-#   Live             url: "https://fuzonapps.com"           baseurl: ""  staging: false
-#
-# This file keeps the preview values: pages.yml deploys them to GitHub
-# Pages (fuzon.fixmypcperth.com, noindex). The live site, fuzonapps.com,
-# is on the owner's web host and uploaded by ftp.yml, which writes a
-# second config at build time with the live url and staging: false
-# (owner, 18 Oct; STATUS.md section 8).
+# Site address: the live site, fuzonapps.com, on the owner's web host.
+# Every push to main is built and uploaded by .github/workflows/ftp.yml
+# (owner, 18 Oct: "always push to main website"). The GitHub Pages
+# preview (fuzon.fixmypcperth.com) was retired the same day.
 #
 # Every internal link goes through relative_url and every full URL through
-# absolute_url, and both read these values, so the switch is these three
-# lines and nothing else. The custom domain itself is set in the repo's
-# Settings > Pages > Custom domain: Actions deployments ignore a CNAME file.
+# absolute_url, and both read these values.
 # ---------------------------------------------------------------------------
-url: "https://fuzon.fixmypcperth.com"
+url: "https://fuzonapps.com"
 baseurl: ""
 
-# true adds noindex to every page and blocks crawling in robots.txt, so the
-# preview can never be indexed. Set to false only at the cutover.
-staging: true
+# true would add noindex to every page and block crawling in robots.txt
+# (the old preview). The live site is indexable; pages that aren't ready
+# (the guides while they're drafts) carry their own noindex.
+staging: false
 
 timezone: Australia/Perth
 

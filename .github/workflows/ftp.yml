@@ -15,7 +15,9 @@
 #   FTP_TLS        loose (encrypted, default), strict (encrypted and the
 #                  certificate checked) or off (plain FTP, unencrypted)
 #
-# Run it from the Actions tab and pick a mode:
+# Every push to main uploads automatically (owner, 18 Oct: "always push to
+# main website"); the GitHub Pages preview was retired the same day.
+# Or run it from the Actions tab and pick a mode:
 #   look    connect and report what's on the server and how the website
 #           answers (the default). Changes nothing, except one tiny test
 #           file it puts in the website folder and deletes straight away,
@@ -31,6 +33,13 @@
 name: Upload to fuzonapps.com
 
 on:
+  push:
+    branches: [main]
+    paths-ignore:
+      - 'STATUS.md'
+      - 'PLAN.md'
+      - 'SITE-PLAYBOOK.md'
+      - 'README.md'
   workflow_dispatch:
     inputs:
       mode:
@@ -57,7 +66,19 @@ jobs:
       FTP_USERNAME: ${{ secrets.FTP_USERNAME }}
       LFTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
       SITE: https://fuzonapps.com
-      MODE: ${{ inputs.mode || 'look' }}
+      MODE: ${{ github.event_name == 'push' && 'upload' || inputs.mode || 'look' }}
+      # The WordPress install that was in the website folder before this
+      # site (first look run, 18 Oct). The owner chose to retire it: the
+      # first upload MOVES these into .site-backups/wordpress-<time>/ (a
+      # rename on the server: nothing downloaded, nothing lost), which
+      # the server refuses to show. "core" is a crash dump that sat with
+      # it. Runs only while wp-config.php or wp-admin/ is still there.
+      RETIRE_WORDPRESS: >-
+        wp-admin wp-content wp-includes index.php license.txt readme.html
+        wp-activate.php wp-blog-header.php wp-comments-post.php
+        wp-config-sample.php wp-config.php wp-cron.php wp-links-opml.php
+        wp-load.php wp-login.php wp-mail.php wp-settings.php wp-signup.php
+        wp-trackback.php xmlrpc.php core
       # Files this site used to have that must be removed from the server
       # even though no manifest listed them yet (the first upload with
       # removals). Space-separated, relative to the website folder.
@@ -196,6 +217,24 @@ jobs:
           if [ "$HTTPS_OK" != true ]; then
             echo "::error::$SITE doesn't answer over https yet, and this site sends every visitor there. Turn on SSL for the domain in the hosting panel, then run this again. Nothing was uploaded."
             exit 1
+          fi
+
+          # Retire WordPress (see RETIRE_WORDPRESS above): move, not delete.
+          if grep -qxE 'wp-config\.php|wp-admin/' "$RUNNER_TEMP/webroot.txt"; then
+            wpbk=".site-backups/wordpress-$(date -u +%Y%m%d-%H%M%S)"
+            printf 'Require all denied\nDeny from all\n' > "$RUNNER_TEMP/deny.htaccess"
+            cmds="mkdir -p \"$wpbk\"; put \"$RUNNER_TEMP/deny.htaccess\" -o .site-backups/.htaccess"
+            moved=""
+            read -r -a wpfiles <<< "$RETIRE_WORDPRESS"
+            for f in "${wpfiles[@]}"; do
+              if grep -qxE "$(printf '%s' "$f" | sed 's/[.]/\\./g')/?" "$RUNNER_TEMP/webroot.txt"; then
+                cmds="$cmds; mv \"$f\" \"$wpbk/$f\""; moved="$moved $f"
+              fi
+            done
+            lftp -c "$SETUP; cd \"$DIR\" && $cmds"
+            echo "::notice title=WordPress retired::Moved into '$wpbk' (hidden, not served):$moved"
+            # Refresh the listing so the backup below sees the folder as it is now.
+            lftp -c "$SETUP; cd \"$DIR\" && cls -1aF" | sed -E '/^\.\.?\/$/d' > "$RUNNER_TEMP/webroot.txt"
           fi
 
           # Back up what the upload could replace: the website folder's
