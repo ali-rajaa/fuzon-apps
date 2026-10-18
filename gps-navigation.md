@@ -1,6 +1,6 @@
 ---
 layout: app
-title: "GPS Navigation & Directions: routes, traffic, cameras | Fuzon Apps"
+title: "GPS Navigation & Directions: routes and traffic | Fuzon Apps"
 description: "Live GPS navigation and directions on Android: plan the best route and see speed cameras and real-time traffic. How it works, plus tips for driving safely."
 permalink: /gps-navigation
 css: app

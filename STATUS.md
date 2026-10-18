@@ -346,6 +346,46 @@ targeted per page (searchfit on-page checklist).
 - Checked: axe, overflow, tap targets, 184 links, 23 interaction checks,
   html-validate clean; screenshots at 1280 and 390.
 
+### 5n. Full audit (18 Oct)
+Owner: "audit fully now". Playbook 17 checklist plus the searchfit SEO
+audit, on all 19 built pages.
+- **Tools**: build; html-validate; unrendered-Liquid grep; static audit
+  script (titles, descriptions, canonicals, OG/Twitter, one H1, heading
+  order, images, JSON-LD required fields, internal links and #anchors,
+  orphans, sitemap, robots, copy rules, page weight); axe at 1440/390;
+  runtime script (every page at 15 widths for overflow and clipping;
+  320 to 430px for tap targets, 16px gutter and text size; layout shift;
+  console and network errors; keyboard focus rings; no-JS view);
+  interaction tests; Lighthouse 12 mobile and desktop on 5 pages;
+  actionlint and shellcheck on the workflow.
+- **Found and fixed**:
+  - Guide and legal pages shifted on phones (CLS up to 0.36): the
+    contents fold rendered open, then site.js closed it. It is now drawn
+    closed on phones until the script has run (`.is-synced`). CLS 0.
+  - /about overflowed by 1px at 320px: the email in the side card could
+    not wrap. Grid column now shrinks and links wrap.
+  - Google Play buttons: accessible name didn't start with the visible
+    words (WCAG 2.5.3, Lighthouse label-content-name-mismatch). Now "Get
+    it on Google Play: <app>" and "All our apps on Google Play".
+  - GPS app page title 66 characters, now 60. About and Contact titles
+    made descriptive. Privacy (84) and Terms (44) meta descriptions
+    rewritten to 150 to 160 characters.
+- **Result**: 0 critical findings; axe zero violations; 184 links and
+  every #anchor resolve; no overflow, clipping, small targets or tiny
+  text at any width; CLS 0; no console errors; Lighthouse performance
+  99 to 100, accessibility 100, best practices 100 (SEO 69 only because
+  the preview is noindex).
+- **Left as is, on purpose**: "Privacy Policy" and "Terms of Service"
+  titles are short (convention). US spellings ("organize", "center",
+  "license") are in the owner's legal text, reproduced word for word.
+  Lighthouse cache and compression notes come from the local test server
+  (GitHub Pages compresses and caches). site.js is unminified (19KB,
+  about 6KB compressed). The sitemap has no lastmod because no page has a
+  real content date yet; guides get one when published.
+- **Still to do before launch**: share cards for the hub and guides;
+  `llms.txt`; `app-ads.txt` (needs the AdMob ID); remove noindex at
+  cutover; Search Console and sitemap submission after cutover.
+
 ## 6. SEO and routing
 
 - Clean URLs (`/cloud-storage`), canonicals generated from `page.url`.
@@ -417,5 +457,5 @@ records for console@ intact.
 | 6 | Decisions on the legal-document issues in PLAN.md section 7 |
 | 7 | ~~Smart Switch name~~ Kept (owner) |
 | 8 | Domain access, and confirm the console@ mailbox works |
-| 9 | Enable GitHub Pages (section 7) |
+| 9 | ~~Enable GitHub Pages~~ Done; deploys from main (5i). Turn on Enforce HTTPS in Settings > Pages |
 | 10 | ~~Guides hub~~ Fuzon Know-How (5m): confirm the design, then the 8 guides get written. Analytics: none (recommended) or which? |

@@ -205,7 +205,7 @@
   var folds = document.querySelectorAll('.legal-toc-fold');
   if (folds.length) {
     var wideToc = window.matchMedia('(min-width: 900px)');
-    var syncFolds = function () { folds.forEach(function (d) { d.open = wideToc.matches; }); };
+    var syncFolds = function () { folds.forEach(function (d) { d.open = wideToc.matches; d.classList.add('is-synced'); }); };
     syncFolds();
     if (wideToc.addEventListener) wideToc.addEventListener('change', syncFolds);
     folds.forEach(function (d) {

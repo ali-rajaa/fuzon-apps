@@ -5,16 +5,17 @@
   logo. Opens the listing in the same tab.
 
   Params: url (the listing or developer page), name (the app name, for the
-  accessible name "Get <name> on Google Play"; leave out for the developer
-  page, which reads "See all our apps on Google Play"), class (optional),
+  accessible name "Get it on Google Play: <name>", which starts with the
+  visible words as WCAG 2.5.3 asks; leave out for the developer page,
+  which reads "All our apps on Google Play"), class (optional),
   light (true for the white version on the black CTA band).
   Usage: {% include store-badge.html url=app.android_url name=app.short %}
 {%- endcomment -%}
 {%- if include.name -%}
-  {%- assign _label = "Get " | append: include.name | append: " on Google Play" -%}
+  {%- assign _label = "Get it on Google Play: " | append: include.name -%}
   {%- assign _top = "Get it on" -%}
 {%- else -%}
-  {%- assign _label = "See all our apps on Google Play" -%}
+  {%- assign _label = "All our apps on Google Play" -%}
   {%- assign _top = "All our apps on" -%}
 {%- endif -%}
 <a class="store-badge{% if include.light %} store-badge--light{% endif %}{% if include.class %} {{ include.class }}{% endif %}" href="{{ include.url }}" aria-label="{{ _label | escape }}">
