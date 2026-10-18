@@ -8,8 +8,10 @@
 #   FTP_PASSWORD   its password
 # Optional variables (same screen, Variables tab):
 #   FTP_HOST       default ftps14.us.cloudlogin.co (owner, 18 Oct)
-#   FTP_SERVER_DIR the website's folder on the server; default
-#                  /www/fuzonapps.com (owner, 18 Oct)
+#   FTP_SERVER_DIR the website's folder as the FTP login sees it;
+#                  default "." (the login lands straight in the
+#                  website folder, /www/fuzonapps.com on the host's
+#                  side: first look run, 18 Oct)
 #   FTP_TLS        loose (encrypted, default), strict (encrypted and the
 #                  certificate checked) or off (plain FTP, unencrypted)
 #
@@ -50,7 +52,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       FTP_HOST: ${{ vars.FTP_HOST || 'ftps14.us.cloudlogin.co' }}
-      FTP_SERVER_DIR: ${{ vars.FTP_SERVER_DIR || '/www/fuzonapps.com' }}
+      FTP_SERVER_DIR: ${{ vars.FTP_SERVER_DIR || '.' }}
       FTP_TLS: ${{ vars.FTP_TLS || 'loose' }}
       FTP_USERNAME: ${{ secrets.FTP_USERNAME }}
       LFTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
