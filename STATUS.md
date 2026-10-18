@@ -455,6 +455,14 @@ and the backup folder answering 403.
   clear error for a wrong password); actionlint and shellcheck clean.
 - **Owner setup done (18 Oct)**: the two secrets are in; https already
   answers on fuzonapps.com.
+- **Live (18 Oct, run #3 of ftp.yml, push-triggered)**: WordPress moved
+  into `.site-backups/`, site uploaded, all 14 live checks passed (home,
+  about, privacy with the legal name, terms, an app page, guides hub,
+  sitemap, missing file 404, .htaccess hidden, robots.txt, 404 page,
+  .html to clean, folder slash, http to https).
+- **Owner, still to do**: unpublish the old preview (Settings > Pages:
+  remove the custom domain, unpublish) and delete the `fuzon` CNAME in
+  the fixmypcperth.com DNS.
 - **After the upload**: Search Console (add fuzonapps.com, submit
   /sitemap.xml); point the Google Play listings' website, privacy and
   support links at fuzonapps.com; `app-ads.txt` once the AdMob ID is in.
