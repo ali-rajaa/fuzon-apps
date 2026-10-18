@@ -1,0 +1,338 @@
+# Uploads the site to the fuzonapps.com web host over FTPS (STATUS.md
+# section 8). Edit the site in this repo. From the playbook (Appendix K),
+# proven on the playbook's earlier FTP site. The noindex preview on
+# GitHub Pages (pages.yml) is separate and keeps running.
+#
+# Secrets in THIS repo (Settings > Secrets and variables > Actions):
+#   FTP_USERNAME   the FTP user name
+#   FTP_PASSWORD   its password
+# Optional variables (same screen, Variables tab):
+#   FTP_HOST       default ftps14.us.cloudlogin.co (owner, 18 Oct)
+#   FTP_SERVER_DIR the website's folder on the server; default
+#                  /www/fuzonapps.com (owner, 18 Oct)
+#   FTP_TLS        loose (encrypted, default), strict (encrypted and the
+#                  certificate checked) or off (plain FTP, unencrypted)
+#
+# Run it from the Actions tab and pick a mode:
+#   look    connect and report what's on the server and how the website
+#           answers (the default). Changes nothing, except one tiny test
+#           file it puts in the website folder and deletes straight away,
+#           to see which web addresses that folder serves.
+#   upload  back up the files the upload could replace (to a folder on
+#           the server, outside the website where possible), upload the
+#           site, remove files this site uploaded before but no longer has
+#           (never anything else), then check the live pages.
+#   check   only the live-page checks from the end of upload; touches
+#           nothing on the server.
+# The results are shown as annotations on the run's summary page.
+
+name: Upload to fuzonapps.com
+
+on:
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: "look = report only, upload = publish the site, check = test the live site only"
+        type: choice
+        options: [look, upload, check]
+        default: look
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ftp-site
+  cancel-in-progress: false
+
+jobs:
+  ftp:
+    if: github.repository == 'ali-rajaa/fuzon-apps'
+    runs-on: ubuntu-latest
+    env:
+      FTP_HOST: ${{ vars.FTP_HOST || 'ftps14.us.cloudlogin.co' }}
+      FTP_SERVER_DIR: ${{ vars.FTP_SERVER_DIR || '/www/fuzonapps.com' }}
+      FTP_TLS: ${{ vars.FTP_TLS || 'loose' }}
+      FTP_USERNAME: ${{ secrets.FTP_USERNAME }}
+      LFTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
+      SITE: https://fuzonapps.com
+      MODE: ${{ inputs.mode || 'look' }}
+      # Files this site used to have that must be removed from the server
+      # even though no manifest listed them yet (the first upload with
+      # removals). Space-separated, relative to the website folder.
+      RETIRED_PATHS: ""
+    steps:
+      - name: Check the secrets
+        if: env.MODE != 'check'
+        run: |
+          if [ -z "$FTP_USERNAME" ] || [ -z "$LFTP_PASSWORD" ]; then
+            echo "::error::Add the FTP_USERNAME and FTP_PASSWORD secrets to this repo first (see the top of ftp.yml)."
+            exit 1
+          fi
+          echo "Mode: $MODE"
+
+      - name: Install lftp
+        if: env.MODE != 'check'
+        run: sudo apt-get update -qq && sudo apt-get install -y -qq lftp >/dev/null
+
+      # lftp reads the password from LFTP_PASSWORD (--env-password), so it
+      # is never on a command line or in the log.
+      - name: Connect and look
+        if: env.MODE != 'check'
+        id: look
+        run: |
+          case "$FTP_TLS" in
+            strict) TLS="set ftp:ssl-force true; set ftp:ssl-protect-data true; set ssl:verify-certificate true" ;;
+            loose)  TLS="set ftp:ssl-force true; set ftp:ssl-protect-data true; set ssl:verify-certificate false" ;;
+            off)    TLS="set ftp:ssl-allow false" ;;
+            *) echo "::error::FTP_TLS must be strict, loose or off."; exit 1 ;;
+          esac
+          SETUP="$TLS; set net:max-retries 2; set net:persist-retries 0; set net:timeout 30; set ftp:passive-mode true; open --user \"$FTP_USERNAME\" --env-password \"ftp://$FTP_HOST\""
+          printf '%s' "$SETUP" > "$RUNNER_TEMP/lftp-setup"
+
+          # 1. Log in and list the login folder.
+          if ! login=$(lftp -c "$SETUP; cls -1aF" 2> "$RUNNER_TEMP/lftp.err"); then
+            err=$(tr '\n' ' ' < "$RUNNER_TEMP/lftp.err" | head -c 300)
+            case "$err" in
+              *530*|*"ogin incorrect"*|*"uthentication failed"*) hint="The server refused the user name or password: check the FTP_USERNAME and FTP_PASSWORD secrets." ;;
+              *SSL*|*TLS*|*ssl*|*AUTH*) hint="The encrypted connection failed. If the host doesn't offer FTP over TLS, a variable FTP_TLS=off would use plain FTP, which sends the password unencrypted." ;;
+              *) hint="Check FTP_HOST ($FTP_HOST) and the secrets." ;;
+            esac
+            echo "::error::Couldn't log in to the FTP server. $hint (lftp said: $err)"
+            exit 1
+          fi
+          login=$(printf '%s\n' "$login" | grep -vxE '\./|\.\./' || true)
+          folders=$(printf '%s\n' "$login" | sed -n 's:/$::p')
+          nfiles=$(printf '%s\n' "$login" | grep -vc '/$' || true)
+          echo "::notice title=FTP login::Logged in to $FTP_HOST (TLS: $FTP_TLS). Folders where it lands: $(printf '%s\n' "$folders" | paste -sd ',' - | sed 's/,/, /g'); plus $nfiles files."
+
+          # 2. Find the website's folder.
+          if [ -n "$FTP_SERVER_DIR" ]; then
+            DIR="$FTP_SERVER_DIR"
+          elif printf '%s\n' "$folders" | grep -qx domains && lftp -c "$SETUP; cls -1 \"domains/$FTP_HOST/public_html\"" >/dev/null 2>&1; then
+            DIR="domains/$FTP_HOST/public_html"
+          elif printf '%s\n' "$folders" | grep -qx public_html; then
+            DIR="public_html"
+          elif printf '%s\n' "$folders" | grep -qx httpdocs; then
+            DIR="httpdocs"
+          else
+            DIR="."
+          fi
+          if ! lftp -c "$SETUP; cd \"$DIR\" && cls -1aF" > "$RUNNER_TEMP/webroot.txt" 2> "$RUNNER_TEMP/lftp.err"; then
+            echo "::error::Couldn't open the folder '$DIR' on the server. Set the FTP_SERVER_DIR variable to the website's folder. ($(tr '\n' ' ' < "$RUNNER_TEMP/lftp.err" | head -c 200))"
+            exit 1
+          fi
+          sed -i -E '/^\.\.?\/$/d' "$RUNNER_TEMP/webroot.txt"
+          entries=$(head -n 80 "$RUNNER_TEMP/webroot.txt" | paste -sd ',' - | sed 's/,/, /g')
+          total=$(wc -l < "$RUNNER_TEMP/webroot.txt")
+          echo "::notice title=Website folder::'$DIR' holds $total entries: ${entries:-nothing}"
+          echo "dir=$DIR" >> "$GITHUB_OUTPUT"
+
+          # 3. How the website answers right now.
+          probe() { curl -sS -o /dev/null --max-time 20 -w '%{http_code} %{redirect_url}' "$1" 2>&1 || true; }
+          home=$(probe "$SITE/")
+          server=$(curl -sSI --max-time 20 "$SITE/" 2>/dev/null | tr -d '\r' | sed -n 's/^[Ss]erver: //p' | head -n 1 || true)
+          title=$(curl -sS --max-time 20 "$SITE/" 2>/dev/null | grep -o '<title>[^<]*' | head -n 1 | sed 's/<title>//' || true)
+          echo "::notice title=Website now::https: $home; server: ${server:-unknown}; title: ${title:-none}; http: $(probe "http://${SITE#https://}/"); www: $(probe "https://www.${SITE#https://}/")"
+          case "$home" in
+            2*|3*) echo "https_ok=true" >> "$GITHUB_OUTPUT" ;;
+            *)     echo "https_ok=false" >> "$GITHUB_OUTPUT" ;;
+          esac
+
+          # 4. What the folder's own index.html is and what's in assets/.
+          idx_title=$(lftp -c "$SETUP; cd \"$DIR\" && cat index.html" 2>/dev/null | grep -o '<title>[^<]*' | head -n 1 | sed 's/<title>//' || true)
+          if grep -qx 'assets/' "$RUNNER_TEMP/webroot.txt"; then
+            n_assets=$(lftp -c "$SETUP; cd \"$DIR\" && find assets" 2>/dev/null | grep -vc '/$' || true)
+          fi
+          echo "::notice title=Folder's index.html::index.html title: ${idx_title:-none}; assets/ holds ${n_assets:-0} files"
+
+
+      - if: env.MODE == 'upload'
+        uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+
+      - if: env.MODE == 'upload'
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.3'
+          bundler-cache: true
+
+      - name: Build for the live address
+        if: env.MODE == 'upload'
+        env:
+          JEKYLL_ENV: production
+        run: |
+          printf 'url: "%s"\nbaseurl: ""\nstaging: false\n' "$SITE" > "$RUNNER_TEMP/_config.live.yml"
+          bundle exec jekyll build --trace --config "_config.yml,$RUNNER_TEMP/_config.live.yml"
+          for f in index.html .htaccess 404.html 404.php sitemap.xml robots.txt; do
+            if [ ! -f "_site/$f" ]; then
+              echo "::error::The build is missing _site/$f. Nothing was uploaded."
+              exit 1
+            fi
+          done
+          if grep -rlE '\{\{|\{%' --include='*.html' --include='*.xml' --include='*.txt' --include='*.css' --include='*.js' --include='*.json' _site; then
+            echo "::error::The files above contain unrendered Liquid. Nothing was uploaded."
+            exit 1
+          fi
+          if ! grep -q "<loc>$SITE/</loc>" _site/sitemap.xml; then
+            echo "::error::The sitemap doesn't use $SITE. Nothing was uploaded."
+            exit 1
+          fi
+          if grep -qi 'name="robots" content="noindex' _site/index.html || grep -q 'Disallow: /$' _site/robots.txt; then
+            echo "::error::The live build is still marked noindex. Nothing was uploaded."
+            exit 1
+          fi
+
+      - name: Back up and upload
+        if: env.MODE == 'upload'
+        env:
+          DIR: ${{ steps.look.outputs.dir }}
+          HTTPS_OK: ${{ steps.look.outputs.https_ok }}
+        run: |
+          SETUP=$(cat "$RUNNER_TEMP/lftp-setup")
+          # .htaccess sends every visitor to https, so https has to work first.
+          if [ "$HTTPS_OK" != true ]; then
+            echo "::error::$SITE doesn't answer over https yet, and this site sends every visitor there. Turn on SSL for the domain in the hosting panel, then run this again. Nothing was uploaded."
+            exit 1
+          fi
+
+          # Back up what the upload could replace: the website folder's
+          # top-level files, and its assets and guides folders if any.
+          # Skipped once the folder already holds this site (it has
+          # guides/): every earlier version of it is in git.
+          if grep -qx 'guides/' "$RUNNER_TEMP/webroot.txt"; then
+            echo "::notice title=Backup::Skipped: the folder already holds this site, and its earlier versions are in git."
+            skip_backup=true
+          fi
+          stamp=$(date -u +%Y%m%d-%H%M%S)
+          bkdir="$RUNNER_TEMP/backup"
+          mkdir -p "$bkdir"
+          if [ "${skip_backup:-}" != true ]; then
+            lftp -c "$SETUP; cd \"$DIR\" && mirror --no-recursion --parallel=4 . \"$bkdir\""
+            for d in assets guides; do
+              if grep -qx "$d/" "$RUNNER_TEMP/webroot.txt"; then
+                lftp -c "$SETUP; cd \"$DIR\" && mirror --parallel=4 \"$d\" \"$bkdir/$d\""
+              fi
+            done
+          fi
+          nb=$(find "$bkdir" -type f | wc -l)
+          if [ "${skip_backup:-}" = true ]; then
+            :
+          elif [ "$nb" -gt 0 ]; then
+            if [ "$DIR" = "." ]; then
+              # The login folder is the website: keep the backup in a
+              # hidden folder that the server refuses to show.
+              bk=".site-backups/$stamp"
+              printf 'Require all denied\nDeny from all\n' > "$RUNNER_TEMP/deny.htaccess"
+              lftp -c "$SETUP; mkdir -p .site-backups; put \"$RUNNER_TEMP/deny.htaccess\" -o .site-backups/.htaccess"
+            else
+              bk="site-backups/$stamp"
+            fi
+            lftp -c "$SETUP; mkdir -p \"$bk\"; mirror --reverse --parallel=4 --no-perms \"$bkdir\" \"$bk\""
+            echo "::notice title=Backup::$nb files the upload could replace were copied to '$bk' on the server."
+          else
+            echo "::notice title=Backup::The website folder was empty, so there was nothing to back up."
+          fi
+
+          # Upload. No --delete here: removals are handled below, and only
+          # for files this site itself put there.
+          lftp -c "$SETUP; cd \"$DIR\" && mirror --reverse --parallel=4 --no-perms --verbose=1 \"$PWD/_site\" ."
+          echo "::notice title=Upload::$(find _site -type f | wc -l) files uploaded to '$DIR'."
+
+          # Remove what this site no longer has, safely. A file is deleted
+          # only if this site uploaded it before (listed in the previous
+          # .site-manifest.txt) or it's named in RETIRED_PATHS, and the new
+          # build doesn't have it. Anything else on the server is left
+          # alone and only reported. The backup folder, SSL checks
+          # (.well-known) and cgi-bin are never touched.
+          (cd _site && find . -type f | sed 's#^\./##' | sort) > "$RUNNER_TEMP/build.txt"
+          lftp -c "$SETUP; cd \"$DIR\" && find" 2>/dev/null | grep -v '/$' | sed 's#^\./##' | sort > "$RUNNER_TEMP/server.txt" || true
+          lftp -c "$SETUP; cd \"$DIR\" && cat .site-manifest.txt" 2>/dev/null | sort > "$RUNNER_TEMP/old-manifest.txt" || true
+          read -r -a retired <<< "$RETIRED_PATHS"
+          printf '%s\n' "${retired[@]}" | sort > "$RUNNER_TEMP/retired.txt"
+          comm -23 "$RUNNER_TEMP/server.txt" "$RUNNER_TEMP/build.txt" \
+            | grep -vE '^(\.site-backups/|\.well-known/|cgi-bin/|\.site-manifest\.txt$)' > "$RUNNER_TEMP/extra.txt" || true
+          sort -u "$RUNNER_TEMP/old-manifest.txt" "$RUNNER_TEMP/retired.txt" > "$RUNNER_TEMP/ours.txt"
+          comm -12 "$RUNNER_TEMP/extra.txt" "$RUNNER_TEMP/ours.txt" > "$RUNNER_TEMP/delete.txt"
+          comm -23 "$RUNNER_TEMP/extra.txt" "$RUNNER_TEMP/ours.txt" > "$RUNNER_TEMP/left.txt"
+          if [ -s "$RUNNER_TEMP/delete.txt" ]; then
+            cmds=""
+            while IFS= read -r f; do cmds="$cmds; rm -f \"$f\""; done < "$RUNNER_TEMP/delete.txt"
+            lftp -c "$SETUP; cd \"$DIR\" $cmds"
+            echo "::notice title=Removed::$(wc -l < "$RUNNER_TEMP/delete.txt") files this site no longer has: $(head -n 20 "$RUNNER_TEMP/delete.txt" | paste -sd ',' - | sed 's/,/, /g')"
+          else
+            echo "::notice title=Removed::Nothing to remove."
+          fi
+          if [ -s "$RUNNER_TEMP/left.txt" ]; then
+            echo "::notice title=Left alone::$(wc -l < "$RUNNER_TEMP/left.txt") files on the server weren't put there by this site, so they were kept: $(head -n 20 "$RUNNER_TEMP/left.txt" | paste -sd ',' - | sed 's/,/, /g')"
+          fi
+          # Record what this site uploaded, for the next run.
+          lftp -c "$SETUP; cd \"$DIR\" && put \"$RUNNER_TEMP/build.txt\" -o .site-manifest.txt"
+
+      - name: Check the live site
+        if: env.MODE == 'upload' || env.MODE == 'check'
+        run: |
+          sleep 5
+          fails=0; report=""
+          bust="v=$GITHUB_RUN_ID"
+          check() { # name, url, expected status, text that must appear (optional)
+            code=$(curl -sS -o "$RUNNER_TEMP/page" --max-time 25 -w '%{http_code}' "$2" 2>/dev/null || echo 000)
+            if [ "$code" = "$3" ] && { [ -z "$4" ] || grep -qF "$4" "$RUNNER_TEMP/page"; }; then
+              report="$report $1 ok;"
+            else
+              got=$(grep -o '<title>[^<]*' "$RUNNER_TEMP/page" 2>/dev/null | head -n 1 | sed 's/<title>//' || true)
+              [ -n "$got" ] || got=$(head -c 120 "$RUNNER_TEMP/page" 2>/dev/null | tr -d '\r' | tr '\n' ' ' || true)
+              report="$report $1 FAILED ($code, got: ${got:-empty});"; fails=$((fails+1))
+            fi
+          }
+          redirect() { # name, url, where it should end up
+            got=$(curl -sS -o /dev/null --max-time 25 -w '%{http_code} %{redirect_url}' "$2" 2>/dev/null || echo 000)
+            case "$got" in
+              30[18]" $3"*) report="$report $1 ok;" ;;
+              *) report="$report $1 FAILED ($got);"; fails=$((fails+1)) ;;
+            esac
+          }
+          check "home" "$SITE/?$bust" 200 '<link rel="canonical" href="'"$SITE"'/">'
+          check "about (clean address)" "$SITE/about?$bust" 200 '<link rel="canonical" href="'"$SITE"'/about">'
+          check "privacy policy" "$SITE/privacy-policy?$bust" 200 "FUZON APS PTY LIMITED"
+          check "terms" "$SITE/terms-of-service?$bust" 200 "Terms of Service"
+          check "an app page" "$SITE/smart-switch?$bust" 200 '<link rel="canonical" href="'"$SITE"'/smart-switch">'
+          check "guides hub" "$SITE/guides/?$bust" 200 "Fuzon Know-How"
+          check "sitemap" "$SITE/sitemap.xml?$bust" 200 "<loc>$SITE/</loc>"
+          check "missing file" "$SITE/assets/missing-$GITHUB_RUN_ID.png" 404 "Page not found"
+          # .htaccess must never be shown: 403 or 404 are both fine, as
+          # long as its rules don't come back.
+          code=$(curl -sS -o "$RUNNER_TEMP/ht" --max-time 25 -w '%{http_code}' "$SITE/.htaccess" 2>/dev/null || echo 000)
+          if { [ "$code" = 403 ] || [ "$code" = 404 ]; } && ! grep -q 'RewriteEngine' "$RUNNER_TEMP/ht"; then
+            report="$report .htaccess hidden ok;"
+          else
+            report="$report .htaccess hidden FAILED ($code);"; fails=$((fails+1))
+          fi
+          check "robots.txt" "$SITE/robots.txt?$bust" 200 "Sitemap: $SITE/sitemap.xml"
+          check "404 page" "$SITE/this-page-does-not-exist-$GITHUB_RUN_ID" 404 "Page not found"
+          redirect ".html to clean" "$SITE/about.html" "$SITE/about"
+          redirect "folder slash" "$SITE/guides" "$SITE/guides/"
+          read -r -a retired <<< "$RETIRED_PATHS"
+          for f in "${retired[@]}"; do
+            case "$f" in *.html) u="${f%.html}" ;; *) u="$f" ;; esac
+            check "removed: /$u" "$SITE/$u?$bust" 404 "Page not found"
+          done
+          redirect "http to https" "http://${SITE#https://}/" "$SITE/"
+          echo "::notice title=Live checks::$report"
+          # When the not-found page check fails, say what the server does
+          # with a missing address and with the site's own 404 page.
+          case "$report" in
+            *"404 page FAILED"*)
+              miss="$SITE/this-page-does-not-exist-$GITHUB_RUN_ID"
+              hdrs=$(curl -sS -o /dev/null -D - --max-time 20 "$miss" 2>/dev/null | tr -d '\r' | grep -iE '^(server|content-type|content-length|x-[a-z-]+|via|cf-ray):' | paste -sd ';' - || true)
+              p404=$(curl -sS -o "$RUNNER_TEMP/p404" --max-time 20 -w '%{http_code}' "$SITE/404" 2>/dev/null || echo 000)
+              t404=$(grep -o '<title>[^<]*' "$RUNNER_TEMP/p404" 2>/dev/null | head -n 1 | sed 's/<title>//' || true)
+              body=$(curl -sS --max-time 20 "$miss" 2>/dev/null | sed -e 's/<[^>]*>/ /g' | tr -s ' \n\r\t' ' ' | head -c 300 || true)
+              echo "::notice title=Not-found page text::${body:-empty}"
+              echo "::notice title=Not-found diagnostics::missing address headers: ${hdrs:-none}; /404 answers $p404 (${t404:-no title}); /404.html answers $(curl -sS -o /dev/null --max-time 20 -w '%{http_code} %{redirect_url}' "$SITE/404.html" 2>/dev/null || echo 000)"
+              ;;
+          esac
+          if [ "$fails" -gt 0 ]; then
+            echo "::error::$fails live check(s) failed. The files were uploaded; see 'Live checks' for which pages didn't answer as expected."
+            exit 1
+          fi

@@ -1,0 +1,81 @@
+# ---------------------------------------------------------------------------
+# Web server rules for fuzonapps.com (Apache / LiteSpeed shared hosting),
+# uploaded by .github/workflows/ftp.yml. Jekyll copies .htaccess into
+# _site by default; GitHub Pages (the preview) ignores it.
+# From the playbook (Appendix H), proven on Daily Utility's host.
+# STATUS.md section 8.
+# ---------------------------------------------------------------------------
+
+Options -Indexes -MultiViews
+DirectoryIndex index.html
+
+# Never serve this file, any other .ht* file, or the upload's file list.
+<IfModule mod_authz_core.c>
+  <FilesMatch "^\.(ht|site-manifest)">
+    Require all denied
+  </FilesMatch>
+</IfModule>
+# Missing addresses are answered by 404.php (the last rewrite rule below):
+# some hosts' server-wide error page takes priority over an ErrorDocument
+# set here. ErrorDocument stays for hosts that do honour it.
+ErrorDocument 404 /404.php
+
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+
+  # One address for every page: https, no www.
+  RewriteCond %{HTTPS} !=on
+  RewriteCond %{HTTP:X-Forwarded-Proto} !=https
+  RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [R=301,L]
+  RewriteCond %{HTTP_HOST} ^www\.(.+)$ [NC]
+  RewriteRule ^ https://%1%{REQUEST_URI} [R=301,L]
+
+  # A folder asked for without its slash (/guides): add the slash here.
+  # Left to Apache, the redirect can show the host's internal folder path.
+  RewriteCond %{REQUEST_FILENAME} -d
+  RewriteRule ^(.*[^/])$ https://%{HTTP_HOST}/$1/ [R=301,L]
+
+  # Clean URLs. Jekyll writes about.html but every link and canonical is
+  # /about. A typed or old /about.html redirects to /about (and
+  # /guides/index.html to /guides/), then /about is answered from
+  # about.html. THE_REQUEST is the browser's own request line, so the
+  # internal rewrite below never loops back into these redirects.
+  RewriteCond %{THE_REQUEST} \s/+((?:[^?\s]*/)?)index\.html[\s?]
+  RewriteRule ^ https://%{HTTP_HOST}/%1 [R=301,L]
+  RewriteCond %{THE_REQUEST} \s/+([^?\s]+)\.html[\s?]
+  RewriteRule ^ https://%{HTTP_HOST}/%1 [R=301,L]
+
+  RewriteCond %{REQUEST_FILENAME} !-f
+  RewriteCond %{REQUEST_FILENAME} !-d
+  RewriteCond %{REQUEST_FILENAME}.html -f
+  RewriteRule ^(.+)$ $1.html [L]
+
+  # Anything else that doesn't exist: 404.php sends a real 404 status
+  # with the site's not-found page.
+  RewriteCond %{REQUEST_FILENAME} !-f
+  RewriteCond %{REQUEST_FILENAME} !-d
+  RewriteRule ^ 404.php [L]
+</IfModule>
+
+# Stylesheets and scripts carry a ?v= stamp that changes on every build,
+# so browsers may keep them for a year. Pages are always rechecked.
+<IfModule mod_expires.c>
+  ExpiresActive On
+  ExpiresDefault "access plus 1 week"
+  ExpiresByType text/html "access plus 0 seconds"
+  ExpiresByType application/xml "access plus 1 hour"
+  ExpiresByType text/xml "access plus 1 hour"
+  ExpiresByType text/css "access plus 1 year"
+  ExpiresByType application/javascript "access plus 1 year"
+  ExpiresByType text/javascript "access plus 1 year"
+  ExpiresByType font/woff2 "access plus 1 year"
+</IfModule>
+
+<IfModule mod_deflate.c>
+  AddOutputFilterByType DEFLATE text/html text/css text/plain text/xml application/xml application/javascript text/javascript image/svg+xml application/manifest+json
+</IfModule>
+
+<IfModule mod_headers.c>
+  Header always set X-Content-Type-Options "nosniff"
+  Header always set Referrer-Policy "strict-origin-when-cross-origin"
+</IfModule>

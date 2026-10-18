@@ -427,16 +427,46 @@ Nothing in the fixmypcperth repo changes; it's one DNS record.
 - Local build in this environment: `bundle exec jekyll build` (if the
   binstub is missing, run `bundle exec ruby $(bundle info jekyll --path)/exe/jekyll build`).
 
-## 8. Domain cutover (later)
+## 8. Live site: fuzonapps.com on the web host (18 Oct)
 
-`fuzonapps.com` has no DNS records yet (checked 16 Oct). At cutover:
-Settings > Pages > Custom domain `fuzonapps.com` (replacing
-`fuzon.fixmypcperth.com`), then delete the `fuzon` CNAME from the
-fixmypcperth.com zone; apex A records to
-185.199.108-111.153 and `www` CNAME to `ali-rajaa.github.io` (DNS only on
-Cloudflare); Enforce HTTPS; in `_config.yml` set `url:
-"https://fuzonapps.com"`, `baseurl: ""`, `staging: false`. Keep the mail
-records for console@ intact.
+The owner's web host serves fuzonapps.com (FTPS host
+`ftps14.us.cloudlogin.co`, website folder `/www/fuzonapps.com`). The
+GitHub Pages preview at fuzon.fixmypcperth.com stays as the noindex
+preview; nothing about it changes.
+
+- **`.github/workflows/ftp.yml`** (playbook Appendix K), run by hand from
+  the Actions tab: `look` (log in, report the folder and how the site
+  answers; changes nothing but a test file it deletes), `upload` (build
+  with `url: https://fuzonapps.com` and `staging: false`, check the
+  build, back up what could be replaced to `site-backups/` outside the
+  website folder on the first upload, mirror `_site` up, delete only
+  files a previous upload put there, then the live checks), `check`
+  (live checks only).
+- **Secrets** (repo Settings > Secrets and variables > Actions):
+  `FTP_USERNAME` and `FTP_PASSWORD`. The owner pastes them there; they
+  are never in the repo, a commit, the chat or a log (lftp reads the
+  password from an environment variable). Optional variables:
+  `FTP_HOST`, `FTP_SERVER_DIR`, `FTP_TLS` (loose by default).
+- **`.htaccess`** (Appendix H): https and no-www redirects, folder
+  slashes, `.html` to clean-address redirects, `/x` served from `x.html`,
+  missing addresses to `404.php`, `.ht*` and the manifest hidden, caching,
+  gzip, two security headers. **`404.php`** (Appendix I): real 404 status
+  with the site's page.
+- **Tested locally before the first upload** (playbook 16.3): Apache with
+  PHP serving the live build (every rule above: 200s, 301s, 404 with the
+  site's page and X-Robots-Tag noindex, 403 for .htaccess, gzip, cache
+  headers); the workflow's own look and upload scripts against a local
+  FTPS server (backup of the host's page, 43 files up, host folders left
+  alone, a second run deleting only a page this site had uploaded, a
+  clear error for a wrong password); actionlint and shellcheck clean.
+- **Needs from the owner first**: the two secrets; SSL switched on for
+  fuzonapps.com in the hosting panel (the upload refuses to run if
+  https doesn't answer, because .htaccess sends everyone there); DNS for
+  fuzonapps.com and www pointing at the host; keep the mail records for
+  console@.
+- **After the upload**: Search Console (add fuzonapps.com, submit
+  /sitemap.xml); point the Google Play listings' website, privacy and
+  support links at fuzonapps.com; `app-ads.txt` once the AdMob ID is in.
 
 ## 9. Execution order (next)
 

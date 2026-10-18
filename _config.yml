@@ -4,13 +4,14 @@ description: Fuzon Apps makes Android apps for everyday jobs, free to download o
 # ---------------------------------------------------------------------------
 # Site address. Two states; see STATUS.md section 7.
 #
-#   Preview (now)    url: "https://fuzon.fixmypcperth.com"  baseurl: ""  staging: true
-#   Live (cutover)   url: "https://fuzonapps.com"           baseurl: ""  staging: false
+#   Preview          url: "https://fuzon.fixmypcperth.com"  baseurl: ""  staging: true
+#   Live             url: "https://fuzonapps.com"           baseurl: ""  staging: false
 #
-# The preview borrows a subdomain of fixmypcperth.com (owner, 16 Oct), the
-# same way Daily Utility's preview used staging.fixmypcperth.com. At the
-# cutover the custom domain moves to fuzonapps.com and the fuzon DNS
-# record on fixmypcperth.com is deleted.
+# This file keeps the preview values: pages.yml deploys them to GitHub
+# Pages (fuzon.fixmypcperth.com, noindex). The live site, fuzonapps.com,
+# is on the owner's web host and uploaded by ftp.yml, which writes a
+# second config at build time with the live url and staging: false
+# (owner, 18 Oct; STATUS.md section 8).
 #
 # Every internal link goes through relative_url and every full URL through
 # absolute_url, and both read these values, so the switch is these three
