@@ -20,9 +20,7 @@
   <p class="store-note">On Google Play as “{{ include.app.store_name | escape }}”</p>
   {%- endif %}
   <div class="app-card-foot">
-    {%- if include.app.android_url != "" %}
-    {% include store-badge.html url=include.app.android_url name=include.app.short class="app-card-store" %}
-    {%- endif %}
+    {% include store-badges.html app=include.app badge_class="app-card-store" %}
     <span class="link-arrow app-card-more" aria-hidden="true">About<svg class="icon"><use href="#i-arrow-right"/></svg></span>
   </div>
   <svg class="icon app-card-bg" aria-hidden="true"><use href="#i-{{ include.app.glyph }}"/></svg>

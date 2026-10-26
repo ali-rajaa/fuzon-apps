@@ -15,9 +15,9 @@ og_image_alt: "Cloud Storage & Cloud Drive by Fuzon Apps"
 # or legal-document content.
 overview_title: "Your files, kept in one place"
 overview:
-  - "Cloud Storage & Cloud Drive is an Android app from Fuzon Apps for keeping your files and photos in the cloud. Instead of everything living on one phone, you upload what matters to your cloud storage, sort it into folders, and share it with other people when you need to."
+  - "Cloud Storage & Cloud Drive is an app from Fuzon Apps, for Android phones and iPhone, for keeping your files and photos in the cloud. Instead of everything living on one phone, you upload what matters to your cloud storage, sort it into folders, and share it with other people when you need to."
   - "It suits anyone whose phone is filling up with photos, documents and downloads, and anyone who wants their important files kept somewhere other than the phone in their pocket. Phones get lost, dropped and replaced. The photos from a family holiday or the scan of an important document shouldn't go with them."
-  - "The app is free to download from Google Play, with optional in-app purchases. This page covers what it does, the moments it helps with, how to get started, and plain advice on getting the most out of cloud storage."
+  - "The app is free to download from Google Play and the App Store, with optional in-app purchases, and you can also sign in to your account on the web. This page covers what it does, the moments it helps with, how to get started, and plain advice on getting the most out of cloud storage."
 moments_title: "Made for moments like these"
 moments:
   - icon: "image"
@@ -45,11 +45,11 @@ features:
     text: "When someone needs a file, share it from the app instead of hunting for it on your phone. A simple way to pass on photos after an event or send a document."
   - icon: "download"
     title: "Free to download"
-    text: "Get the app from Google Play at no cost. If you want more from it, optional in-app purchases are available through Google Play."
+    text: "Get the app from Google Play or the App Store at no cost. If you want more from it, optional in-app purchases are available through the store you got it from."
 steps_title: "How to get started"
 steps:
   - title: "Install the app"
-    text: "Get Cloud Storage & Cloud Drive from Google Play on your Android phone. It's free to download."
+    text: "Get Cloud Storage & Cloud Drive from Google Play on an Android phone, or from the App Store on an iPhone. It's free to download."
   - title: "Open it and follow the set-up"
     text: "Open the app and follow the steps on screen to get going."
   - title: "Upload your first files"
@@ -69,9 +69,9 @@ compare:
 guide_title: "A short guide to keeping files in the cloud"
 faqs:
   - q: "Is Cloud Storage & Cloud Drive free?"
-    a: "It's free to download from Google Play. Optional in-app purchases are available in the app."
+    a: "It's free to download from Google Play and the App Store. Optional in-app purchases are available in the app."
   - q: "Which phones does it work on?"
-    a: "It's an Android app, available on Google Play."
+    a: "Android phones, from Google Play, and iPhone, from the App Store. You can also sign in to your account on the web at cloud.fuzonapps.com."
   - q: "What should I keep in cloud storage?"
     a: "Start with the files that would be hardest to replace: family photos and videos, scanned documents, receipts, and school or work files. Things you can easily download again usually don't need to be stored twice."
   - q: "Can I organise my files into folders?"

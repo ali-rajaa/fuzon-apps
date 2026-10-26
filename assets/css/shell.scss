@@ -894,6 +894,16 @@ main:focus { outline: none; }
 .store-badge-name { font-size: 1.0625rem; font-weight: 700; letter-spacing: var(--track-headline); }
 .store-badge--light { background: #ffffff; color: var(--text); box-shadow: 0 10px 32px rgba(255, 255, 255, 0.16); }
 .store-badge--light .store-badge-top { color: var(--text-2); }
+/* An app's store buttons (store-badges.html): Google Play and, for an app
+   on iPhone, the App Store, side by side, the same height, wrapping when
+   the row is tight; stacked full width on small phones where the page
+   stacks its buttons. */
+.store-badges { display: flex; flex-wrap: wrap; align-items: center; gap: 0.75rem; }
+.cta-apps .store-badges { justify-content: center; }
+@media (max-width: 479.98px) {
+  .app-actions .store-badges, .cta-apps .store-badges { flex-direction: column; align-items: stretch; }
+  .app-actions .store-badges .store-badge, .cta-apps .store-badges .store-badge { justify-content: center; }
+}
 @media (hover: hover) {
   .store-badge:hover { background: var(--btn-hover); }
   .store-badge--light:hover { background: #ffffff; box-shadow: 0 12px 40px rgba(255, 255, 255, 0.28); }

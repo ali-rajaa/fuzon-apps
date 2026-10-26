@@ -34,7 +34,7 @@ colours. The header button is "Sign in", to Cloud Storage on the web (owner, 26 
 | Always push to `main` | Owner, 16 Oct |
 | Google Play listings: Cloud Storage & Cloud Drive (`com.cloudstorageapp.cloudbackup.storagespace.databackup`), Transfer My Data – Phone Clone (`com.smartswitch.shareit.datashare.phoneclone`), GPS Navigation & Directions (`com.gpsnavigation.directions.gpsmaps`); developer page `dev?id=8522805663199379420` | Owner's links and screenshots, 16 Oct |
 | All free to download, all with in-app purchases; Smart Switch and GPS also "Contains ads" | Play listings (screenshots) |
-| App Store developer page `apps.apple.com/developer/fuzon-aps-pty-limited/id1868315941` (owner's link without its Macau storefront, so Apple opens each visitor's own store), beside every Google Play developer link and in sameAs. Which apps are on iPhone isn't confirmed, so no per-app App Store buttons, and the "Android" wording stays | Owner, 26 Oct |
+| App Store developer page `apps.apple.com/developer/fuzon-aps-pty-limited/id1868315941` (owner's link without its Macau storefront, so Apple opens each visitor's own store), beside every Google Play developer link and in sameAs. Cloud Storage is on iPhone (owner, 26 Oct): App Store "Cloud Storage & Cloud Drive" by FUZON APS PTY LIMITED, id6757691187 (found by search; owner to confirm), `ios_url` in apps.yml. Its App Store button sits beside Google Play everywhere the app's store button shows (store-badges.html); its page, schema (operatingSystem "Android, iOS") and the site-wide wording say Android and iPhone. Smart Switch and GPS Navigation stay Android only | Owner, 26 Oct |
 | Keep the name "Smart Switch" (it's also our name); on Play it's "Transfer My Data – Phone Clone" | Owner, 16 Oct |
 | The logo is the one the owner supplied (traced to SVG, no other file) | Owner, 16 Oct |
 | Domain move to fuzonapps.com happens last | Owner, 16 Oct |
@@ -494,7 +494,7 @@ and the backup folder answering 403.
 | # | Item |
 |---|---|
 | 1 | ~~Logo~~ Done: use the supplied logo (traced SVG) |
-| 2 | ~~Store links~~ Google Play done; App Store developer page linked (26 Oct). For per-app App Store buttons and to update the "Android apps" / "For Android phones" wording: which apps are on iPhone, and each one's App Store link |
+| 2 | ~~Store links~~ Google Play done; App Store developer page and Cloud Storage on iPhone done (26 Oct). Confirm the Cloud Storage App Store link (id6757691187); send App Store links for Smart Switch or GPS Navigation if they come to iPhone |
 | 3 | Per app: 3 to 6 plain app screenshots (not the Play marketing images) for the showcase window and app pages |
 | 4 | AdMob publisher ID (`pub-…`) for `app-ads.txt`: Smart Switch and GPS show ads |
 | 5 | Fill the rest of `_data/legal.yml`: governing law, jurisdiction, arbitration (or remove that clause), effective and last-updated dates. ABN/ACN, postal address and legal name are done (ABN advice letter) |

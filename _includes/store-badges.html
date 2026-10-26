@@ -1,0 +1,19 @@
+{%- comment -%}
+  An app's store buttons, side by side: "Get it on Google Play" (from
+  android_url) and, when the app is on iPhone, "Download on the App
+  Store" (from ios_url). Every place that shows an app's store button uses
+  this, so adding an ios_url in apps.yml puts the App Store button
+  everywhere at once (owner, 26 Oct: Cloud Storage on iPhone).
+
+  Params: app (an apps.yml entry), light (white badges, for the black CTA
+  band), badge_class (a class on each badge), class (on the group).
+{%- endcomment -%}
+{%- assign _sb = include.app -%}
+<div class="store-badges{% if include.class %} {{ include.class }}{% endif %}">
+  {%- if _sb.android_url and _sb.android_url != "" %}
+  {% include store-badge.html url=_sb.android_url name=_sb.short light=include.light class=include.badge_class %}
+  {%- endif %}
+  {%- if _sb.ios_url and _sb.ios_url != "" %}
+  {% include store-badge.html url=_sb.ios_url name=_sb.short light=include.light class=include.badge_class store="apple" %}
+  {%- endif %}
+</div>

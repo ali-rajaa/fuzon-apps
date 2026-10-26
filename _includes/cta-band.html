@@ -21,11 +21,10 @@
     {%- assign _cta_heading = "Get " | append: include.app.short %}
     <p class="eyebrow">Free to download</p>
     <h2 id="cta-title" class="cta-title">{{ include.heading | default: _cta_heading | escape }}</h2>
-    <p class="cta-sub">{{ include.sub | default: "Download it from Google Play. Optional in-app purchases." | escape }}</p>
+    {%- if include.app.ios_url and include.app.ios_url != "" %}{% assign _cta_sub = "Download it from Google Play or the App Store. Optional in-app purchases." %}{% else %}{% assign _cta_sub = "Download it from Google Play. Optional in-app purchases." %}{% endif %}
+    <p class="cta-sub">{{ include.sub | default: _cta_sub | escape }}</p>
     <div class="cta-apps">
-      {%- if include.app.android_url != "" %}
-      {% include store-badge.html url=include.app.android_url name=include.app.short light=true %}
-      {%- endif %}
+      {% include store-badges.html app=include.app light=true %}
     </div>
     <p class="cta-small">Questions? Email <a href="mailto:{{ site.company.support_email }}">{{ site.company.support_email }}</a></p>
     {%- else %}

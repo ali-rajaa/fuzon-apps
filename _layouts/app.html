@@ -42,7 +42,7 @@ layout: default
       "alternateName": {{ _app.store_name | jsonify }},
       "description": {{ _app.tagline | jsonify }},
       "url": {{ page.url | absolute_url | jsonify }},
-      "operatingSystem": "Android",
+      "operatingSystem": {% if _app.ios_url and _app.ios_url != "" %}"Android, iOS"{% else %}"Android"{% endif %},
       "applicationCategory": "UtilitiesApplication",
       {%- if _app.android_url != "" %}
       "installUrl": {{ _app.android_url | jsonify }},
@@ -78,16 +78,14 @@ layout: default
       <h1 id="app-title" class="app-title">{{ _app.name | escape }}</h1>
       <p class="app-lead">{{ _app.tagline | escape }}</p>
       <div class="app-actions" id="download">
-        {%- if _app.android_url != "" %}
-        {% include store-badge.html url=_app.android_url name=_app.short %}
-        {%- endif %}
+        {% include store-badges.html app=_app %}
         <a class="btn btn--secondary btn--lg" href="#how-it-works">How it works</a>
       </div>
       {%- if _app.web_url and _app.web_url != "" %}
       <p class="app-web">Already have an account? <a class="link-arrow" href="{{ _app.web_url }}">Sign in on the web<svg class="icon" aria-hidden="true"><use href="#i-arrow-right"/></svg></a></p>
       {%- endif %}
       <p class="app-facts">
-        <span>Android</span><span aria-hidden="true">·</span><span>Free to download</span><span aria-hidden="true">·</span><span>Optional in-app purchases</span>
+        <span>Android{% if _app.ios_url and _app.ios_url != "" %} and iPhone{% endif %}</span><span aria-hidden="true">·</span><span>Free to download</span><span aria-hidden="true">·</span><span>Optional in-app purchases</span>
       </p>
       {%- if _app.store_name != _app.name %}
       <p class="store-note">On Google Play as “{{ _app.store_name | escape }}”</p>
@@ -136,13 +134,11 @@ phones, the current section is highlighted by site.js. {%- endcomment %}
       <p class="eyebrow">At a glance</p>
       <dl>
         <div><dt>Made by</dt><dd>Fuzon Apps</dd></div>
-        <div><dt>Works on</dt><dd>Android phones</dd></div>
+        <div><dt>Works on</dt><dd>{% if _app.ios_url and _app.ios_url != "" %}Android phones and iPhone{% else %}Android phones{% endif %}</dd></div>
         <div><dt>Price</dt><dd>Free to download, optional in-app purchases</dd></div>
-        <div><dt>On Google Play as</dt><dd>{{ _app.store_name | escape }}</dd></div>
+        <div><dt>{% if _app.ios_url and _app.ios_url != "" %}On Google Play and the App Store as{% else %}On Google Play as{% endif %}</dt><dd>{{ _app.store_name | escape }}</dd></div>
       </dl>
-      {%- if _app.android_url != "" %}
-      {% include store-badge.html url=_app.android_url name=_app.short %}
-      {%- endif %}
+      {% include store-badges.html app=_app %}
     </div>
   </div>
 </section>
@@ -193,9 +189,7 @@ phones, the current section is highlighted by site.js. {%- endcomment %}
     <div class="section-head split-head reveal">
       <p class="eyebrow">How it works</p>
       <h2 id="steps-title">{{ page.steps_title | default: "How to get started" | escape }}</h2>
-      {%- if _app.android_url != "" %}
-      <div class="steps-cta">{% include store-badge.html url=_app.android_url name=_app.short %}</div>
-      {%- endif %}
+      {% include store-badges.html app=_app class="steps-cta" %}
     </div>
     <ol class="timeline">
       {%- for s in page.steps %}

@@ -13,9 +13,7 @@
     <p class="guide-app-title">Do it with {{ _a.name | escape }}</p>
     <p class="guide-app-text">{{ _a.tagline | escape }} Free to download, with optional in-app purchases.</p>
     <div class="guide-app-actions">
-      {%- if _a.android_url != "" %}
-      {% include store-badge.html url=_a.android_url name=_a.short %}
-      {%- endif %}
+      {% include store-badges.html app=_a %}
       <a class="link-arrow" href="{{ '/' | append: _a.slug | relative_url }}">About {{ _a.short | escape }}<svg class="icon" aria-hidden="true"><use href="#i-arrow-right"/></svg></a>
     </div>
   </div>

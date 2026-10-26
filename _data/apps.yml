@@ -19,8 +19,10 @@
 #   points      three things it does (showcase, cards, placeholder page)
 #   android_url Google Play listing. Store buttons and "Android" are derived
 #               from these, never typed.
-#   ios_url     App Store listing (none yet; the App Store developer page
-#               is site.appstore_developer_url)
+#   ios_url     App Store listing, if the app is on iPhone (Cloud Storage:
+#               owner, 26 Oct). Its App Store button, "iPhone" wording and
+#               schema are derived from this. The developer page is
+#               site.appstore_developer_url
 #   web_url     sign-in for the app on the web, if it has one (Cloud
 #               Storage: owner, 26 Oct). Shown on the app's page.
 #   ads         true if the listing says "Contains ads" (app-ads.txt)
@@ -39,7 +41,9 @@
     - "Keep your files organised in folders"
     - "Share files with other people"
   android_url: "https://play.google.com/store/apps/details?id=com.cloudstorageapp.cloudbackup.storagespace.databackup"
-  ios_url: ""
+  # App Store "Cloud Storage & Cloud Drive" by FUZON APS PTY LIMITED
+  # (id6757691187), without a storefront so Apple opens the visitor's own.
+  ios_url: "https://apps.apple.com/app/cloud-storage-cloud-drive/id6757691187"
   web_url: "https://cloud.fuzonapps.com/signin"
   ads: false
   built: true
