@@ -59,6 +59,11 @@ jobs:
   ftp:
     if: github.repository == 'ali-rajaa/fuzon-apps'
     runs-on: ubuntu-latest
+    # A whole upload takes about 4 minutes. If the host stalls a transfer,
+    # fail after 15 instead of holding the queue for GitHub's 6-hour
+    # default (26 Oct: one upload hung in "Back up and upload"). Re-run it
+    # from the Actions tab; the upload is safe to repeat.
+    timeout-minutes: 15
     env:
       FTP_HOST: ${{ vars.FTP_HOST || 'ftps14.us.cloudlogin.co' }}
       FTP_SERVER_DIR: ${{ vars.FTP_SERVER_DIR || '.' }}
