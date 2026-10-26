@@ -125,19 +125,35 @@
 }
 
 /* ---------- App tones ----------
-   Every app wears the logo's blue (owner, 26 Oct: "just this blue"); the
-   apps are told apart by their glyphs. A tone class sets the colours for
-   anything inside it: tiles, glow, check marks, card accents. A white
-   glyph on the tile's lightest blue is 4.0:1; --tone-text is 5.6:1 on
-   white and 5.2:1 on --bg-alt. Kept as classes so an app can take its own
-   shade of blue later. */
-.tone-cloud, .tone-switch, .tone-gps {
+   One colour per app, as a system (owner, 26 Oct): Cloud Storage takes
+   the logo's blue, Smart Switch a teal and GPS Navigation a green, tuned
+   to match each other: a white glyph on each tile's light end is 3.6:1
+   or more, and each --tone-text is 5.6:1 on white and 5.2:1 on
+   --bg-alt. Everything else on the site stays blue. A tone class sets the
+   colours for anything inside it: tiles, glow, check marks, accents. */
+.tone-cloud {
   --tone-gradient: linear-gradient(160deg, var(--logo-top), var(--logo-bottom));
   --tone-text: #0166cb;
   --tone-soft: #eef5fe;
   --glow-a: #3d9bff;
   --glow-b: var(--logo-top);
   --glow-c: #7fc0ff;
+}
+.tone-switch {
+  --tone-gradient: linear-gradient(160deg, #0b958a, #03544e);
+  --tone-text: #03756d;
+  --tone-soft: #ebf8f6;
+  --glow-a: #2ec4b6;
+  --glow-b: #0b958a;
+  --glow-c: #8fe3da;
+}
+.tone-gps {
+  --tone-gradient: linear-gradient(160deg, #1a9a4a, #0b5a2a);
+  --tone-text: #13773a;
+  --tone-soft: #edf8f1;
+  --glow-a: #4cc77a;
+  --glow-b: #1a9a4a;
+  --glow-c: #a6e8bf;
 }
 
 /* ---------- Font ----------
@@ -918,8 +934,8 @@ main:focus { outline: none; }
   min-width: 7em;
   height: 1.15em;
   vertical-align: -0.2em;
-  border-bottom: 2px dashed #aa5902;
-  background: rgba(253, 169, 78, 0.18);
+  border-bottom: 2px dashed var(--text-3);   /* a fact still to come: neutral, not a colour */
+  background: var(--surface-sunk);
   border-radius: 3px 3px 0 0;
 }
 

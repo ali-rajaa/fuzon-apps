@@ -73,7 +73,6 @@ layout: default
       </nav>
       <div class="app-hero-brand">
         {% include app-tile.html app=_app class="app-hero-tile" %}
-        <p class="eyebrow">An app by Fuzon Apps</p>
       </div>
       <h1 id="app-title" class="app-title">{{ _app.name | escape }}</h1>
       <p class="app-lead">{{ _app.tagline | escape }}</p>
@@ -121,7 +120,6 @@ phones, the current section is highlighted by site.js. {%- endcomment %}
 <section class="section app-overview" id="overview" aria-labelledby="overview-title">
   <div class="wrap overview-grid">
     <div class="overview-copy reveal">
-      <p class="eyebrow">Overview</p>
       <h2 id="overview-title">{{ page.overview_title | default: "What it is" | escape }}</h2>
       {%- for para in page.overview %}
       <p>{{ para | escape }}</p>
@@ -143,7 +141,6 @@ phones, the current section is highlighted by site.js. {%- endcomment %}
 <section class="section section--alt" id="when-it-helps" aria-labelledby="moments-title">
   <div class="wrap">
     <div class="section-head reveal">
-      <p class="eyebrow">When it helps</p>
       <h2 id="moments-title">{{ page.moments_title | default: "Made for moments like these" | escape }}</h2>
     </div>
     <ul class="moments" role="list">
@@ -163,7 +160,6 @@ phones, the current section is highlighted by site.js. {%- endcomment %}
 <section class="section" id="features" aria-labelledby="features-title">
   <div class="wrap">
     <div class="section-head reveal">
-      <p class="eyebrow">Features</p>
       <h2 id="features-title">{{ page.features_title | default: "What it does" | escape }}</h2>
     </div>
     <ul class="bento" role="list">
@@ -184,7 +180,6 @@ phones, the current section is highlighted by site.js. {%- endcomment %}
 <section class="section section--alt" id="how-it-works" aria-labelledby="steps-title">
   <div class="wrap split">
     <div class="section-head split-head reveal">
-      <p class="eyebrow">How it works</p>
       <h2 id="steps-title">{{ page.steps_title | default: "How to get started" | escape }}</h2>
       {% include store-badges.html app=_app class="steps-cta" %}
     </div>
@@ -206,7 +201,6 @@ phones, the current section is highlighted by site.js. {%- endcomment %}
 <section class="section" id="compare" aria-labelledby="compare-title">
   <div class="wrap">
     <div class="section-head reveal">
-      <p class="eyebrow">Compare</p>
       <h2 id="compare-title">{{ page.compare.title | escape }}</h2>
       {%- if page.compare.sub %}<p class="section-sub">{{ page.compare.sub | escape }}</p>{% endif %}
     </div>
@@ -239,7 +233,6 @@ phones, the current section is highlighted by site.js. {%- endcomment %}
 <section class="section{% if page.compare %} section--alt{% endif %}" id="checklist" aria-labelledby="checklist-title">
   <div class="wrap split">
     <div class="section-head split-head reveal">
-      <p class="eyebrow">Checklist</p>
       <h2 id="checklist-title">{{ page.checklist.title | escape }}</h2>
       {%- if page.checklist.sub %}<p class="section-sub">{{ page.checklist.sub | escape }}</p>{% endif %}
     </div>
@@ -255,7 +248,6 @@ phones, the current section is highlighted by site.js. {%- endcomment %}
 <section class="section guide" id="guide" aria-labelledby="guide-title">
   <div class="wrap guide-grid">
     <div class="guide-head reveal">
-      <p class="eyebrow">Guide</p>
       <h2 id="guide-title">{{ page.guide_title | escape }}</h2>
     </div>
     <div class="prose guide-body">
@@ -264,13 +256,12 @@ phones, the current section is highlighted by site.js. {%- endcomment %}
   </div>
 </section>
 
-{% include faq-section.html faqs=page.faqs id="faq" alt=true eyebrow="FAQ" heading="Questions people ask" %}
+{% include faq-section.html faqs=page.faqs id="faq" alt=true heading="Questions people ask" %}
 
 {%- if _others.size > 0 %}
 <section class="section more-apps" aria-labelledby="more-title">
   <div class="wrap">
     <div class="section-head reveal">
-      <p class="eyebrow">More from Fuzon Apps</p>
       <h2 id="more-title">Other apps you might need</h2>
     </div>
     <ul class="more-list" role="list">

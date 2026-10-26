@@ -41,7 +41,6 @@ layout: default
       <svg class="icon" aria-hidden="true"><use href="#i-chevron-right"/></svg>
       <span aria-current="page">{{ _heading | escape }}</span>
     </nav>
-    <p class="eyebrow">Legal</p>
     <h1 id="legal-title" class="legal-title">{{ _heading | escape }}</h1>
     <p class="legal-dates">
       <span>Effective {% if _eff and _eff != "" %}<time datetime="{{ _eff | date: '%Y-%m-%d' }}">{{ _eff | date: "%-d %B %Y" }}</time>{% else %}{% include legal-field.html value="" %}{% endif %}</span>

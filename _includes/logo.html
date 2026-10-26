@@ -1,9 +1,11 @@
 {%- comment -%}
-  The Fuzon Apps mark: the gradient hexagon with the rocket. Redrawn as
-  SVG from the owner's logo screenshot (16 Oct; _reference/logo-source.png),
-  replace assets/icons/logo.svg if the original file turns up.
+  The Fuzon Apps mark: FZ on the blue disc (owner, 26 Oct), redrawn as SVG
+  (assets/icons/logo.svg; the full logo with "Fuzon Apps" lettering is
+  logo-full.svg, for the app icons). The ?v= build stamp makes browsers
+  fetch a new logo at once instead of keeping a week-old copy.
   An <img>, so the file is cached once for every page. Decorative where
   used, because the wordmark "Fuzon Apps" always sits beside it.
   Params: class (optional).
 {%- endcomment -%}
-<img class="{{ include.class | default: 'logo-mark' }}" src="{{ '/assets/icons/logo.svg' | relative_url }}" width="117" height="117" alt="" decoding="async">
+{%- assign _lv = site.time | date: "%s" -%}
+<img class="{{ include.class | default: 'logo-mark' }}" src="{{ '/assets/icons/logo.svg' | relative_url }}?v={{ _lv }}" width="117" height="117" alt="" decoding="async">

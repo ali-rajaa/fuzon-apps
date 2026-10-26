@@ -60,9 +60,15 @@
   {%- comment -%} Share image: a page's own 1200x630 card (og_image), else
   the site-wide default. JPEG, about 60KB, under the ~300KB some apps
   allow for link previews. {%- endcomment -%}
+  {%- comment -%} Images and icons carry the same ?v= build stamp as the
+  stylesheets: images are cached for a week (.htaccess), so without it a
+  new logo or share card wouldn't show until the old copy expired (26 Oct:
+  the new FZ logo didn't appear for returning visitors). {%- endcomment -%}
+  {%- assign _v = site.time | date: "%s" -%}
   {%- assign _og_img = page.og_image | default: "/assets/og/default.jpg" -%}
-  {%- assign _og_alt = page.og_image_alt | default: "Fuzon Apps: Android apps for everyday jobs" %}
-  <meta property="og:image" content="{{ _og_img | absolute_url }}">
+  {%- assign _og_img = _og_img | absolute_url | append: "?v=" | append: _v -%}
+  {%- assign _og_alt = page.og_image_alt | default: "Fuzon Apps: apps for everyday jobs on Android and iPhone" %}
+  <meta property="og:image" content="{{ _og_img }}">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
   <meta property="og:image:alt" content="{{ _og_alt | escape }}">
@@ -70,13 +76,13 @@
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="{{ _title | escape }}">
   <meta name="twitter:description" content="{{ _desc | escape }}">
-  <meta name="twitter:image" content="{{ _og_img | absolute_url }}">
+  <meta name="twitter:image" content="{{ _og_img }}">
   <meta name="twitter:image:alt" content="{{ _og_alt | escape }}">
 
-  <link rel="icon" href="{{ '/favicon.ico' | relative_url }}" sizes="48x48">
-  <link rel="icon" href="{{ '/assets/icons/logo.svg' | relative_url }}" type="image/svg+xml">
-  <link rel="apple-touch-icon" href="{{ '/assets/icons/apple-touch-icon.png' | relative_url }}">
-  <link rel="manifest" href="{{ '/site.webmanifest' | relative_url }}">
+  <link rel="icon" href="{{ '/favicon.ico' | relative_url }}?v={{ _v }}" sizes="48x48">
+  <link rel="icon" href="{{ '/assets/icons/logo.svg' | relative_url }}?v={{ _v }}" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="{{ '/assets/icons/apple-touch-icon.png' | relative_url }}?v={{ _v }}">
+  <link rel="manifest" href="{{ '/site.webmanifest' | relative_url }}?v={{ _v }}">
   {%- comment -%} Light only (owner, 16 Oct). Telling the browser keeps
   form controls and scrollbars light on dark-mode devices too. {%- endcomment %}
   <meta name="color-scheme" content="light">
@@ -87,7 +93,6 @@
   (a layout's front matter doesn't cascade down to its pages). The ?v=
   stamp changes on every build, so a deploy never leaves a stale copy
   in a browser cache. {%- endcomment -%}
-  {%- assign _v = site.time | date: "%s" %}
   <link rel="preload" href="{{ '/assets/fonts/inter-latin.woff2' | relative_url }}" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="{{ '/assets/css/shell.css' | relative_url }}?v={{ _v }}">
   {%- if page.css %}
