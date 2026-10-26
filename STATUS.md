@@ -28,6 +28,9 @@ colours. The header button is "Sign in", to Cloud Storage on the web (owner, 26 
 | Support email `console@fuzonapps.com` | Owner, 16 Oct |
 | Legal name "FUZON APS PTY LIMITED", ABN 56 679 075 775, ACN 679 075 775, Australian private company; postal address 7 Barraberry Rtt, Canning Vale WA 6155 | ABN advice letter from the Australian Business Register (owner, 16 Oct). The letter also lists a business address in Craigieburn VIC; the site shows the postal address only |
 | Light theme only | Owner, 16 Oct |
+| Logo: the FZ mark on a blue disc (owner's image, 26 Oct), redrawn as SVG (`assets/icons/logo.svg`; overlay-checked against the source). The disc shades #017ef2 (top) to #00418d (bottom). Icons, favicon and share images rebuilt from it | Owner, 26 Oct |
+| Colour: the logo's blue only ("keep UI just this blue, same fonts"). Primary buttons, links and focus #0166cb (5.6:1 on white); app tiles and the closing band in the logo gradient; all three app tones are the same blue (told apart by glyph); greys lean cool. Store badges stay black. Font unchanged (Inter) | Owner, 26 Oct |
+| Cloud Storage on three: Google Play, the App Store and the web ("Use it on the Web" badge → cloud.fuzonapps.com/signin) everywhere its buttons show; homepage strip adds "Cloud Storage on the Web" | Owner, 26 Oct |
 | Header button "Sign in" → `https://cloud.fuzonapps.com/signin` (replaces "Get the apps"; also on the Cloud Storage page and the delete-account page) | Owner, 26 Oct |
 | Logo colours: `#FDA94E`, `#F755FA`, `#42C6FE` (3-stop horizontal gradient) | Sampled from `_reference/logo-source.png` |
 | Template look | Owner's Cloudly screenshots, `_reference/template/` |

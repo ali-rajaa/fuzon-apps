@@ -81,11 +81,8 @@ layout: default
         {% include store-badges.html app=_app %}
         <a class="btn btn--secondary btn--lg" href="#how-it-works">How it works</a>
       </div>
-      {%- if _app.web_url and _app.web_url != "" %}
-      <p class="app-web">Already have an account? <a class="link-arrow" href="{{ _app.web_url }}">Sign in on the web<svg class="icon" aria-hidden="true"><use href="#i-arrow-right"/></svg></a></p>
-      {%- endif %}
       <p class="app-facts">
-        <span>Android{% if _app.ios_url and _app.ios_url != "" %} and iPhone{% endif %}</span><span aria-hidden="true">·</span><span>Free to download</span><span aria-hidden="true">·</span><span>Optional in-app purchases</span>
+        <span>{% if _app.ios_url and _app.ios_url != "" and _app.web_url and _app.web_url != "" %}Android, iPhone and web{% elsif _app.ios_url and _app.ios_url != "" %}Android and iPhone{% else %}Android{% endif %}</span><span aria-hidden="true">·</span><span>Free to download</span><span aria-hidden="true">·</span><span>Optional in-app purchases</span>
       </p>
       {%- if _app.store_name != _app.name %}
       <p class="store-note">On Google Play as “{{ _app.store_name | escape }}”</p>
@@ -134,7 +131,7 @@ phones, the current section is highlighted by site.js. {%- endcomment %}
       <p class="eyebrow">At a glance</p>
       <dl>
         <div><dt>Made by</dt><dd>Fuzon Apps</dd></div>
-        <div><dt>Works on</dt><dd>{% if _app.ios_url and _app.ios_url != "" %}Android phones and iPhone{% else %}Android phones{% endif %}</dd></div>
+        <div><dt>Works on</dt><dd>{% if _app.ios_url and _app.ios_url != "" %}Android phones and iPhone{% else %}Android phones{% endif %}{% if _app.web_url and _app.web_url != "" %}, and on the web{% endif %}</dd></div>
         <div><dt>Price</dt><dd>Free to download, optional in-app purchases</dd></div>
         <div><dt>{% if _app.ios_url and _app.ios_url != "" %}On Google Play and the App Store as{% else %}On Google Play as{% endif %}</dt><dd>{{ _app.store_name | escape }}</dd></div>
       </dl>

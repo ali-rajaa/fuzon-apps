@@ -86,12 +86,16 @@
     <div class="store-strip">
       <p class="eyebrow">Where to get them</p>
       <div class="store-strip-row">
-        {% include store-badge.html url=site.play_developer_url %}
-        {% include store-badge.html url=site.appstore_developer_url store="apple" %}
+        <div class="store-badges">
+          {% include store-badge.html url=site.play_developer_url %}
+          {% include store-badge.html url=site.appstore_developer_url store="apple" %}
+          {% include store-badge.html url=site.cloud_signin_url store="web" top="Cloud Storage on the" %}
+        </div>
         <ul class="store-strip-facts" role="list">
           <li><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg>Free to download</li>
           <li><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg>Optional in-app purchases</li>
-          <li><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg>Android, and iPhone for Cloud Storage</li>
+          <li><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg>Android phones</li>
+          <li><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg>Cloud Storage on iPhone and the web</li>
         </ul>
       </div>
     </div>

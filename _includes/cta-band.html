@@ -21,7 +21,7 @@
     {%- assign _cta_heading = "Get " | append: include.app.short %}
     <p class="eyebrow">Free to download</p>
     <h2 id="cta-title" class="cta-title">{{ include.heading | default: _cta_heading | escape }}</h2>
-    {%- if include.app.ios_url and include.app.ios_url != "" %}{% assign _cta_sub = "Download it from Google Play or the App Store. Optional in-app purchases." %}{% else %}{% assign _cta_sub = "Download it from Google Play. Optional in-app purchases." %}{% endif %}
+    {%- if include.app.web_url and include.app.web_url != "" %}{% assign _cta_sub = "Download it from Google Play or the App Store, or use it on the web. Optional in-app purchases." %}{% elsif include.app.ios_url and include.app.ios_url != "" %}{% assign _cta_sub = "Download it from Google Play or the App Store. Optional in-app purchases." %}{% else %}{% assign _cta_sub = "Download it from Google Play. Optional in-app purchases." %}{% endif %}
     <p class="cta-sub">{{ include.sub | default: _cta_sub | escape }}</p>
     <div class="cta-apps">
       {% include store-badges.html app=include.app light=true %}

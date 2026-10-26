@@ -1,7 +1,8 @@
 {%- comment -%}
   An app's store buttons, side by side: "Get it on Google Play" (from
-  android_url) and, when the app is on iPhone, "Download on the App
-  Store" (from ios_url). Every place that shows an app's store button uses
+  android_url), "Download on the App Store" when the app is on iPhone
+  (ios_url) and "Use it on the Web" when it has a web version (web_url;
+  owner, 26 Oct: Cloud Storage on all three). Every place that shows an app's store button uses
   this, so adding an ios_url in apps.yml puts the App Store button
   everywhere at once (owner, 26 Oct: Cloud Storage on iPhone).
 
@@ -15,5 +16,8 @@
   {%- endif %}
   {%- if _sb.ios_url and _sb.ios_url != "" %}
   {% include store-badge.html url=_sb.ios_url name=_sb.short light=include.light class=include.badge_class store="apple" %}
+  {%- endif %}
+  {%- if _sb.web_url and _sb.web_url != "" %}
+  {% include store-badge.html url=_sb.web_url name=_sb.short light=include.light class=include.badge_class store="web" %}
   {%- endif %}
 </div>
