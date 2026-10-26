@@ -406,6 +406,13 @@ audit, on all 19 built pages.
   `staging: false`). Owner steps to take fuzon.fixmypcperth.com down:
   GitHub > Settings > Pages > remove the custom domain and unpublish the
   site; Cloudflare (fixmypcperth.com) > DNS > delete the `fuzon` CNAME.
+- **Google Ads tag (owner, 26 Oct).** `AW-18507925058` in `_config.yml`
+  (`google_ads_id`), loaded by `_includes/google-tag.html` at the top of
+  `<head>` on every page (all 19), async, exactly as Google supplies it.
+  Never on a staging build; empty `google_ads_id` turns it off. Checked:
+  the page requests gtag.js and pushes `config AW-18507925058` with no
+  script errors. It loads the tag only; a conversion is counted when an
+  event snippet fires (item 11 below).
 - Local build in this environment: `bundle exec jekyll build` (if the
   binstub is missing, run `bundle exec ruby $(bundle info jekyll --path)/exe/jekyll build`).
 
@@ -487,4 +494,6 @@ and the backup folder answering 403.
 | 7 | ~~Smart Switch name~~ Kept (owner) |
 | 8 | Domain access, and confirm the console@ mailbox works |
 | 9 | ~~Enable GitHub Pages~~ Done; deploys from main (5i). Turn on Enforce HTTPS in Settings > Pages |
-| 10 | ~~Guides hub~~ Fuzon Know-How (5m): confirm the design, then the 8 guides get written. Analytics: none (recommended) or which? |
+| 10 | ~~Guides hub~~ Fuzon Know-How (5m): confirm the design, then the 8 guides get written. ~~Analytics~~ Google Ads tag added (section 7) |
+| 11 | Google Ads conversions: the event snippet for each conversion action (`send_to: 'AW-18507925058/<label>'`, value, currency), e.g. "Get it on Google Play" clicks, so they can be wired to those buttons |
+| 12 | Privacy policy: it covers the apps, and says no personal information was shared for cross-context behavioural advertising. With the Google Ads tag on the website (cookies, possibly remarketing), the website's use of Google Ads cookies should be disclosed; owner's legal text, so owner to decide the wording |

@@ -1,0 +1,17 @@
+{%- comment -%}
+  Google tag (gtag.js) for Google Ads (owner, 26 Oct), exactly as Google
+  supplies it, with the ID from _config.yml (google_ads_id). Google asks
+  for it as high in <head> as possible; default.html includes it straight
+  after the js class. Off on any staging build so previews never send
+  data. async, so it never holds up the page.
+{%- endcomment -%}
+{%- if site.google_ads_id and site.google_ads_id != "" and site.staging != true %}
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id={{ site.google_ads_id }}"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', '{{ site.google_ads_id }}');
+  </script>
+{%- endif %}

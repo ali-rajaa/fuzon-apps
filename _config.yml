@@ -51,6 +51,11 @@ company:
 # the Organization schema.
 play_developer_url: "https://play.google.com/store/apps/dev?id=8522805663199379420"
 
+# Google Ads tag (owner, 26 Oct: "conversion value fixing"). Loaded on
+# every page of the live site by _includes/google-tag.html; never when
+# staging is true. Empty turns it off.
+google_ads_id: "AW-18507925058"
+
 exclude:
   - Gemfile
   - Gemfile.lock
