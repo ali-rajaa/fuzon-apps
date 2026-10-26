@@ -1,11 +1,12 @@
 {%- comment -%}
   Site header, in the Cloudly template's style: logo and wordmark on the
-  left, a few plain links beside it, one black button on the right. No
-  "Log in" (owner, 16 Oct: there is no login, it is just a website).
+  left, a few plain links beside it, one black button on the right:
+  "Sign in", to Cloud Storage on the web (owner, 26 Oct: replaces "Get the
+  apps"; the 16 Oct "no login" rule is lifted for this).
 
   Items: Apps (menu of every app in apps.yml), Support (menu from
-  nav.yml), Guides and About (plain links, nav.yml links), and "Get the
-  apps" (to the homepage's app list).
+  nav.yml), Guides and About (plain links, nav.yml links), and "Sign in"
+  (site.cloud_signin_url).
 
   Behaviour (site.js, playbook 9.1): sticky; a hairline and shadow appear
   once content scrolls under it. On 760px and up the menus are flyouts,
@@ -17,7 +18,7 @@
   (shell.scss "Header"), and on phones the links show as a plain list.
 {%- endcomment -%}
 {%- assign _home = '/' | relative_url -%}
-{%- assign _apps_href = '/' | relative_url | append: '#apps' -%}
+{%- assign _signin = site.cloud_signin_url -%}
 <header class="site-header" id="site-header">
   <div class="wrap header-bar">
     <a class="brand" href="{{ _home }}"{% if page.url == "/" %} aria-current="page"{% endif %}>
@@ -78,11 +79,11 @@
         </li>
         {%- endfor %}
       </ul>
-      <a class="btn btn--primary nav-sheet-cta" href="{{ _apps_href }}">Get the apps</a>
+      <a class="btn btn--primary nav-sheet-cta" href="{{ _signin }}">Sign in</a>
     </nav>
 
     <div class="header-actions">
-      <a class="btn btn--primary btn--sm header-cta" href="{{ _apps_href }}">Get the apps</a>
+      <a class="btn btn--primary btn--sm header-cta" href="{{ _signin }}">Sign in</a>
       <button class="nav-toggle" id="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav" aria-label="Open menu">
         <svg class="icon nav-toggle-open" aria-hidden="true"><use href="#i-menu"/></svg>
         <svg class="icon nav-toggle-close" aria-hidden="true"><use href="#i-close"/></svg>

@@ -17,7 +17,7 @@ Last updated: 16 October 2026.
 The website for **Fuzon Apps**, publisher of three phone apps: Cloud
 Storage, Smart Switch – Data Transfer and GPS Voice Navigation. A
 light-only static site in the Cloudly template's style with the logo's
-colours. There is no login (owner, 16 Oct).
+colours. The header button is "Sign in", to Cloud Storage on the web (owner, 26 Oct; until then there was no login).
 
 ## 2. Confirmed facts (and where each came from)
 
@@ -27,13 +27,14 @@ colours. There is no login (owner, 16 Oct).
 | Taglines, points and chips for each app | Play listing titles and screenshot captions (Play can't be fetched from this environment) |
 | Support email `console@fuzonapps.com` | Owner, 16 Oct |
 | Legal name "FUZON APS PTY LIMITED", ABN 56 679 075 775, ACN 679 075 775, Australian private company; postal address 7 Barraberry Rtt, Canning Vale WA 6155 | ABN advice letter from the Australian Business Register (owner, 16 Oct). The letter also lists a business address in Craigieburn VIC; the site shows the postal address only |
-| Light theme only; no login | Owner, 16 Oct |
+| Light theme only | Owner, 16 Oct |
+| Header button "Sign in" → `https://cloud.fuzonapps.com/signin` (replaces "Get the apps"; also on the Cloud Storage page and the delete-account page) | Owner, 26 Oct |
 | Logo colours: `#FDA94E`, `#F755FA`, `#42C6FE` (3-stop horizontal gradient) | Sampled from `_reference/logo-source.png` |
 | Template look | Owner's Cloudly screenshots, `_reference/template/` |
 | Always push to `main` | Owner, 16 Oct |
 | Google Play listings: Cloud Storage & Cloud Drive (`com.cloudstorageapp.cloudbackup.storagespace.databackup`), Transfer My Data – Phone Clone (`com.smartswitch.shareit.datashare.phoneclone`), GPS Navigation & Directions (`com.gpsnavigation.directions.gpsmaps`); developer page `dev?id=8522805663199379420` | Owner's links and screenshots, 16 Oct |
 | All free to download, all with in-app purchases; Smart Switch and GPS also "Contains ads" | Play listings (screenshots) |
-| Android only (no App Store links) | Play listings |
+| App Store developer page `apps.apple.com/developer/fuzon-aps-pty-limited/id1868315941` (owner's link without its Macau storefront, so Apple opens each visitor's own store), beside every Google Play developer link and in sameAs. Which apps are on iPhone isn't confirmed, so no per-app App Store buttons, and the "Android" wording stays | Owner, 26 Oct |
 | Keep the name "Smart Switch" (it's also our name); on Play it's "Transfer My Data – Phone Clone" | Owner, 16 Oct |
 | The logo is the one the owner supplied (traced to SVG, no other file) | Owner, 16 Oct |
 | Domain move to fuzonapps.com happens last | Owner, 16 Oct |
@@ -493,7 +494,7 @@ and the backup folder answering 403.
 | # | Item |
 |---|---|
 | 1 | ~~Logo~~ Done: use the supplied logo (traced SVG) |
-| 2 | ~~Store links~~ Done (Google Play). App Store links if iPhone versions ever exist |
+| 2 | ~~Store links~~ Google Play done; App Store developer page linked (26 Oct). For per-app App Store buttons and to update the "Android apps" / "For Android phones" wording: which apps are on iPhone, and each one's App Store link |
 | 3 | Per app: 3 to 6 plain app screenshots (not the Play marketing images) for the showcase window and app pages |
 | 4 | AdMob publisher ID (`pub-…`) for `app-ads.txt`: Smart Switch and GPS show ads |
 | 5 | Fill the rest of `_data/legal.yml`: governing law, jurisdiction, arbitration (or remove that clause), effective and last-updated dates. ABN/ACN, postal address and legal name are done (ABN advice letter) |

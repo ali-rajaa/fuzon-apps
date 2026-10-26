@@ -37,7 +37,7 @@
       <li><a class="btn btn--light btn--lg" href="{{ '/' | append: app.slug | relative_url }}">{% include app-tile.html app=app class="cta-tile" %}{{ app.short | escape }}</a></li>
       {%- endfor %}
     </ul>
-    <p class="cta-small">Free to download · Optional in-app purchases · <a href="{{ site.play_developer_url }}">All our apps on Google Play</a></p>
+    <p class="cta-small">Free to download · Optional in-app purchases · All our apps on <a href="{{ site.play_developer_url }}">Google Play</a> and the <a href="{{ site.appstore_developer_url }}">App Store</a></p>
     {%- endif %}
   </div>
 </section>

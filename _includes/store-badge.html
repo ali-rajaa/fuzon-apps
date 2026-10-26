@@ -1,5 +1,6 @@
 {%- comment -%}
-  "Get it on Google Play" button, drawn in SVG and HTML rather than a
+  "Get it on Google Play" or (store="apple") "Download on the App Store"
+  button, drawn in SVG and HTML rather than a
   downloaded badge image (playbook 9.10), so it stays sharp and matches the
   site's type. The triangle is a plain white glyph, not Google's coloured
   logo. Opens the listing in the same tab.
@@ -8,17 +9,32 @@
   accessible name "Get it on Google Play: <name>", which starts with the
   visible words as WCAG 2.5.3 asks; leave out for the developer page,
   which reads "All our apps on Google Play"), class (optional),
-  light (true for the white version on the black CTA band).
+  light (true for the white version on the black CTA band),
+  store ("apple" for the App Store; Google Play otherwise).
   Usage: {% include store-badge.html url=app.android_url name=app.short %}
+         {% include store-badge.html url=site.appstore_developer_url store="apple" %}
 {%- endcomment -%}
-{%- if include.name -%}
-  {%- assign _label = "Get it on Google Play: " | append: include.name -%}
-  {%- assign _top = "Get it on" -%}
+{%- if include.store == "apple" -%}
+  {%- assign _store = "App Store" -%}
+  {%- assign _get = "Download on the" -%}
+  {%- assign _on = "All our apps on the" -%}
 {%- else -%}
-  {%- assign _label = "All our apps on Google Play" -%}
-  {%- assign _top = "All our apps on" -%}
+  {%- assign _store = "Google Play" -%}
+  {%- assign _get = "Get it on" -%}
+  {%- assign _on = "All our apps on" -%}
+{%- endif -%}
+{%- if include.name -%}
+  {%- assign _label = _get | append: " " | append: _store | append: ": " | append: include.name -%}
+  {%- assign _top = _get -%}
+{%- else -%}
+  {%- assign _label = _on | append: " " | append: _store -%}
+  {%- assign _top = _on -%}
 {%- endif -%}
 <a class="store-badge{% if include.light %} store-badge--light{% endif %}{% if include.class %} {{ include.class }}{% endif %}" href="{{ include.url }}" aria-label="{{ _label | escape }}">
+  {%- if include.store == "apple" %}
+  <svg class="store-badge-mark" viewBox="0 0 24 24" aria-hidden="true"><path d="M16.37 12.67c-.02-2.13 1.74-3.15 1.82-3.2-1-1.45-2.54-1.65-3.08-1.67-1.31-.13-2.56.77-3.23.77-.67 0-1.69-.75-2.78-.73-1.43.02-2.75.83-3.49 2.11-1.49 2.58-.38 6.4 1.07 8.5.71 1.02 1.55 2.17 2.66 2.13 1.07-.04 1.47-.69 2.76-.69 1.29 0 1.65.69 2.78.67 1.15-.02 1.88-1.04 2.58-2.07.81-1.19 1.15-2.34 1.17-2.4-.03-.01-2.24-.86-2.26-3.42ZM14.25 6.42c.59-.72.99-1.71.88-2.7-.85.03-1.88.57-2.49 1.28-.55.63-1.03 1.64-.9 2.61.95.07 1.92-.48 2.51-1.19Z"/></svg>
+  {%- else %}
   <svg class="store-badge-mark" viewBox="0 0 24 24" aria-hidden="true"><path d="M5.2 2.6c-.4.3-.7.8-.7 1.5v15.8c0 .7.3 1.2.7 1.5l9.1-9.4-9.1-9.4Zm10.4 8.1 2.6-2.7-10.6-6.1c-.4-.2-.8-.3-1.1-.2l9.1 9Zm0 2.6-9.1 9c.3.1.7 0 1.1-.2l10.6-6.1-2.6-2.7Zm4.3-4.3-2.5-1.5-2.9 2.5 2.9 2.5 2.5-1.5c.8-.4.8-1.6 0-2Z"/></svg>
-  <span class="store-badge-text" aria-hidden="true"><span class="store-badge-top">{{ _top }}</span><span class="store-badge-name">Google Play</span></span>
+  {%- endif %}
+  <span class="store-badge-text" aria-hidden="true"><span class="store-badge-top">{{ _top }}</span><span class="store-badge-name">{{ _store }}</span></span>
 </a>

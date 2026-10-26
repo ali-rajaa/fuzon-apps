@@ -19,7 +19,10 @@
 #   points      three things it does (showcase, cards, placeholder page)
 #   android_url Google Play listing. Store buttons and "Android" are derived
 #               from these, never typed.
-#   ios_url     App Store listing (none yet)
+#   ios_url     App Store listing (none yet; the App Store developer page
+#               is site.appstore_developer_url)
+#   web_url     sign-in for the app on the web, if it has one (Cloud
+#               Storage: owner, 26 Oct). Shown on the app's page.
 #   ads         true if the listing says "Contains ads" (app-ads.txt)
 #   built       true once the app's full page exists; until then its
 #               address serves the "upcoming" placeholder
@@ -37,6 +40,7 @@
     - "Share files with other people"
   android_url: "https://play.google.com/store/apps/details?id=com.cloudstorageapp.cloudbackup.storagespace.databackup"
   ios_url: ""
+  web_url: "https://cloud.fuzonapps.com/signin"
   ads: false
   built: true
 

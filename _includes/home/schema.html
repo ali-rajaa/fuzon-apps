@@ -17,7 +17,7 @@
       "url": {{ _home | jsonify }},
       "logo": {{ '/assets/icons/icon-512.png' | absolute_url | jsonify }},
       "email": {{ site.company.support_email | jsonify }},
-      "sameAs": [{{ site.play_developer_url | jsonify }}],
+      "sameAs": [{{ site.play_developer_url | jsonify }}, {{ site.appstore_developer_url | jsonify }}],
       "contactPoint": {
         "@type": "ContactPoint",
         "contactType": "customer support",

@@ -47,6 +47,10 @@
   font-weight: 500;
 }
 .app-facts [aria-hidden] { color: var(--text-3); }
+/* "Already have an account? Sign in on the web" (an app with a web
+   sign-in: Cloud Storage), under the store button. */
+.app-web { margin-top: 1rem; color: var(--text-2); font-size: 0.9375rem; }
+.app-web .link-arrow { margin-left: 0.25rem; font-weight: 600; color: var(--text); }
 .app-hero-copy .store-note { margin-top: 0.5rem; }
 @media (max-width: 479.98px) {
   .app-actions { flex-direction: column; align-items: stretch; }

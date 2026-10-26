@@ -51,6 +51,17 @@ company:
 # the Organization schema.
 play_developer_url: "https://play.google.com/store/apps/dev?id=8522805663199379420"
 
+# Fuzon Apps' developer page on the App Store (owner, 26 Oct). The owner's
+# link had a Macau storefront and language in it (/mo/, ?l=en-GB); without
+# them Apple opens the visitor's own country's store. Linked beside every
+# Google Play developer link and used as sameAs.
+appstore_developer_url: "https://apps.apple.com/developer/fuzon-aps-pty-limited/id1868315941"
+
+# Sign in to Cloud Storage on the web (owner, 26 Oct). The header's button
+# ("Sign in", replacing "Get the apps"), the Cloud Storage page and the
+# delete-account page link here.
+cloud_signin_url: "https://cloud.fuzonapps.com/signin"
+
 # Google Ads tag (owner, 26 Oct: "conversion value fixing"). Loaded on
 # every page of the live site by _includes/google-tag.html; never when
 # staging is true. Empty turns it off.
