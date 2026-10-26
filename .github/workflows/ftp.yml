@@ -292,7 +292,32 @@ jobs:
           # alone and only reported. The backup folder, SSL checks
           # (.well-known) and cgi-bin are never touched.
           (cd _site && find . -type f | sed 's#^\./##' | sort) > "$RUNNER_TEMP/build.txt"
-          lftp -c "$SETUP; cd \"$DIR\" && find" 2>/dev/null | grep -v '/$' | sed 's#^\./##' | sort > "$RUNNER_TEMP/server.txt" || true
+          # List the server without walking the folders it never touches:
+          # .site-backups/ holds the whole old WordPress install, thousands
+          # of files, and over FTP every folder is its own request (26 Oct:
+          # a plain recursive find there hung the run after the upload had
+          # finished). Top-level files, then a find of each other folder,
+          # in one connection, capped at 2 minutes; if the cap is hit the
+          # clean-up is skipped (with a notice), never the deploy.
+          lftp -c "$SETUP; cd \"$DIR\" && cls -1aF" 2>/dev/null | sed -E '/^\.\.?\/$/d' > "$RUNNER_TEMP/top.txt" || true
+          grep -v '/$' "$RUNNER_TEMP/top.txt" | sed -E 's/[*@]$//' > "$RUNNER_TEMP/server-top.txt" || true
+          finds=""
+          while IFS= read -r d; do
+            case "$d" in .site-backups/|site-backups/|.well-known/|cgi-bin/) continue ;; esac
+            finds="$finds; find \"${d%/}\""
+          done < <(grep '/$' "$RUNNER_TEMP/top.txt" || true)
+          listed=true
+          if [ -n "$finds" ]; then
+            timeout 120 lftp -c "$SETUP; cd \"$DIR\" $finds" 2>/dev/null > "$RUNNER_TEMP/server-dirs.txt" || listed=false
+          else
+            : > "$RUNNER_TEMP/server-dirs.txt"
+          fi
+          if [ ! -s "$RUNNER_TEMP/top.txt" ]; then listed=false; fi
+          cat "$RUNNER_TEMP/server-top.txt" "$RUNNER_TEMP/server-dirs.txt" | grep -v '/$' | sed 's#^\./##' | sort > "$RUNNER_TEMP/server.txt" || true
+          if [ "$listed" != true ]; then
+            echo "::warning title=Clean-up skipped::Couldn't list the server in time, so nothing was removed this run. The upload itself finished."
+            : > "$RUNNER_TEMP/server.txt"
+          fi
           lftp -c "$SETUP; cd \"$DIR\" && cat .site-manifest.txt" 2>/dev/null | sort > "$RUNNER_TEMP/old-manifest.txt" || true
           read -r -a retired <<< "$RETIRED_PATHS"
           printf '%s\n' "${retired[@]}" | sort > "$RUNNER_TEMP/retired.txt"

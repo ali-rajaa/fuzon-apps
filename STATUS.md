@@ -406,6 +406,13 @@ audit, on all 19 built pages.
   `staging: false`). Owner steps to take fuzon.fixmypcperth.com down:
   GitHub > Settings > Pages > remove the custom domain and unpublish the
   site; Cloudflare (fixmypcperth.com) > DNS > delete the `fuzon` CNAME.
+- **Upload clean-up listing (26 Oct).** After uploading, ftp.yml lists
+  the server to remove files this site no longer has. It now skips
+  `.site-backups/` (the old WordPress install), `.well-known/` and
+  `cgi-bin/`, and is capped at 2 minutes (if hit, clean-up is skipped
+  with a warning, never the deploy). A plain recursive listing walked the
+  WordPress backup and hung two runs after their uploads had finished.
+  The job also stops after 15 minutes.
 - **Google Ads tag (owner, 26 Oct).** `AW-18507925058` in `_config.yml`
   (`google_ads_id`), loaded by `_includes/google-tag.html` at the top of
   `<head>` on every page (all 19), async, exactly as Google supplies it.
