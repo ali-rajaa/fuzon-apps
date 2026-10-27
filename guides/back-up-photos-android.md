@@ -7,6 +7,7 @@ crumb: "Back up photos"
 description: "Back up the photos on your Android phone to the cloud, check the backup worked, then free up space. Plain steps that work on any Android phone."
 permalink: /guides/back-up-photos-android
 topic: cloud-backup
+glyph: image   # the guide card's own icon (27 Oct; the topic's otherwise)
 tone: cloud
 date: 2026-10-17
 order: 1

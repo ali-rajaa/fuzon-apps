@@ -7,6 +7,7 @@ crumb: "Transfer photos and contacts"
 description: "Transfer your photos and contacts to a new Android phone: check what's saved to your account, then move the rest phone to phone, through the cloud or by file."
 permalink: /guides/transfer-photos-contacts-new-phone
 topic: new-phone
+glyph: users   # the guide card's own icon (27 Oct; the topic's otherwise)
 tone: switch
 date: 2026-10-17
 order: 6

@@ -72,6 +72,7 @@
         {%- comment -%} Guides is marked current on the hub ("page") and on
         every guide ("true": you're inside that section). {%- endcomment %}
         {%- for item in site.data.nav.links %}
+        {%- if item.url == "/guides/" and site.guides_live != true %}{% continue %}{% endif %}
         {%- assign _cur = "" %}
         {%- if page.url == item.url %}{% assign _cur = "page" %}{% elsif item.url == "/guides/" and page.layout == "guide" %}{% assign _cur = "true" %}{% endif %}
         <li class="nav-item">
@@ -79,11 +80,11 @@
         </li>
         {%- endfor %}
       </ul>
-      <a class="btn btn--primary nav-sheet-cta" href="{{ _signin }}">Sign in</a>
+      <a class="btn btn--primary nav-sheet-cta" href="{{ _signin }}">Sign in to Cloud</a>
     </nav>
 
     <div class="header-actions">
-      <a class="btn btn--primary btn--sm header-cta" href="{{ _signin }}">Sign in</a>
+      <a class="btn btn--primary btn--sm header-cta" href="{{ _signin }}">Sign in to Cloud</a>
       <button class="nav-toggle" id="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav" aria-label="Open menu">
         <svg class="icon nav-toggle-open" aria-hidden="true"><use href="#i-menu"/></svg>
         <svg class="icon nav-toggle-close" aria-hidden="true"><use href="#i-close"/></svg>

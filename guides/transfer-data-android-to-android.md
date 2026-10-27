@@ -7,6 +7,7 @@ crumb: "Transfer to a new phone"
 description: "Moving to a new Android phone? Get both phones ready, choose how to transfer your data, then check everything arrived. A step-by-step checklist."
 permalink: /guides/transfer-data-android-to-android
 topic: new-phone
+glyph: phones   # the guide card's own icon (27 Oct; the topic's otherwise)
 tone: switch
 date: 2026-10-17
 order: 4

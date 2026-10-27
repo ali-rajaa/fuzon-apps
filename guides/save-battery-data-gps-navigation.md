@@ -7,6 +7,7 @@ crumb: "Save battery and data"
 description: "Does GPS navigation use mobile data? What drains your battery while navigating, and simple ways to save battery and data on your Android phone in the car."
 permalink: /guides/save-battery-data-gps-navigation
 topic: maps-driving
+glyph: battery   # the guide card's own icon (27 Oct; the topic's otherwise)
 tone: gps
 date: 2026-10-17
 order: 8

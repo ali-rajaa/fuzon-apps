@@ -78,7 +78,6 @@ layout: default
       <p class="app-lead">{{ _app.tagline | escape }}</p>
       <div class="app-actions" id="download">
         {% include store-badges.html app=_app %}
-        <a class="btn btn--secondary btn--lg" href="#how-it-works">How it works</a>
       </div>
       <p class="app-facts">
         <span>{% if _app.ios_url and _app.ios_url != "" and _app.web_url and _app.web_url != "" %}Android, iPhone and web{% elsif _app.ios_url and _app.ios_url != "" %}Android and iPhone{% else %}Android{% endif %}</span><span aria-hidden="true">·</span><span>Free to download</span><span aria-hidden="true">·</span><span>Optional in-app purchases</span>
@@ -90,7 +89,7 @@ layout: default
     <div class="app-hero-stage" aria-hidden="true">
       <div class="app-hero-ring"></div>
       <div class="phone">
-        <div class="phone-screen">
+        <div class="phone-screen tone-{{ _app.tone }}">
           <span class="phone-notch"></span>
           {% include app-tile.html app=_app class="phone-tile" %}
           <span class="phone-name">{{ _app.short | escape }}</span>
@@ -251,7 +250,20 @@ phones, the current section is highlighted by site.js. {%- endcomment %}
       <h2 id="guide-title">{{ page.guide_title | escape }}</h2>
     </div>
     <div class="prose guide-body">
+      {%- comment -%} The intro and the first three tips show; the rest
+      folds behind "Read the rest of the guide", so the page stays a
+      sensible length on phones (owner, 27 Oct). The text is still on the
+      page for search engines and for the #guide links. {%- endcomment %}
+      {%- assign _parts = content | split: '<h3' %}
+      {%- if _parts.size > 5 %}
+      {%- for part in _parts limit: 4 %}{% if forloop.first %}{{ part }}{% else %}<h3{{ part }}{% endif %}{% endfor %}
+      <details class="guide-more">
+        <summary><span>Read the rest of the guide</span><span class="guide-more-count">{{ _parts.size | minus: 4 }} more tips</span><svg class="icon" aria-hidden="true"><use href="#i-chevron-down"/></svg></summary>
+        {%- for part in _parts offset: 4 %}<h3{{ part }}{% endfor %}
+      </details>
+      {%- else %}
       {{ content }}
+      {%- endif %}
     </div>
   </div>
 </section>

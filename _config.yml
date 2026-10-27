@@ -67,6 +67,12 @@ cloud_signin_url: "https://cloud.fuzonapps.com/signin"
 # staging is true. Empty turns it off.
 google_ads_id: "AW-18507925058"
 
+# Fuzon Know-How (/guides/): false hides every link to the hub (header,
+# footer) while the guides are still placeholders (owner, 27 Oct). The
+# pages stay up, unlinked and noindex. Set to true when the first guides
+# are written.
+guides_live: false
+
 exclude:
   - Gemfile
   - Gemfile.lock

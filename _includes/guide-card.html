@@ -13,7 +13,7 @@
 {%- assign _hl = include.level | default: "h3" -%}
 <article class="guide-card tone-{{ _t.tone }}{% if include.class %} {{ include.class }}{% endif %}" data-topic="{{ _t.slug }}">
   <div class="guide-banner" aria-hidden="true">
-    <span class="guide-banner-tile"><svg class="icon"><use href="#i-{{ _t.glyph }}"/></svg></span>
+    <span class="guide-banner-tile"><svg class="icon"><use href="#i-{{ _g.glyph | default: _t.glyph }}"/></svg></span>
   </div>
   <div class="guide-card-body">
     <p class="eyebrow">{{ _t.name | escape }}</p>

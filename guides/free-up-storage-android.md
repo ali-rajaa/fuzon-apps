@@ -7,6 +7,7 @@ crumb: "Free up storage"
 description: "Phone storage full? See what's using the space, then free it up safely: move photos to the cloud, remove unused apps and clear out downloads on Android."
 permalink: /guides/free-up-storage-android
 topic: cloud-backup
+glyph: gauge   # the guide card's own icon (27 Oct; the topic's otherwise)
 tone: cloud
 date: 2026-10-17
 order: 2

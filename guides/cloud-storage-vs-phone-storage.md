@@ -7,6 +7,7 @@ crumb: "Cloud vs phone storage"
 description: "Cloud storage vs phone storage, explained simply: how they differ, what to keep on your phone, what to keep in the cloud, and why sync isn't a backup."
 permalink: /guides/cloud-storage-vs-phone-storage
 topic: cloud-backup
+glyph: layers   # the guide card's own icon (27 Oct; the topic's otherwise)
 tone: cloud
 date: 2026-10-17
 order: 3

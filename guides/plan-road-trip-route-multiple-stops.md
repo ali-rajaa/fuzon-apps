@@ -7,6 +7,7 @@ crumb: "Plan a road trip route"
 description: "Plan a road trip route with multiple stops: list your stops, put them in order, split the drive into daily legs and plan breaks before you set off."
 permalink: /guides/plan-road-trip-route-multiple-stops
 topic: maps-driving
+glyph: route   # the guide card's own icon (27 Oct; the topic's otherwise)
 tone: gps
 date: 2026-10-17
 order: 7

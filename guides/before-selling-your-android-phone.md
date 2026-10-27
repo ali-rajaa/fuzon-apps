@@ -7,6 +7,7 @@ crumb: "Before you sell your phone"
 description: "Selling or giving away your Android phone? Back up, sign out of your accounts, factory reset and take out your SIM. Everything to do, in the right order."
 permalink: /guides/before-selling-your-android-phone
 topic: new-phone
+glyph: checklist   # the guide card's own icon (27 Oct; the topic's otherwise)
 tone: switch
 date: 2026-10-17
 order: 5

@@ -33,7 +33,6 @@
       <p class="hero-lead">Fuzon Apps makes apps that do one job well, from keeping your files in the cloud to moving to a new phone and finding your way.</p>
       <div class="hero-actions">
         <a class="btn btn--primary btn--lg" href="#apps">See the apps</a>
-        <a class="btn btn--secondary btn--lg" href="{{ site.play_developer_url }}">All apps on Google Play</a>
       </div>
     </div>
 
@@ -62,7 +61,7 @@
             {%- endfor %}
           </ul>
           <div class="showcase-actions">
-            {% include store-badges.html app=app %}
+            {% include store-badges.html app=app compact=true %}
             <a class="link-arrow" href="{{ '/' | append: app.slug | relative_url }}">About {{ app.short | escape }}<svg class="icon" aria-hidden="true"><use href="#i-arrow-right"/></svg></a>
           </div>
           {%- if app.store_name != app.name %}
@@ -71,7 +70,7 @@
         </div>
         <div class="showcase-stage" aria-hidden="true">
           <div class="phone">
-            <div class="phone-screen">
+            <div class="phone-screen tone-{{ app.tone }}">
               <span class="phone-notch"></span>
               {% include app-tile.html app=app class="phone-tile" %}
               <span class="phone-name">{{ app.short | escape }}</span>

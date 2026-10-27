@@ -391,3 +391,29 @@ main [id] { scroll-margin-top: calc(var(--header-h) + 3.5rem); }
   .more-item { transition: border-color 0.2s ease, box-shadow 0.2s ease; }
   .more-item:hover, .more-item:active { transform: none; }
 }
+
+/* "Read the rest of the guide": the tips after the first three, folded
+   (27 Oct). A full-width row like the FAQ items; the chevron turns when
+   open. */
+.guide-more { margin-top: 2rem; border-top: 1px solid var(--border); }
+.guide-more > summary {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  min-height: 3rem;
+  padding: 1rem 0;
+  color: var(--text);
+  font-weight: 700;
+  letter-spacing: var(--track-headline);
+  cursor: pointer;
+  list-style: none;
+  -webkit-tap-highlight-color: transparent;
+}
+.guide-more > summary::-webkit-details-marker { display: none; }
+.guide-more-count { color: var(--text-3); font-size: 0.9375rem; font-weight: 500; letter-spacing: var(--track-small); }
+.guide-more > summary .icon { width: 1.25rem; height: 1.25rem; margin-left: auto; color: var(--text-2); transition: transform var(--dur-spring-fast) var(--ease-spring); }
+.guide-more[open] > summary .icon { transform: rotate(180deg); }
+.guide-more > summary:hover { color: var(--brand-text); }
+@media (prefers-reduced-motion: reduce) {
+  .guide-more > summary .icon { transition: none; }
+}
